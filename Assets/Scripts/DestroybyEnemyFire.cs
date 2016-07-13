@@ -13,8 +13,9 @@ public class DestroybyEnemyFire : MonoBehaviour {
 
     void OnTriggerStay(Collider player)
     {
-        if (player.tag == "PlayerShip" && !gameController.Invincible)
+        if (player.CompareTag("PlayerShip") && !gameController.Invincible && !gameController.playerDied)
         {
+            gameController.setPlayerDeathFlag(true);
             Destroy(player.gameObject);
             if (gameController.playerLives == 0)
             {

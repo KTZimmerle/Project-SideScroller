@@ -13,9 +13,8 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400002}
   - 54: {fileID: 5400000}
-  - 114: {fileID: 11400000}
-  - 114: {fileID: 11400004}
-  m_Layer: 0
+  - 114: {fileID: 11479946}
+  m_Layer: 8
   m_Name: Hazard
   m_TagString: Hazard
   m_Icon: {fileID: 0}
@@ -94,18 +93,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8504d13d7b47e1c4e9c7f70cf1d4c969, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: -5
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,8 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 1
   scoreValue: 1
-  isHit: 0
---- !u!114 &11400004
+--- !u!114 &11479946
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -128,11 +114,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 018cf559a294253418fddcbc16e8aca5, type: 3}
+  m_Script: {fileID: 11500000, guid: e0e8cf7ebe151d946bf39daff00afe61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: -5
+  followPlayer: 0
+  drop: {fileID: 0}
   speedMin: 0.5
   speedMax: 1.5
+  hitPoints: 1
+  scoreValue: 1
+  projectile: {fileID: 170482, guid: 9b0441fe9b7cc73448d3a766b5f8b03d, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

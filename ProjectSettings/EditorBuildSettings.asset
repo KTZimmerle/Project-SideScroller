@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Space Battle.unity
-  - enabled: 1
     path: Assets/Scenes/Title Screen.unity
+  - enabled: 1
+    path: Assets/Scenes/Space Battle.unity

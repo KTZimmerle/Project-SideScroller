@@ -9,7 +9,6 @@ public class HazardSpeed : MonoBehaviour {
 	void Start () 
 	{
 		GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(GetComponent<Rigidbody>().velocity.x*speedMin, 
-		                                              GetComponent<Rigidbody>().velocity.x*speedMax), 
-		                                 0.0f, 0.0f);
+		                                              GetComponent<Rigidbody>().velocity.x*speedMax), 0.0f, 0.0f);
 	}
 }

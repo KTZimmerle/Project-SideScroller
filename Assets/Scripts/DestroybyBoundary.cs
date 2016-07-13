@@ -5,6 +5,7 @@ public class DestroybyBoundary : MonoBehaviour {
 
 	void OnTriggerExit(Collider other)
 	{
-		Destroy (other.gameObject);
+        if(!other.CompareTag("BossLaser"))
+		    Destroy (other.gameObject);
 	}
 }

@@ -6,7 +6,9 @@ public class PowerUpSystem : MonoBehaviour {
     public bool missilePowUp;
     public bool laserPowUp;
     public float missileRate;
+    public int MISSILE_LIMIT = 1;
     public float laserRate;
+    float speedModifier;
 
     public GameObject missile;
 
@@ -18,11 +20,13 @@ public class PowerUpSystem : MonoBehaviour {
 
     public void FireMissiles()
     {
-        if (missileRate < 0.0f && missilePowUp)
+        if (missileRate < 0.0f && missilePowUp && GameObject.FindGameObjectsWithTag("MissileProjectile").Length + 1
+            <= MISSILE_LIMIT)
         {
             GameObject clone;
             clone = Instantiate(missile, transform.position, transform.rotation) as GameObject;
-            missileRate = 1.5f;
+            clone.GetComponent<ProjectileBehavior>().isFriendly = true;
+            missileRate = 0.5f;
         }
 
     }
@@ -34,8 +38,10 @@ public class PowerUpSystem : MonoBehaviour {
     //shields
 
 	// Use this for initialization
-	void Start () {
+	void Awake ()
+    {
+        speedModifier = 1.0f;
         missilePowUp = false;
-        missileRate = 1.5f;
+        missileRate = 0.5f;
 	}
 }

@@ -3,18 +3,22 @@ using System.Collections;
 
 public class CircularMover : Mover {
 
+    public int hitPoints;
+    public int scoreValue;
+    public EnemyShip ES;
     public GameObject projectile;
     public float delayManuvuer = 2.0f;
     float stopManuvuer = 1.19f;
 
 	public float turnSpeed;
 	Rigidbody enemyShip;
-	Quaternion angle;
+	Quaternion qAngle;
     bool isManuevering = false;
     float newSpeed;
 
-	void Start()
+    protected override void Awake()
 	{
+        ES = new EnemyShip(hitPoints, scoreValue);
         enemyShip = GetComponent<Rigidbody>();
         if (enemyShip.transform.position.y >= 2.5f)
         {
@@ -46,7 +50,7 @@ public class CircularMover : Mover {
     IEnumerator circlarMovement()
     {
 		yield return new WaitForSeconds(delayManuvuer);
-        Shoot();
+        ES.Shoot(projectile, transform.position, transform.rotation);
         isManuevering = true;
         yield return new WaitForSeconds(stopManuvuer);
         isManuevering = false;
@@ -56,9 +60,9 @@ public class CircularMover : Mover {
     {
         if (isManuevering)
         {
-            angle = Quaternion.Euler(enemyShip.rotation.eulerAngles + new Vector3(0.0f, 0.0f, -turnSpeed));
+            qAngle = Quaternion.Euler(enemyShip.rotation.eulerAngles + new Vector3(0.0f, 0.0f, -turnSpeed));
             enemyShip.velocity = transform.right * newSpeed;
-            enemyShip.rotation = angle; 
+            enemyShip.rotation = qAngle; 
         }
         else
         {
@@ -66,11 +70,4 @@ public class CircularMover : Mover {
             enemyShip.velocity = transform.right * speed;
         }
     }
-
-    void Shoot()
-    {
-        GameObject clone;
-        clone = Instantiate(projectile, transform.position, transform.rotation) as GameObject;
-    }
-
 }

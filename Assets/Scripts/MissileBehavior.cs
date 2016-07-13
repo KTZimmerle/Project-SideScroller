@@ -3,16 +3,18 @@ using System.Collections;
 
 public class MissileBehavior : ProjectileBehavior {
 
+    Missile missile;
     GameObject[] targets;
     GameObject closestTarget;
     public float veloc;
 
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
+        missile = new Missile();
         closestTarget = null;
         Rigidbody rb = GetComponent<Rigidbody>();
         veloc = GetComponent<Mover>().speed;
-        hitType = PlayerAttackType.missile;
     }
 
     void FixedUpdate()
@@ -26,8 +28,6 @@ public class MissileBehavior : ProjectileBehavior {
         }
         else //keep searching the closest enemy available
         {
-            /*rb.rotation =
-                   Quaternion.Euler(GetComponent<Rigidbody>().rotation.eulerAngles + new Vector3(0.0f, 0.0f, rotaSpeed));*/
             targets = GameObject.FindGameObjectsWithTag("Hazard");
             float dist = Mathf.Infinity;
             Vector3 pos = transform.position;
@@ -46,4 +46,46 @@ public class MissileBehavior : ProjectileBehavior {
         //GetComponent<Rigidbody>().velocity = new Vector3(transform.right, GetComponent<Rigidbody>().velocity.y, 0.0f);
         GetComponent<Rigidbody>().velocity = transform.right * veloc;
 	}
+
+    protected override void OnTriggerEnter(Collider other)
+    {
+        /*if(other.CompareTag("Hazard"))
+        {
+            Ray self = new Ray(transform.position, transform.up);
+            //Physics.SphereCastAll(self, 15.0f);
+            Physics.OverlapSphere(transform.position, 15.0f, 0, QueryTriggerInteraction.Collide);
+            Debug.DrawRay(self.origin, self.direction, Color.red, 5.0f );
+        }*/
+        //Debug.Log("hit something");
+        if (other.GetComponent<CircularMover>() != null)
+        {
+            E1 = other.GetComponent<CircularMover>();
+            enemy = E1.ES;
+        }
+        else if (other.GetComponent<RotatorMover>() != null)
+        {
+            E2 = other.GetComponent<RotatorMover>();
+            enemy = E2.ES;
+        }
+        else if (other.GetComponent<StraightMover>() != null)
+        {
+            E3 = other.GetComponent<StraightMover>();
+            enemy = E3.ES;
+        }
+        else if (other.GetComponent<WavyMover>() != null)
+        {
+            EP = other.GetComponent<WavyMover>();
+            enemy = EP.ES;
+        }
+        else
+            return;
+
+        if (enemy.takeDamage(missile.damage) <= 0)
+        {
+            gameController.ModifyScore(enemy.getScoreValue());
+            Destroy(other.gameObject);
+        }
+
+        Destroy(gameObject);
+    }
 }

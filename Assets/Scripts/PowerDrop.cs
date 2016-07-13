@@ -3,13 +3,11 @@ using System.Collections;
 
 public class PowerDrop : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public GameObject PowerUpDrop;
+
+    void OnDestroy()
+    {
+        GameObject clone;
+        clone = Instantiate(PowerUpDrop, transform.position, transform.rotation) as GameObject;
+    }
 }

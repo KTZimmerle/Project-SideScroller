@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11496634}
   - 136: {fileID: 13659782}
   - 114: {fileID: 11439722}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnemyProj2
   m_TagString: EnemyProj
   m_Icon: {fileID: 0}
@@ -133,6 +133,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: -15
+  followPlayer: 0
+  drop: {fileID: 0}
+  angle: 0
 --- !u!114 &11496634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,9 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 0
+  isFriendly: 0
   isHit: 0
-  damage: 0
-  hitType: 0
 --- !u!136 &13659782
 CapsuleCollider:
   m_ObjectHideFlags: 1

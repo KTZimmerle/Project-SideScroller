@@ -15,25 +15,41 @@ public class PowerSelector : MonoBehaviour {
         collectedPowerUps++;
     }
 
-    void selectPower(PowerUpSystem p)
+    public void selectPower(PowerUpSystem p)
     {
         switch (collectedPowerUps)
         {
             case 1:
+
                 break;
             case 2:
-                break;
-            case 3:
                 p.missilePowUp = true;
                 break;
+            case 3:
+                break;
             case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            default:
                 break;
         }
         collectedPowerUps = 0;
     }
 
-    void Start()
+    void Awake()
     {
         collectedPowerUps = 0;
+    }
+
+    void OnTriggerEnter(Collider pickup)
+    {
+        if (pickup.CompareTag("PickUp"))
+        {
+            IncrementCounter();
+            Destroy(pickup.gameObject);
+        }
     }
 }

@@ -12,10 +12,13 @@ TagManager:
   - EnemyProj
   - enemy/v/e/a/ed
   - MissilePickUp
-  - LaserPickUp
+  - AltfireProjectile
   - SpeedUp
   - PowerUpSystem
   - MissileProjectile
+  - PickUp
+  - PlayerShield
+  - BossLaser
   layers:
   - Default
   - TransparentFX
@@ -25,10 +28,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - EnemyProj
+  - Boss
+  - Player
   - 
   - 
   - 

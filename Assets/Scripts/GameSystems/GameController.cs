@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	
+
 	public GameObject PlayerShip;
 	public GameObject RespawnPoint;
     
@@ -14,11 +15,13 @@ public class GameController : MonoBehaviour {
     GameUI gameUI;
     SpawnWaves waves;
 	public int score = 0;
-	public int extraLifeReq = 100;
+	public int extraLifeReq = 2000;
 	public bool Invincible = false;
+    bool shielded = false;
+    public bool playerDied = false;
     public int livesGained = 0;
 	//Color transperency;
-    const int EXTRA_LIFE_LIMIT = 50;
+    const int EXTRA_LIFE_LIMIT = 20;
     
 	// Use this for initialization
 	void Start () 
@@ -43,7 +46,9 @@ public class GameController : MonoBehaviour {
         if (Input.GetKey(KeyCode.Escape))
         {
             //start the game
-            Application.LoadLevel("Title Screen");
+            //Application.LoadLevel("Title Screen");
+            SceneManager.LoadScene(0);
+
         }
 
 		if(Invincible)
@@ -51,18 +56,24 @@ public class GameController : MonoBehaviour {
 			if(invincibilityTimer <= 0.0f)
 			{
 				Invincible = false;
-				//transperency.a = 1.0f;
-			}
+                //transperency.a = 1.0f;
+            }
 			invincibilityTimer -= Time.deltaTime;
 		}
 	}
 
 	
 	public void ModifyScore (int modifyScore)
-	{
-		score += modifyScore;
+    {
+        score += modifyScore;
         gameUI.UpdateScore(score);
-	}
+        if (livesGained < score / (extraLifeReq) &&
+            livesGained < GetExtraLivesLimit())
+        {
+            livesGained += 1;
+            ModifyLives(1);
+        }
+    }
 
 	public void ModifyLives (int modifyLives)
 	{
@@ -70,20 +81,26 @@ public class GameController : MonoBehaviour {
         gameUI.UpdateLives(playerLives);
 		if(modifyLives < 0)
 		{
-			StartCoroutine (RespawnPlayer());
+            gameUI.DeHighlightAll();
+            gameUI.speedmultiplier = 1.0f;
+            gameUI.SpeedupText.text = "Speed x 1.0";
+            StartCoroutine (RespawnPlayer());
 		}
 	}
 
 	IEnumerator RespawnPlayer()
 	{
 		yield return new WaitForSeconds (playerSpawnWait);
+        GameObject clone;
 		Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
 		Quaternion spawnRotate = Quaternion.identity;
-		Instantiate (PlayerShip, spawnPos, spawnRotate);
+		clone = Instantiate (PlayerShip, spawnPos, spawnRotate) as GameObject;
+        clone.GetComponent<PlayerController>().revived = true;
 		Invincible = true;
 		//transperency.a = 0.5f;
 		invincibilityTimer = playerInvincibilityTimer;
-	}
+        setPlayerDeathFlag(false);
+    }
 
     public int GetExtraLivesLimit()
     {
@@ -92,6 +109,32 @@ public class GameController : MonoBehaviour {
 
     public void setGameOver()
     {
-        gameUI.GameOver(true);
+        waves.setGameOverFlag();
+        gameUI.GameOver();
+    }
+
+    public void setPlayerDeathFlag(bool change)
+    {
+        playerDied = change;
+    }
+
+    public void setShieldStatus(bool status)
+    {
+        shielded = status;
+    }
+
+    public bool getShieldStatus()
+    {
+        return shielded;
+    }
+
+    public void startNextWaveMessage()
+    {
+        StartCoroutine(gameUI.nextWaveMessage());
+    }
+
+    public void starIncomingBossMessage()
+    {
+        StartCoroutine(gameUI.bossIncomingMessage());
     }
 }

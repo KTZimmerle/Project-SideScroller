@@ -46,7 +46,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 407934}
   m_Layer: 0
-  m_Name: Respawn
+  m_Name: Player Respawn
   m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,7 +127,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.004865918, g: 0.03156839, b: 0.07352942, a: 0.019607844}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -179,13 +179,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRange: {x: 12, y: 3, z: 0}
   spawnRangeTwo: {x: 2, y: 6, z: 0}
+  spawnRangeThree: {x: 13, y: 3, z: 0}
   HazardLimit: 10
   startWait: 3
   Hazard: {fileID: 100000, guid: 23984e43f083c1c48967b75dc280f977, type: 2}
   EnemyShipOne: {fileID: 163362, guid: 1d403aab272fee9459075225b4702d57, type: 2}
   EnemyShipTwo: {fileID: 120356, guid: 5c75b292ac1772b45af193a3854f7102, type: 2}
-  spawnWait: 3
-  waveBreak: 3
+  EnemyShipThree: {fileID: 119542, guid: 9bbdda54352adff4fb1f17752126cb64, type: 2}
+  EnemyShipPower: {fileID: 105642, guid: 103f6e6fb8c3c1745b2108beb55c2cc8, type: 2}
+  BossOne: {fileID: 117034, guid: ac261392b7afe324daf5ad37c738b039, type: 2}
+  spawnWait: 1
+  waveBreak: 5
+  bossWait: 4
 --- !u!114 &11481714
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,10 +202,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207bfe97743959d4db7542b95933ac3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalScore: {fileID: 11448930, guid: a1da70aeacc24db48ae0f5ee282476c4, type: 2}
-  gameOverText: {fileID: 11458758, guid: a1da70aeacc24db48ae0f5ee282476c4, type: 2}
-  playerLivesText: {fileID: 11468640, guid: a1da70aeacc24db48ae0f5ee282476c4, type: 2}
-  waveText: {fileID: 11400380, guid: a1da70aeacc24db48ae0f5ee282476c4, type: 2}
+  totalScore: {fileID: 0}
+  gameOverText: {fileID: 0}
+  playerLivesText: {fileID: 0}
+  waveText: {fileID: 0}
+  SpeedupText: {fileID: 0}
+  NextWave: {fileID: 0}
+  BossIncoming: {fileID: 0}
+  Speedup: {fileID: 0}
+  Missile: {fileID: 0}
+  AltFire: {fileID: 0}
+  Laser: {fileID: 0}
+  Shield: {fileID: 0}
+  SuperBomb: {fileID: 0}
+  speedmultiplier: 0
 --- !u!114 &11488256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -218,8 +233,9 @@ MonoBehaviour:
   playerInvincibilityTimer: 4
   playerLives: 2
   score: 0
-  extraLifeReq: 100
+  extraLifeReq: 2000
   Invincible: 0
+  playerDied: 0
   livesGained: 0
 --- !u!124 &12446266
 Behaviour:

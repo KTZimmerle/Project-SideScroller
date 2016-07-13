@@ -14,7 +14,8 @@ GameObject:
   - 23: {fileID: 2330692}
   - 114: {fileID: 11440052}
   - 114: {fileID: 11430692}
-  m_Layer: 0
+  - 114: {fileID: 11406052}
+  m_Layer: 11
   m_Name: PlayerShip
   m_TagString: PlayerShip
   m_Icon: {fileID: 0}
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 130692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.65, y: 0.65, z: 0.65}
+  m_LocalScale: {x: 0.65, y: 0.2, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -93,6 +94,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11406052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 130692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d5f5d44b075284db2faa0068e702a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11430692
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -104,16 +116,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c5eccc5cff7374ca0ce5e0e3ca6cce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 500
-  boundary:
-    xMin: -10.25
-    xMax: 10.25
-    yMin: -4.25
-    yMax: 3.75
+  revived: 0
+  speed: 250
   projectile: {fileID: 100002, guid: 1c075ebabab61284c8347353acd7a06b, type: 2}
   cooldownRate: 0.1
   PROJECTILE_LIMIT: 2
-  MISSILE_LIMIT: 2
 --- !u!114 &11440052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -126,10 +133,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missilePowUp: 0
+  altfirePowUp: 0
   laserPowUp: 0
   missileRate: 0
+  altfireRate: 0
+  shieldHits: 5
+  MISSILE_LIMIT: 1
+  ALTFIRE_LIMIT: 4
   laserRate: 0
+  isShielded: 0
   missile: {fileID: 138512, guid: a1b246d2e40f3c24ca764759fb563307, type: 2}
+  altfire: {fileID: 178876, guid: ba0a65f336e22a14c9b34d306071005a, type: 2}
+  laser: {fileID: 159354, guid: 4fe888fa9e82d644aaafd703b38bab9d, type: 2}
+  shields: {fileID: 188906, guid: 0deebe1888d843b499eb41c6ef2c5caa, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

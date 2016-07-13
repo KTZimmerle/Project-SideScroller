@@ -14,7 +14,7 @@ GameObject:
   - 23: {fileID: 2373694}
   - 114: {fileID: 11430520}
   - 114: {fileID: 11410560}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyShip
   m_TagString: Hazard
   m_Icon: {fileID: 0}
@@ -106,7 +106,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 1
   scoreValue: 2
-  isHit: 0
 --- !u!114 &11430520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,6 +118,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: -7
+  followPlayer: 0
+  drop: {fileID: 0}
+  hitPoints: 1
+  scoreValue: 2
   projectile: {fileID: 152982, guid: cc81a7334b2f9734190158d85e7b0a1d, type: 2}
   delayManuvuer: 1.5
   turnSpeed: -3
