@@ -48,7 +48,7 @@
 				FragmentInfo o;
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.color = _Color;
-				//o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
 				return o;
 			}
@@ -57,8 +57,8 @@
 			fixed4 frag (FragmentInfo i) : SV_Target
 			{
 				// sample the texture
-				//fixed4 col = tex2D(_MainTex, i.uv);
-				fixed4 col = i.color;
+				fixed4 col = tex2D(_MainTex, i.uv);
+				//fixed4 col = i.color;
 				col.a = _Alpha;
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);

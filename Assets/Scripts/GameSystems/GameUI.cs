@@ -46,7 +46,7 @@ public class GameUI : MonoBehaviour {
         playerLivesText.text = "Lives: " + (playerLives);
         totalScore.text = "Score: " + score;
         waveText.text = "Wave: " + waveCount;
-        SpeedupText.text = "Speed x " + speedmultiplier;
+        SpeedupText.text = "Speed x 1.0";
     }
 
     public void DeHighlightAll()
@@ -78,14 +78,14 @@ public class GameUI : MonoBehaviour {
     public IEnumerator bossIncomingMessage()
     {
         BossIncoming.text = "Warning!";
-        yield return new WaitForSeconds(1.5f);
-        BossIncoming.enabled = false;
-        yield return new WaitForSeconds(0.25f);
-        BossIncoming.enabled = true;
-        yield return new WaitForSeconds(1.5f);
-        BossIncoming.enabled = false;
-        yield return new WaitForSeconds(0.25f);
-        BossIncoming.text = "Boss Incoming!";
+        for (int i = 0; i < 2; i++)
+        {
+            BossIncoming.enabled = true;
+            yield return new WaitForSeconds(1.5f);
+            BossIncoming.enabled = false;
+            yield return new WaitForSeconds(0.25f);
+        }
+        BossIncoming.text = "Battleship Incoming!";
         BossIncoming.enabled = true;
         yield return new WaitForSeconds(2.0f);
         BossIncoming.text = "";

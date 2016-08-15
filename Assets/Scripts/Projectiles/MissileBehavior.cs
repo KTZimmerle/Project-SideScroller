@@ -3,12 +3,10 @@ using System.Collections;
 
 public class MissileBehavior : ProjectileBehavior {
 
-    Missile missile;
-    //GameObject[] targets;
+    public Missile missile;
     Collider[] targets;
     Collider closestTarget;
     float explosionRadius;
-    public float veloc;
 
     protected override void Awake()
     {
@@ -16,7 +14,13 @@ public class MissileBehavior : ProjectileBehavior {
         missile = new Missile();
         closestTarget = null;
         Rigidbody rb = GetComponent<Rigidbody>();
-        veloc = GetComponent<Mover>().speed;
+        veloc = speed;
+    }
+
+    void Start()
+    {
+        if (isFriendly)
+            gameController.GetComponent<PlayerProjectileList>().addMissile(gameObject);
     }
 
     void FixedUpdate()
@@ -30,7 +34,6 @@ public class MissileBehavior : ProjectileBehavior {
         }
         else //keep searching the closest enemy available
         {
-            //targets = GameObject.FindGameObjectsWithTag("Hazard");
             targets = Physics.OverlapSphere(transform.position, 25.0f, 1 << 8, QueryTriggerInteraction.Collide);
             float dist = Mathf.Infinity;
             Vector3 pos = transform.position;
@@ -45,73 +48,48 @@ public class MissileBehavior : ProjectileBehavior {
                 }
             }
         }
-
-        //GetComponent<Rigidbody>().velocity = new Vector3(transform.right, GetComponent<Rigidbody>().velocity.y, 0.0f);
+        
         GetComponent<Rigidbody>().velocity = transform.right * veloc;
-	}
+    }
 
     protected override void OnTriggerEnter(Collider other)
     {
         if (!isFriendly || isHit)
             return;
 
-        if (other.GetComponent<CircularMover>() != null)
+        if (other.GetComponent<BossArmorBehavior>() != null)
         {
-            E1 = other.GetComponent<CircularMover>();
-            enemy = E1.ES;
-        }
-        else if (other.GetComponent<RotatorMover>() != null)
-        {
-            E2 = other.GetComponent<RotatorMover>();
-            enemy = E2.ES;
-        }
-        else if (other.GetComponent<StraightMover>() != null)
-        {
-            E3 = other.GetComponent<StraightMover>();
-            enemy = E3.ES;
-        }
-        else if (other.GetComponent<TrackingMover>() != null)
-        {
-            E4 = other.GetComponent<TrackingMover>();
-            enemy = E4.ES;
-        }
-        else if (other.GetComponent<WavyMover>() != null)
-        {
-            EP = other.GetComponent<WavyMover>();
-            enemy = EP.ES;
-        }
-        else if (other.GetComponent<FirstBossRoutine>() != null)
-        {
-            BE = other.GetComponent<FirstBossRoutine>();
-            enemy = BE.BE;
-        }
-        else if (other.GetComponent<BossBarrierBehavior>() != null)
-        {
-            Barrier = other.GetComponent<BossBarrierBehavior>();
-            enemy = Barrier.ES;
-        }
-        else if (other.GetComponent<BossArmorBehavior>() != null)
-        {
+            gameController.GetComponent<PlayerProjectileList>().removeMissile(gameObject);
             Destroy(gameObject);
             return;
         }
-        else
+
+        enemy = GetComponent<OnHitHandler>().OnHitHandle(other);
+
+        if (enemy == null)
+            return;
+
+        if (enemy.getDeathStatus())
             return;
 
         if (enemy.takeDamage(missile.damage) <= 0)
         {
-            if (other.GetComponent<Mover>() != null)
-                enemy.DropOnDeath(other.GetComponent<Mover>().drop, other.transform.position, other.transform.rotation);
+            enemy.DropOnDeath(other.transform.position, other.transform.rotation);
             isHit = true;
             if (!enemy.isBoss())
             {
                 gameController.ModifyScore(enemy.getScoreValue());
+                enemy.PlayExplosion(other.transform.position, other.transform.rotation);
                 Destroy(other.gameObject);
             }
             else
+            {
+                BE = other.GetComponent<FirstBossRoutine>();
                 BE.killBoss();
+            }
         }
 
+        gameController.GetComponent<PlayerProjectileList>().removeMissile(gameObject);
         Destroy(gameObject);
     }
 }

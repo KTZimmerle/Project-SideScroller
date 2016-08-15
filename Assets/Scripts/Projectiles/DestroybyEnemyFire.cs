@@ -4,14 +4,24 @@ using System.Collections;
 public class DestroybyEnemyFire : MonoBehaviour {
 
     GameController gameController;
+    public bool canKill = true;
 
     void Start()
     {
         GameObject target = GameObject.FindWithTag("GameController");
-        gameController = target.GetComponent<GameController>();
+        if(target != null)
+            gameController = target.GetComponent<GameController>();
     }
 
     void OnTriggerStay(Collider player)
+    {
+        if (!canKill)
+            return;
+        
+        HandlePlayerHit(player);
+    }
+
+    public void HandlePlayerHit(Collider player)
     {
         if (player.CompareTag("PlayerShip") && !gameController.Invincible && 
             !gameController.playerDied && !gameController.getShieldStatus())

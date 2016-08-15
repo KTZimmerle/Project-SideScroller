@@ -16,17 +16,17 @@ public class GameController : MonoBehaviour {
     SpawnWaves waves;
 	public int score = 0;
 	public int extraLifeReq = 2000;
+    int reqScore;
 	public bool Invincible = false;
     bool shielded = false;
     public bool playerDied = false;
-    public int livesGained = 0;
 	//Color transperency;
-    const int EXTRA_LIFE_LIMIT = 20;
     
 	// Use this for initialization
 	void Start () 
 	{
-		score = 0;
+        reqScore = 0;
+        score = 0;
 		//transperency = PlayerShip.GetComponent<Renderer>().sharedMaterial.color;
 		invincibilityTimer = playerInvincibilityTimer;
 
@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour {
 
         //Spawn Player for the first time
         Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
-		Quaternion spawnRotate = Quaternion.identity;
+        Quaternion spawnRotate = PlayerShip.transform.rotation;
 		Instantiate (PlayerShip, spawnPos, spawnRotate);
 		StartCoroutine (waves.spawnWaves());
 	}
@@ -67,10 +67,10 @@ public class GameController : MonoBehaviour {
     {
         score += modifyScore;
         gameUI.UpdateScore(score);
-        if (livesGained < score / (extraLifeReq) &&
-            livesGained < GetExtraLivesLimit())
+        if (score > extraLifeReq)
         {
-            livesGained += 1;
+            reqScore += 500;
+            extraLifeReq += 2000 + reqScore;
             ModifyLives(1);
         }
     }
@@ -93,18 +93,13 @@ public class GameController : MonoBehaviour {
 		yield return new WaitForSeconds (playerSpawnWait);
         GameObject clone;
 		Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
-		Quaternion spawnRotate = Quaternion.identity;
+		Quaternion spawnRotate = PlayerShip.transform.rotation;
 		clone = Instantiate (PlayerShip, spawnPos, spawnRotate) as GameObject;
         clone.GetComponent<PlayerController>().revived = true;
 		Invincible = true;
 		//transperency.a = 0.5f;
 		invincibilityTimer = playerInvincibilityTimer;
         setPlayerDeathFlag(false);
-    }
-
-    public int GetExtraLivesLimit()
-    {
-        return EXTRA_LIFE_LIMIT;
     }
 
     public void setGameOver()

@@ -12,10 +12,9 @@ GameObject:
   - 65: {fileID: 6580586}
   - 114: {fileID: 11494908}
   - 54: {fileID: 5407176}
-  - 114: {fileID: 11422476}
   - 114: {fileID: 11454936}
   - 114: {fileID: 11475138}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: BossLaser
   m_TagString: BossLaser
   m_Icon: {fileID: 0}
@@ -29,7 +28,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145802}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 2.1, z: 0}
+  m_LocalPosition: {x: 7, y: 2.2613277, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,7 +46,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 120
+  m_Constraints: 72
   m_CollisionDetection: 0
 --- !u!65 &6580586
 BoxCollider:
@@ -59,23 +58,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.4, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11422476
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 145802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8504d13d7b47e1c4e9c7f70cf1d4c969, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: -4
-  followPlayer: 0
-  drop: {fileID: 0}
-  angle: 0
+  m_Size: {x: 17, y: 0.4, z: 0}
+  m_Center: {x: -8.5, y: 0, z: 0}
 --- !u!114 &11454936
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -87,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e693118d8998954c8f4eb392a19046a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: 20
+  despawn: 25
 --- !u!114 &11475138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,6 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32f6c78243643f41b8ad6e394b48e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canKill: 0
 --- !u!114 &11494908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,12 +95,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac54c5ac1889024e9f5942173c06da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: -5
   isFriendly: 0
   isHit: 0
-  length: 80
-  Xspeed: 0.05
-  Yspeed: 0
-  slowDown: 0
+  isManipulable: 0
+  length: 70
+  width: 0.45
+  angle: 0
 --- !u!120 &12058808
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -126,10 +112,10 @@ LineRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0b9ad07b2700a5243b0d44fc99c76050, type: 2}
+  - {fileID: 2100000, guid: 232164fa14a8fcb47acba1cb34bbca40, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
+  m_UseLightProbes: 0
   m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
@@ -143,8 +129,8 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -0.25, y: 0, z: 0}
-  - {x: 0.25, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     startWidth: 0.45
     endWidth: 0.45

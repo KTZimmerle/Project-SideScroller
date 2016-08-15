@@ -19,6 +19,11 @@ TagManager:
   - PickUp
   - PlayerShield
   - BossLaser
+  - PlayerLaser
+  - Engine_FX
+  - Laser_FX
+  - Muzzle_FX
+  - Explosion_FX
   layers:
   - Default
   - TransparentFX
@@ -32,9 +37,9 @@ TagManager:
   - EnemyProj
   - Boss
   - Player
-  - 
-  - 
-  - 
+  - Enemy(NoTrack)
+  - ReflectLaser
+  - Reflectable
   - 
   - 
   - 

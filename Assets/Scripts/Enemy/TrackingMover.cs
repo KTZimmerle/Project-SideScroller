@@ -1,50 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TrackingMover : Mover {
+public class TrackingMover : MonoBehaviour {
     
     public int hitPoints;
     public int scoreValue;
     public EnemyShip ES;
     float seconds;
+    public Collider[] search;
+    public GameObject explosion;
+    Vector3 direction;
+    public float speed;
 
-    protected override void Awake ()
+    void Awake ()
     {
-        base.Awake();
-        ES = new EnemyShip(hitPoints, scoreValue);
+        //base.Awake();
+        ES = new EnemyShip(hitPoints, scoreValue, explosion);
         seconds = 1.0f;
-        if(player != null)
-        {
-            Vector3 targetPos = player.transform.position;
-            targetPos.z = 0.0f;
-            transform.right = targetPos - transform.position;
-        }
+        search = Physics.OverlapSphere(transform.position, 25.0f, 1 << 11, QueryTriggerInteraction.Collide);
+        findTarget();
+
+        GetComponent<Rigidbody>().velocity = direction * speed;
     }
 	
-	// Update is called once per frame
 	void Update () {
         seconds -= Time.deltaTime;
+
+        //check if a second has passed by before recalculating
         if (seconds < 0.0f)
         {
-            player = GameObject.FindGameObjectWithTag("PlayerShip");
-            if (player != null)
-            {
-                heading = player.transform.position - transform.position;
-                distance = heading.magnitude;
-                direction = heading / distance;
-            }
-            else
-                direction = -transform.right;
-            //new Vector3(1.0f * Mathf.Cos(angle), 1.0f * Mathf.Sin(angle), 0.0f)
-            if (followPlayer)
+            findTarget();
+
+            if (direction != transform.right)
             {
                 GetComponent<Rigidbody>().velocity = direction * speed;
-                if (player != null)
-                {
-                    Vector3 targetPos = player.transform.position;
-                    targetPos.z = 0.0f;
-                    transform.right = targetPos - transform.position;
-                }
             }
             else
             {
@@ -54,4 +43,21 @@ public class TrackingMover : Mover {
             speed += 0.1f;
         }
 	}
+
+    void findTarget()
+    {
+        search = Physics.OverlapSphere(transform.position, 25.0f, 1 << 11, QueryTriggerInteraction.Collide);
+        if (search.Length > 0 && search[0] != null)
+        {
+            Vector3 heading = search[0].transform.position - transform.position;
+            float distance = heading.magnitude;
+            direction = heading / distance;
+            Vector3 targetPos = search[0].transform.position;
+            targetPos.z = 0.0f;
+            transform.right = targetPos - transform.position;
+        }
+        else
+            direction = transform.right;
+    }
+
 }

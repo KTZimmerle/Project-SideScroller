@@ -11,6 +11,7 @@ public class PowerUpSystem : MonoBehaviour {
     public int shieldHits = 5;
     public int MISSILE_LIMIT = 1;
     public int ALTFIRE_LIMIT = 4;
+    public int LASER_LIMIT = 3;
     public float laserRate;
     float speedModifier;
     public bool isShielded;
@@ -22,10 +23,6 @@ public class PowerUpSystem : MonoBehaviour {
 
     protected GameController gameController;
     protected AbstractEnemy enemy;
-    protected CircularMover E1;
-    protected RotatorMover E2;
-    protected StraightMover E3;
-    protected WavyMover EP;
 
     public bool hasMissilePowerUp()
     {
@@ -45,11 +42,15 @@ public class PowerUpSystem : MonoBehaviour {
     //missiles
     public void FireMissiles()
     {
-        if (missileRate < 0.0f && missilePowUp && GameObject.FindGameObjectsWithTag("MissileProjectile").Length + 1
-            <= MISSILE_LIMIT)
+        int numMissiles = GameObject.FindGameObjectWithTag("GameController").GetComponent<PlayerProjectileList>().getMissiles();
+        if (missileRate < 0.0f && missilePowUp && numMissiles
+            < MISSILE_LIMIT)
         {
             GameObject clone;
-            clone = Instantiate(missile, transform.position, transform.rotation) as GameObject;
+            Vector3 offset = transform.position;
+            offset.x += 0.5f;
+            offset.y -= 0.25f;
+            clone = Instantiate(missile, offset, transform.rotation) as GameObject;
             clone.GetComponent<ProjectileBehavior>().isFriendly = true;
             missileRate = 0.5f;
         }
@@ -58,13 +59,16 @@ public class PowerUpSystem : MonoBehaviour {
     //alternate shot
     public void AltShoot()
     {
-        if (altfireRate < 0.0f && altfirePowUp && GameObject.FindGameObjectsWithTag("AltfireProjectile").Length + 2
-            <= ALTFIRE_LIMIT && !laserPowUp)
+        int numAltFires = GameObject.FindGameObjectWithTag("GameController").GetComponent<PlayerProjectileList>().getAltFires();
+        if (altfireRate < 0.0f && altfirePowUp && numAltFires
+            < ALTFIRE_LIMIT && !laserPowUp)
         {
             GameObject clone;
-            clone = Instantiate(altfire, transform.position, Quaternion.Euler(0.0f, 0.0f, 30.0f) * transform.rotation) as GameObject;
+            Vector3 offsetX = transform.position;
+            offsetX.x += 0.75f;
+            clone = Instantiate(altfire, offsetX, Quaternion.Euler(0.0f, 0.0f, 30.0f) * transform.rotation) as GameObject;
             clone.GetComponent<ProjectileBehavior>().isFriendly = true;
-            clone = Instantiate(altfire, transform.position, Quaternion.Euler(0.0f, 0.0f, -30.0f) * transform.rotation) as GameObject;
+            clone = Instantiate(altfire, offsetX, Quaternion.Euler(0.0f, 0.0f, -30.0f) * transform.rotation) as GameObject;
             clone.GetComponent<ProjectileBehavior>().isFriendly = true;
             altfireRate = 0.25f;
         }
@@ -73,8 +77,15 @@ public class PowerUpSystem : MonoBehaviour {
     //lasers
     public void LaserShoot()
     {
-        if (laserRate < 0.0f && laserPowUp)
+        int numLasers = GameObject.FindGameObjectWithTag("GameController").GetComponent<PlayerProjectileList>().getLasers();
+        if (laserRate < 0.0f && laserPowUp && numLasers < LASER_LIMIT)
         {
+            foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
+            {
+                if (ps.CompareTag("Laser_FX"))
+                    ps.Play();
+            }
+
             GameObject clone;
             clone = Instantiate(laser, transform.position, transform.rotation) as GameObject;
             clone.GetComponent<LaserBehavior>().isFriendly = true;
@@ -88,7 +99,9 @@ public class PowerUpSystem : MonoBehaviour {
         if (!isShielded)
         {
             GameObject clone;
-            clone = Instantiate(shields, transform.position, transform.rotation) as GameObject;
+            Vector3 offsetX = transform.position;
+            offsetX.x += 0.25f;
+            clone = Instantiate(shields, offsetX, transform.rotation) as GameObject;
             clone.transform.SetParent(transform);
         }
     }
@@ -98,7 +111,7 @@ public class PowerUpSystem : MonoBehaviour {
     {
         Collider[] targets;
         Collider[] projectiles;
-        targets = Physics.OverlapSphere(transform.position, 25.0f, 1 << 8, QueryTriggerInteraction.Collide);
+        targets = Physics.OverlapSphere(transform.position, 25.0f, 1 << 8 | 1 << 12, QueryTriggerInteraction.Collide);
         projectiles = Physics.OverlapSphere(transform.position, 25.0f, 1 << 9, QueryTriggerInteraction.Collide);
         StartCoroutine(AnnihilateEnemies(targets, projectiles));
     }
@@ -107,30 +120,15 @@ public class PowerUpSystem : MonoBehaviour {
     {
         foreach (Collider potenTarget in targets)
         {
-            if (potenTarget.GetComponent<CircularMover>() != null)
-            {
-                E1 = potenTarget.GetComponent<CircularMover>();
-                enemy = E1.ES;
-            }
-            else if (potenTarget.GetComponent<RotatorMover>() != null)
-            {
-                E2 = potenTarget.GetComponent<RotatorMover>();
-                enemy = E2.ES;
-            }
-            else if (potenTarget.GetComponent<StraightMover>() != null)
-            {
-                E3 = potenTarget.GetComponent<StraightMover>();
-                enemy = E3.ES;
-            }
-            else if (potenTarget.GetComponent<WavyMover>() != null)
-            {
-                EP = potenTarget.GetComponent<WavyMover>();
-                enemy = EP.ES;
-            }
+            enemy = GetComponent<OnHitHandler>().OnHitHandle(potenTarget);
+
+            if (enemy == null)
+                continue;
 
 
             gameController.ModifyScore(enemy.getScoreValue());
-            enemy.DropOnDeath(potenTarget.GetComponent<Mover>().drop, potenTarget.transform.position, potenTarget.transform.rotation);
+            enemy.DropOnDeath(potenTarget.transform.position, potenTarget.transform.rotation);
+            enemy.PlayExplosion(potenTarget.transform.position, potenTarget.transform.rotation);
             Destroy(potenTarget.gameObject);
         }
 
@@ -150,6 +148,7 @@ public class PowerUpSystem : MonoBehaviour {
         isShielded = false;
         speedModifier = 1.0f;
         missilePowUp = false;
+        laserPowUp = false;
         missileRate = 0.5f;
         altfireRate = 0.25f;
         laserRate = 1.0f;

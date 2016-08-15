@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SpawnWaves : MonoBehaviour {
 
-    const int MAX_HAZARD_SIZE = 75;
+    const int MAX_HAZARD_SIZE = 50;
     const int MAX_POWERSHIP_SIZE = 6;
     const int MAX_SQUAD_SIZE = 8;
     const int MAX_FORMATION_SIZE = 8;
@@ -12,7 +12,7 @@ public class SpawnWaves : MonoBehaviour {
     int waveCount = 0;
     bool GameOverFlag;
     bool EnemiesRemaining;
-    bool bossAlive;
+    public bool bossAlive;
     public Vector3 spawnRange;
     public Vector3 spawnRangeTwo;
     public Vector3 spawnRangeThree;
@@ -24,7 +24,9 @@ public class SpawnWaves : MonoBehaviour {
     public GameObject EnemyShipThree;
     public GameObject EnemyShipPower;
     public GameObject BossOne;
+    public GameObject BossOneHM;
     FirstBossRoutine BEOne;
+    FirstBossRoutineHard BEOneHM;
     int numFormations = 2;
     int numPlatforms = 2;
     int numHunters = 2;
@@ -35,6 +37,7 @@ public class SpawnWaves : MonoBehaviour {
     public float bossWait;
     float subtractTime;
 
+    bool BEOneisHM = false;
     GameUI gameUI;
     // Use this for initialization
     void Start ()
@@ -43,6 +46,7 @@ public class SpawnWaves : MonoBehaviour {
         GameOverFlag = false;
         gameUI = GetComponent<GameUI>();
         BEOne = BossOne.GetComponent<FirstBossRoutine>();
+        BEOneHM = BossOneHM.GetComponent<FirstBossRoutineHard>();
         bossAlive = false;
         EnemiesRemaining = false;
     }
@@ -52,7 +56,12 @@ public class SpawnWaves : MonoBehaviour {
         yield return new WaitForSeconds(startWait);
         while (!GameOverFlag)
         {
+
             waveCount += 1;
+            if (waveCount >= 20 && !BEOneisHM)
+            {
+                BEOneisHM = true;
+            }
             gameUI.UpdateWave(waveCount);
             if (waveCount > 2)
             {
@@ -90,11 +99,12 @@ public class SpawnWaves : MonoBehaviour {
                 setBossStatus(true);
                 StartCoroutine(StartBossRoutine(Vector3.zero));
                 yield return new WaitWhile(() => bossAlive);
-                yield return new WaitForSeconds(5.0f);
+                yield return new WaitForSeconds(11.0f);
             }
             
             StartCoroutine(SpawnPowerShips(Vector3.zero));
-            GetComponent<GameController>().startNextWaveMessage();
+            if(!GameOverFlag)
+                GetComponent<GameController>().startNextWaveMessage();
             yield return new WaitForSeconds(waveBreak);
             if(HazardLimit < MAX_HAZARD_SIZE)
                 HazardLimit += 2;
@@ -174,9 +184,19 @@ public class SpawnWaves : MonoBehaviour {
         GameObject boss;
         spawnPt = new Vector3(13.0f, 0.0f, 0.0f);
         Quaternion spawnRotate = Quaternion.identity;
-        boss = Instantiate(BossOne, spawnPt, spawnRotate) as GameObject;
+
         bossAlive = true;
-        yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutine>().notDead);
+        if(!BEOneisHM)
+        {
+            boss = Instantiate(BossOne, spawnPt, spawnRotate) as GameObject;
+            yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutine>().notDead);
+        }
+        else
+        {
+            boss = Instantiate(BossOneHM, spawnPt, spawnRotate) as GameObject;
+            yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutineHard>().notDead);
+        }
+
         bossAlive = false;
     }
 
