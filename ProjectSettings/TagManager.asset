@@ -10,12 +10,12 @@ TagManager:
   - Boundary
   - EnemyShip
   - EnemyProj
-  - enemy/v/e/a/ed
-  - MissilePickUp
+  - PlayerWeapon
+  - ReflectLaser
   - AltfireProjectile
-  - SpeedUp
+  - Helper
   - PowerUpSystem
-  - MissileProjectile
+  - Boss
   - PickUp
   - PlayerShield
   - BossLaser
@@ -24,6 +24,7 @@ TagManager:
   - Laser_FX
   - Muzzle_FX
   - Explosion_FX
+  - MissileProjectile
   layers:
   - Default
   - TransparentFX
@@ -40,6 +41,7 @@ TagManager:
   - Enemy(NoTrack)
   - ReflectLaser
   - Reflectable
+  - Enemy(SBImmune)
   - 
   - 
   - 
@@ -52,11 +54,10 @@ TagManager:
   - 
   - 
   - 
+  - Bloom
   - 
   - 
-  - 
-  - 
-  - 
+  - Background
   m_SortingLayers:
   - name: Default
     uniqueID: 0

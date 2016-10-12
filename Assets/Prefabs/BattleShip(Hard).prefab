@@ -126,7 +126,7 @@ GameObject:
   - 4: {fileID: 487590}
   - 198: {fileID: 19867210}
   - 199: {fileID: 19992740}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: Battleship_Engine_GFX (3)
   m_TagString: Engine_FX
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - 4: {fileID: 480488}
   - 198: {fileID: 19826270}
   - 199: {fileID: 19986108}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boss_Muzzle_Flash
   m_TagString: Laser_FX
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - 4: {fileID: 407374}
   - 198: {fileID: 19809962}
   - 199: {fileID: 19938390}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: Battleship_Engine_GFX
   m_TagString: Engine_FX
   m_Icon: {fileID: 0}
@@ -207,7 +207,7 @@ GameObject:
   - 4: {fileID: 436004}
   - 198: {fileID: 19807618}
   - 199: {fileID: 19947958}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boss_Muzzle_Flash
   m_TagString: Laser_FX
   m_Icon: {fileID: 0}
@@ -241,7 +241,7 @@ GameObject:
   - 4: {fileID: 469110}
   - 198: {fileID: 19863508}
   - 199: {fileID: 19969084}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: Battleship_Engine_GFX (2)
   m_TagString: Engine_FX
   m_Icon: {fileID: 0}
@@ -278,9 +278,9 @@ GameObject:
   - 65: {fileID: 6578612}
   - 114: {fileID: 11484512}
   - 114: {fileID: 11482180}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Barrier3(Hard)
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -364,9 +364,9 @@ GameObject:
   - 65: {fileID: 6541022}
   - 114: {fileID: 11493694}
   - 114: {fileID: 11426702}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Barrier5(Hard)
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -384,9 +384,9 @@ GameObject:
   - 65: {fileID: 6536876}
   - 114: {fileID: 11441324}
   - 114: {fileID: 11412424}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Barrier1(Hard)
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -535,9 +535,9 @@ GameObject:
   - 65: {fileID: 6549774}
   - 114: {fileID: 11408016}
   - 114: {fileID: 11489136}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Barrier4(Hard)
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -575,9 +575,9 @@ GameObject:
   - 65: {fileID: 6547904}
   - 114: {fileID: 11445550}
   - 114: {fileID: 11405538}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Barrier2(Hard)
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -593,14 +593,13 @@ GameObject:
   - 33: {fileID: 3372324}
   - 23: {fileID: 2394174}
   - 135: {fileID: 13505586}
-  - 114: {fileID: 11485450}
   - 114: {fileID: 11467706}
   - 54: {fileID: 5427308}
   - 114: {fileID: 11435640}
   - 114: {fileID: 11414998}
   m_Layer: 10
   m_Name: BattleShip(Hard)
-  m_TagString: Hazard
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -615,7 +614,7 @@ GameObject:
   - 4: {fileID: 449908}
   - 198: {fileID: 19887888}
   - 199: {fileID: 19937822}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: Battleship_Engine_GFX (1)
   m_TagString: Engine_FX
   m_Icon: {fileID: 0}
@@ -1636,7 +1635,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 60
   scoreValue: 20
-  explosion: {fileID: 133262, guid: 56878f7cc01c1894b8f9b911f1de6621, type: 2}
 --- !u!114 &11412424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1659,7 +1657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0126a2e1d7f0df542a07ec7d3fcaec64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeedX: 10
+  rotSpeedX: 30
   rotSpeedY: 0
   rotSpeedZ: 0
   randomize: 0
@@ -1698,12 +1696,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 30
   scoreValue: 2000
-  speed: 1
+  veloc: 1
+  speed: -4
   notDead: 0
   projectile: {fileID: 149722, guid: 47d0fddfdd41a594fad30c4890dd205c, type: 2}
   projectileTwo: {fileID: 185144, guid: 132873245f4886b4e94d1061771fbf2e, type: 2}
   laser: {fileID: 145802, guid: 8ed8e7d5340de694c95f76a30367c0f9, type: 2}
-  reflectLaser: {fileID: 105106, guid: 4978089ebf57dbb4492921be8841dcec, type: 2}
   gunPointOne: {fileID: 167790}
   gunPointTwo: {fileID: 158318}
   gunPointThree: {fileID: 103008}
@@ -1727,7 +1725,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 60
   scoreValue: 20
-  explosion: {fileID: 133262, guid: 56878f7cc01c1894b8f9b911f1de6621, type: 2}
 --- !u!114 &11445550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1741,7 +1738,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 60
   scoreValue: 20
-  explosion: {fileID: 133262, guid: 56878f7cc01c1894b8f9b911f1de6621, type: 2}
 --- !u!114 &11467706
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1788,7 +1784,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 60
   scoreValue: 20
-  explosion: {fileID: 133262, guid: 56878f7cc01c1894b8f9b911f1de6621, type: 2}
 --- !u!114 &11484654
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1800,21 +1795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27edb30d26cdfd2499996734fa5e3532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11485450
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8504d13d7b47e1c4e9c7f70cf1d4c969, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: -4
-  followPlayer: 0
-  player: {fileID: 0}
-  angle: 0
 --- !u!114 &11485592
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1872,7 +1852,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPoints: 60
   scoreValue: 20
-  explosion: {fileID: 133262, guid: 56878f7cc01c1894b8f9b911f1de6621, type: 2}
 --- !u!135 &13505586
 SphereCollider:
   m_ObjectHideFlags: 1

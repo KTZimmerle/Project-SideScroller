@@ -6,11 +6,15 @@ public class BossBarrierBehavior : MonoBehaviour
     public int hitPoints;
     public int scoreValue;
     public EnemyShip ES;
-    public GameObject explosion;
 
     void Awake()
     {
-        ES = new EnemyShip(hitPoints, scoreValue, explosion);
+        ES = new EnemyShip(hitPoints, scoreValue);
+    }
+
+    void OnDisable()
+    {
+        ES.Init(hitPoints);
     }
 }
 

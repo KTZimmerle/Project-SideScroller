@@ -38,5 +38,6 @@ public class Mover : MonoBehaviour {
         }
         else
             GetComponent<Rigidbody>().velocity = transform.right * speed;
+        gameObject.SetActive(false);
     }
 }

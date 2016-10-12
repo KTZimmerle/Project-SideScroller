@@ -22,7 +22,7 @@ public class LaserBehavior : MonoBehaviour {
     public bool isFriendly;
     public bool isHit;
     public bool isManipulable = false;
-    protected bool isDone;
+    protected bool growthPeaked;
     protected bool ownerAlive;
     protected int stopGrowth;
     protected GameController gameController;
@@ -43,18 +43,34 @@ public class LaserBehavior : MonoBehaviour {
     protected Vector3[] points;
     protected Vector3 direction;
 
-    // Use this for initialization
-    protected void Awake ()
+    public void Init()
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+        tailX = -0.0f;
+        headX = 0.0f;
+        tailY = -0.0f;
+        headY = 0.0f;
+        totalGrowth = 0.0f;
         stopGrowth = 1;
-        isDone = false;
+        growthPeaked = false;
         ownerAlive = true;
-        points = new Vector3[2];
-        direction = new Vector3(1.0f * Mathf.Cos(Mathf.Deg2Rad * angle),
-                                1.0f * Mathf.Sin(Mathf.Deg2Rad * angle), 0.0f);
+        for (int i = 0; i < 2; i++)
+        {
+            points[i] = new Vector3(0.0f, 0.0f, 0.0f);
+        }
+        laserBeam.SetPositions(points);
+    }
 
-        lasSpeed = speed / 100;
+    // Use this for initialization
+    protected void Awake()
+    {
+        points = new Vector3[2];
+        laser = new Laser(length);
+        Vector3 bottomleft = new Vector3(-9.5f, -4.5f, 0.0f);
+        Vector3 topright = new Vector3(9.5f, 4.5f, 0.0f);
+        gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);
+        laserBeam = GetComponent<LineRenderer>();
+        laserBeam.SetWidth(width, width);
         GameObject target = GameObject.FindWithTag("GameController");
         if (target != null)
         {
@@ -68,10 +84,21 @@ public class LaserBehavior : MonoBehaviour {
             player = p.GetComponent<PlayerController>();
         }
 
+        lasSpeed = speed / 100;
+
         if (isFriendly)
-            mask = 1 << 8 | 1 << 10 | 1 << 12;
+            mask = 1 << 8 | 1 << 10 | 1 << 12 | 1 << 15;
         else
             mask = 1 << 11;
+    }
+
+    protected void OnEnable()
+    {
+        stopGrowth = 1;
+        growthPeaked = false;
+        ownerAlive = true;
+        direction = new Vector3(1.0f * Mathf.Cos(Mathf.Deg2Rad * angle),
+                                1.0f * Mathf.Sin(Mathf.Deg2Rad * angle), 0.0f);
 
         veloc = speed;
         if (angle == 0)
@@ -80,20 +107,14 @@ public class LaserBehavior : MonoBehaviour {
             extend = -lasSpeed;
         else
             extend = (Mathf.Abs(lasSpeed * Mathf.Cos(Mathf.Deg2Rad * angle)) + Mathf.Abs(lasSpeed * Mathf.Sin(Mathf.Deg2Rad * angle))) / 2;
-        laser = new Laser(length);
-        laserBeam = GetComponent<LineRenderer>();
-        laserBeam.SetWidth(width, width);
-        
-        Vector3 bottomleft = new Vector3(-9.5f, -4.5f, 0.0f);
-        Vector3 topright = new Vector3(9.5f, 4.5f, 0.0f);
-        gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);
-        //StartCoroutine(LaserGrowth());
+
+        /*if (isFriendly)
+            gameController.GetComponent<PlayerProjectileList>().removeWeapon(gameObject);*/
     }
 
-    void Start()
+    protected void OnDisable()
     {
-        if(isFriendly)
-            gameController.GetComponent<PlayerProjectileList>().addLaser(gameObject);
+        Init();
     }
 
     /*protected IEnumerator LaserGrowth()
@@ -119,26 +140,30 @@ public class LaserBehavior : MonoBehaviour {
         }
         else
         {
-            isDone = true;
+            growthPeaked = true;
         }
     }
 
     protected void LaserShrink()
     {
-        if (!isDone)
+        if (!growthPeaked)
             return;
         tailX += extend * direction.normalized.x * Time.deltaTime * 100;
         tailY += extend * direction.normalized.y * Time.deltaTime * 100;
         if (Mathf.Abs(headX - tailX) < 0.11f && Mathf.Abs(headY - tailY) < 0.11f)
         {
-            gameController.GetComponent<PlayerProjectileList>().removeLaser(gameObject);
-            Destroy(gameObject);
+            /*if (isFriendly)
+            {
+                gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+            }*/
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
 
 	protected void Update ()
     {
-        if (!isDone)
+        if (!growthPeaked)
             LaserGrowth();
 
         stopGrowth = 1;
@@ -146,7 +171,6 @@ public class LaserBehavior : MonoBehaviour {
         {
             if (gameController.playerDied)
             {
-                isManipulable = false;
                 ownerAlive = false;
             }
         }
@@ -164,7 +188,7 @@ public class LaserBehavior : MonoBehaviour {
             float offsetY = (i < 1) ? tailY : headY;
             points[i] = new Vector3(offsetX, offsetY, 0.0f);
         }
-        
+
         LasHit.topT = transform.position + points[0] + new Vector3(0.0f, (width - 0.05f) / 2, 0.0f);
         LasHit.topH = transform.position + points[1] + new Vector3(0.0f, (width - 0.05f) / 2, 0.0f);
         LasHit.midT = transform.position + points[0] + new Vector3(0.0f, 0.0f, 0.0f);
@@ -187,7 +211,7 @@ public class LaserBehavior : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if(isDone)
+        if(growthPeaked)
             GetComponent<Rigidbody>().velocity = 
                     new Vector3(1.0f * Mathf.Cos(Mathf.Deg2Rad * angle),
                                 1.0f * Mathf.Sin(Mathf.Deg2Rad * angle), 0.0f) * veloc;
@@ -206,7 +230,7 @@ public class LaserBehavior : MonoBehaviour {
         Vector3 DirResultant = Vector3.zero;
         DirResultant.y = Input.GetAxis("PlayerShipV") * Time.deltaTime;
         DirResultant.x = Input.GetAxis("PlayerShipH") * Time.deltaTime;
-        if (isDone)
+        if (growthPeaked)
             DirResultant.x /= 2;
         
         if (transform.position.x + DirResultant.x < gameBounds.xMin)
@@ -224,7 +248,7 @@ public class LaserBehavior : MonoBehaviour {
                                  new Vector3(transform.position.x, gameBounds.yMin, 0.0f);
         }
 
-        if (isDone)
+        if (growthPeaked)
             GetComponent<Rigidbody>().velocity = player.speed * DirResultant + GetComponent<Rigidbody>().velocity;
         else
             GetComponent<Rigidbody>().velocity = player.speed * DirResultant;
@@ -245,7 +269,7 @@ public class LaserBehavior : MonoBehaviour {
             return;
         }
         
-        AbstractEnemy enemy = GetComponent<OnHitHandler>().OnHitHandle(other);
+        AbstractEnemy enemy = GetComponent<OnHitHandler>().OnHitHandle(other, gameController);
         
         if (enemy == null)
             return;
@@ -256,18 +280,7 @@ public class LaserBehavior : MonoBehaviour {
         isHit = true;
         if (enemy.takeDamage(laser.damage) <= 0)
         {
-            enemy.DropOnDeath(other.transform.position, other.transform.rotation);
-            if (!enemy.isBoss())
-            {
-                gameController.ModifyScore(enemy.getScoreValue());
-                enemy.PlayExplosion(other.transform.position, other.transform.rotation);
-                Destroy(other.gameObject);
-            }
-            else
-            {
-                FirstBossRoutine BE = other.GetComponent<FirstBossRoutine>();
-                BE.killBoss();
-            }
+            GetComponent<OnHitHandler>().OnHitLogic(other, gameController, enemy);
             isHit = false;
         }
 

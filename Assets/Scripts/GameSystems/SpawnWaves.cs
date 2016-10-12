@@ -39,7 +39,8 @@ public class SpawnWaves : MonoBehaviour {
 
     bool BEOneisHM = false;
     GameUI gameUI;
-    // Use this for initialization
+    ShipPool sPool;
+
     void Start ()
     {
         subtractTime = 0.0f;
@@ -51,6 +52,32 @@ public class SpawnWaves : MonoBehaviour {
         EnemiesRemaining = false;
     }
 
+    void Spawner()
+    {
+        if (waveCount >= 15 && !BEOneisHM)
+        {
+            BEOneisHM = true;
+        }
+        gameUI.UpdateWave(waveCount);
+        if (waveCount > 2)
+        {
+            Vector3 spawnPos = Vector3.zero;
+            StartCoroutine(SpawnFormationOne(spawnPos));
+        }
+
+        if (waveCount > 6)
+        {
+            Vector3 spawnPos = Vector3.zero;
+            StartCoroutine(SpawnFormationTwo(spawnPos));
+        }
+
+        if (waveCount > 10)
+        {
+            Vector3 spawnPos = Vector3.zero;
+            StartCoroutine(SpawnShipHunter(spawnPos));
+        }
+    }
+
     public IEnumerator spawnWaves()
     {
         yield return new WaitForSeconds(startWait);
@@ -58,34 +85,15 @@ public class SpawnWaves : MonoBehaviour {
         {
 
             waveCount += 1;
-            if (waveCount >= 20 && !BEOneisHM)
-            {
-                BEOneisHM = true;
-            }
-            gameUI.UpdateWave(waveCount);
-            if (waveCount > 2)
-            {
-                Vector3 spawnPos = Vector3.zero;
-                StartCoroutine(SpawnFormationOne(spawnPos));
-            }
-
-            if (waveCount > 6)
-            {
-                Vector3 spawnPos = Vector3.zero;
-                StartCoroutine(SpawnFormationTwo(spawnPos));
-            }
-
-            if (waveCount > 10)
-            {
-                Vector3 spawnPos = Vector3.zero;
-                StartCoroutine(SpawnShipHunter(spawnPos));
-            }
+            Spawner();
 
             for (int i = 0; i < HazardLimit; i++)
             {
-                Vector3 spawnPos = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
-                Quaternion spawnRotate = Quaternion.identity;
-                Instantiate(Hazard, spawnPos, spawnRotate);
+                GameObject Razer = GetComponent<ShipPool>().SpawnRazer();
+                Razer.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+                Razer.transform.rotation = Quaternion.identity;
+                Razer.SetActive(true);
+                //Instantiate(Hazard, spawnPos, spawnRotate);
                 yield return new WaitForSeconds(spawnWait);
             }
             
@@ -99,7 +107,7 @@ public class SpawnWaves : MonoBehaviour {
                 setBossStatus(true);
                 StartCoroutine(StartBossRoutine(Vector3.zero));
                 yield return new WaitWhile(() => bossAlive);
-                yield return new WaitForSeconds(11.0f);
+                yield return new WaitForSeconds(8.0f);
             }
             
             StartCoroutine(SpawnPowerShips(Vector3.zero));
@@ -129,6 +137,23 @@ public class SpawnWaves : MonoBehaviour {
         }
     }
 
+    /*void SpawnFormationOne(Vector3 spawnPt)
+    {
+        EnemiesRemaining = true;
+        for (int j = 0; j < numFormations; j++)
+        {
+            spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+            for (int i = 0; i < squadSize; i++)
+            {
+                GameObject Swooper = GetComponent<ShipPool>().SpawnSwooper();
+                Swooper.transform.position = spawnPt;
+                Swooper.transform.rotation = Quaternion.identity;
+                Swooper.SetActive(true);
+            }
+        }
+        EnemiesRemaining = false;
+    }*/
+
     //enemy formations
     IEnumerator SpawnFormationOne(Vector3 spawnPt)
     {
@@ -139,8 +164,11 @@ public class SpawnWaves : MonoBehaviour {
             spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
             for (int i = 0; i < squadSize; i++)
             {
-                Quaternion spawnRotate = Quaternion.identity;
-                Instantiate(EnemyShipOne, spawnPt, spawnRotate);
+                GameObject Swooper = GetComponent<ShipPool>().SpawnSwooper();
+                Swooper.transform.position = spawnPt;
+                Swooper.transform.rotation = Quaternion.identity;
+                Swooper.SetActive(true);
+                //Instantiate(EnemyShipOne, spawnPt, spawnRotate);
                 yield return new WaitForSeconds(0.25f);
             }
             yield return new WaitForSeconds(4.0f - subtractTime);
@@ -156,9 +184,13 @@ public class SpawnWaves : MonoBehaviour {
         {
             spawnRangeTwo.y *= CoinFlip(1, -1);
             yield return new WaitForSeconds(Random.Range(1.0f, 5.0f));
-            spawnPt = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
-            Quaternion spawnRotate = Quaternion.identity;
-            Instantiate(EnemyShipTwo, spawnPt, spawnRotate);
+            GameObject Blaster = GetComponent<ShipPool>().SpawnBlaster();
+            Blaster.transform.position = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
+            Blaster.transform.rotation = Quaternion.identity;
+            Blaster.SetActive(true);
+            //spawnPt = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
+            //Quaternion spawnRotate = Quaternion.identity;
+            //Instantiate(EnemyShipTwo, spawnPt, spawnRotate);
         }
     }
 
@@ -170,9 +202,13 @@ public class SpawnWaves : MonoBehaviour {
         int iter = 0;
         while (iter < extraSpawn)
         {
-            spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y/2, spawnRange.y/2), spawnRange.z);
-            Quaternion spawnRotate = Quaternion.identity;
-            Instantiate(EnemyShipPower, spawnPt, spawnRotate);
+            GameObject PowerShip = GetComponent<ShipPool>().SpawnPowerShip();
+            PowerShip.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y / 2, spawnRange.y / 2), spawnRange.z);
+            PowerShip.transform.rotation = Quaternion.identity;
+            PowerShip.SetActive(true);
+            //spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y/2, spawnRange.y/2), spawnRange.z);
+            //Quaternion spawnRotate = Quaternion.identity;
+            //Instantiate(EnemyShipPower, spawnPt, spawnRotate);
             iter++;
             yield return new WaitForSeconds(spawnWait);
         }
@@ -183,17 +219,24 @@ public class SpawnWaves : MonoBehaviour {
         yield return new WaitForSeconds(bossWait);
         GameObject boss;
         spawnPt = new Vector3(13.0f, 0.0f, 0.0f);
-        Quaternion spawnRotate = Quaternion.identity;
 
         bossAlive = true;
         if(!BEOneisHM)
         {
-            boss = Instantiate(BossOne, spawnPt, spawnRotate) as GameObject;
+            //boss = Instantiate(BossOne, spawnPt, spawnRotate) as GameObject;
+            boss = GetComponent<ShipPool>().SpawnBattleShip();
+            boss.transform.position = spawnPt;
+            boss.transform.rotation = Quaternion.identity;
+            boss.SetActive(true);
             yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutine>().notDead);
         }
         else
         {
-            boss = Instantiate(BossOneHM, spawnPt, spawnRotate) as GameObject;
+            boss = GetComponent<ShipPool>().SpawnBattleShipHM();
+            boss.transform.position = spawnPt;
+            boss.transform.rotation = Quaternion.identity;
+            boss.SetActive(true);
+            //boss = Instantiate(BossOneHM, spawnPt, spawnRotate) as GameObject;
             yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutineHard>().notDead);
         }
 
@@ -206,9 +249,11 @@ public class SpawnWaves : MonoBehaviour {
         for (int i = 0; i < numHunters; i++)
         {
             spawnRangeThree.x *= CoinFlip(1, -1);
-            spawnPt = new Vector3(spawnRangeThree.x, Random.Range(-spawnRangeThree.y, spawnRangeThree.y), spawnRangeThree.z);
-            Quaternion spawnRotate = Quaternion.identity;
-            Instantiate(EnemyShipThree, spawnPt, spawnRotate);
+            GameObject Hunter = GetComponent<ShipPool>().SpawnHunter();
+            Hunter.transform.position = new Vector3(spawnRangeThree.x, Random.Range(-spawnRangeThree.y, spawnRangeThree.y), spawnRangeThree.z);
+            Hunter.transform.rotation = Quaternion.identity;
+            Hunter.SetActive(true);
+            //Instantiate(EnemyShipThree, spawnPt, spawnRotate);
             yield return new WaitForSeconds(4.0f);
         }
     }

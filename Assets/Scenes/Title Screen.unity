@@ -274,9 +274,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2116499184}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &841860050
@@ -311,7 +311,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Space Waves
+  m_Text: Zector Wars
 --- !u!222 &841860051
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -349,7 +349,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 0, y: 120}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &932031287
@@ -387,14 +387,14 @@ MonoBehaviour:
   m_Text: 'Press any key to play
 
 
-    W,A,S,D to move ship
-
-    LMB or spacebar to fire
-
-
     Shoot down enemies for
 
     a high score!
+
+
+    Collect powerups that drop from
+
+    Enemies!
 
 
     Dodge enemies and avoid
@@ -403,6 +403,18 @@ MonoBehaviour:
 
 
     Survive each wave!
+
+
+    Right Hand/Left Hand Controls
+
+
+    W,A,S,D/Up,Down,Left,Right to move ship
+
+    Numpad 0/Z to fire main weapon
+
+    Numpad ./X to fire missile weapon
+
+    Numpad Enter/C to activate powerup
 
 
     Press Esc to quit

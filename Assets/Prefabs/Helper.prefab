@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BRlaser1: {fileID: 105106, guid: 4978089ebf57dbb4492921be8841dcec, type: 2}
+  bossRefLaserPool: {fileID: 161386, guid: 4e07d60d8f622c241837fbb16514e892, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

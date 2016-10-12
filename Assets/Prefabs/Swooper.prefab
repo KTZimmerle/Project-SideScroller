@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0126a2e1d7f0df542a07ec7d3fcaec64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeedX: 6
+  rotSpeedX: 12
   rotSpeedY: 0
   rotSpeedZ: 0
   randomize: 0
@@ -209,7 +209,7 @@ MonoBehaviour:
   scoreValue: 20
   projectile: {fileID: 152982, guid: cc81a7334b2f9734190158d85e7b0a1d, type: 2}
   delayManuvuer: 1.5
-  explosion: {fileID: 133262, guid: 56878f7cc01c1894b8f9b911f1de6621, type: 2}
+  explosion: {fileID: 192378, guid: 852e3d82eae57134bb926e234d4e74f3, type: 2}
   turnSpeed: -3
   speed: -7
 --- !u!198 &19882670

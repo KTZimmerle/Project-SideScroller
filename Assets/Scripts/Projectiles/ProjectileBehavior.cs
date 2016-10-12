@@ -21,12 +21,13 @@ public class ProjectileBehavior : MonoBehaviour {
 
     protected virtual void Awake()
     {
-        findTarget();
         GameObject target = GameObject.FindWithTag("GameController");
         if (target.GetComponent<GameController>() != null)
             gameController = target.GetComponent<GameController>();
-        bullet = new Bullet();
-        isHit = false;
+
+        if(GetComponent<ProjectileBehavior>() != null ||
+           GetComponent<AltfireBehavior>() != null)
+            bullet = new Bullet();
 
         if (followPlayer)
         {
@@ -34,12 +35,36 @@ public class ProjectileBehavior : MonoBehaviour {
         }
         else
             GetComponent<Rigidbody>().velocity = transform.right * speed;
+
+        /*isHit = false;
+        findTarget();
+        if (followPlayer)
+        {
+            GetComponent<Rigidbody>().velocity = direction.normalized * speed;
+        }
+        else
+            GetComponent<Rigidbody>().velocity = transform.right * speed;*/
     }
 
-    void Start()
+    /*void Start()
     {
         if (isFriendly)
-            gameController.GetComponent<PlayerProjectileList>().addBullet(gameObject);
+            gameController.GetComponent<PlayerProjectileList>().removeWeapon(gameObject);
+    }*/
+
+    protected void OnEnable()
+    {
+        isHit = false;
+        findTarget();
+        if (followPlayer)
+        {
+            GetComponent<Rigidbody>().velocity = direction.normalized * speed;
+        }
+        else
+            GetComponent<Rigidbody>().velocity = transform.right * speed;
+
+        /*if (isFriendly)
+            gameController.GetComponent<PlayerProjectileList>().removeWeapon(gameObject);*/
     }
 
     void FixedUpdate()
@@ -55,12 +80,13 @@ public class ProjectileBehavior : MonoBehaviour {
         
         if (other.GetComponent<BossArmorBehavior>() != null)
         {
-            gameController.GetComponent<PlayerProjectileList>().removeBullet(gameObject);
-            Destroy(gameObject);
+            //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
             return;
         }
 
-        enemy = GetComponent<OnHitHandler>().OnHitHandle(other);
+        enemy = GetComponent<OnHitHandler>().OnHitHandle(other, gameController);
 
         if(enemy == null)
             return;
@@ -68,25 +94,15 @@ public class ProjectileBehavior : MonoBehaviour {
         if(enemy.getDeathStatus())
             return;
 
+        isHit = true;
         if (enemy.takeDamage(bullet.damage) <= 0)
         {
-            enemy.DropOnDeath(other.transform.position, other.transform.rotation);
-            isHit = true;
-            if (!enemy.isBoss())
-            {
-                gameController.ModifyScore(enemy.getScoreValue());
-                enemy.PlayExplosion(other.transform.position, other.transform.rotation);
-                Destroy(other.gameObject);
-            }
-            else
-            {
-                BE = other.GetComponent<FirstBossRoutine>();
-                BE.killBoss();
-            }
+            GetComponent<OnHitHandler>().OnHitLogic(other, gameController, enemy);
         }
 
-        gameController.GetComponent<PlayerProjectileList>().removeBullet(gameObject);
-        Destroy(gameObject);
+        //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     protected void findTarget()

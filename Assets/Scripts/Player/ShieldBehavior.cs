@@ -8,9 +8,11 @@ public class ShieldBehavior : MonoBehaviour {
     Collider player;
     protected GameController gameController;
     protected AbstractEnemy enemy;
+    GameUI gameUI;
 
-    void Start ()
+    void Awake ()
     {
+        gameUI = (GameUI)FindObjectOfType(typeof(GameUI));
         GameObject target = GameObject.FindWithTag("GameController");
         if (target != null)
             gameController = target.GetComponent<GameController>();
@@ -18,6 +20,10 @@ public class ShieldBehavior : MonoBehaviour {
         player.isTrigger = false;
         gameController.setShieldStatus(true);
         PowUp = transform.parent.GetComponent<PowerUpSystem>();
+    }
+
+    void OnEnable()
+    {
         hitpoints = PowUp.shieldHits;
     }
 
@@ -25,7 +31,8 @@ public class ShieldBehavior : MonoBehaviour {
     {
         if (other.CompareTag("EnemyProj"))
         {
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             TakeHit();
             return;
         }
@@ -36,7 +43,7 @@ public class ShieldBehavior : MonoBehaviour {
         }
         else if (other.CompareTag("Hazard"))
         {
-            enemy = GetComponent<OnHitHandler>().OnHitHandle(other);
+            enemy = GetComponent<OnHitHandler>().OnHitHandle(other, gameController);
 
             if (enemy == null)
                 return;
@@ -46,10 +53,7 @@ public class ShieldBehavior : MonoBehaviour {
 
             if (enemy.takeDamage(1) <= 0)
             {
-                gameController.ModifyScore(enemy.getScoreValue());
-                enemy.DropOnDeath(other.transform.position, other.transform.rotation);
-                enemy.PlayExplosion(other.transform.position, other.transform.rotation);
-                Destroy(other.gameObject);
+                GetComponent<OnHitHandler>().OnHitLogic(other, gameController, enemy);
             }
 
             TakeHit();
@@ -64,7 +68,9 @@ public class ShieldBehavior : MonoBehaviour {
             player.isTrigger = true;
             gameController.setShieldStatus(false);
             PowUp.isShielded = false;
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameUI.RestoreShieldText();
+            gameObject.SetActive(false);
         }
     }
 }

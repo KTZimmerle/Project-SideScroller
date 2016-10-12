@@ -4,7 +4,6 @@ using System.Collections;
 public class MissileBehavior : ProjectileBehavior {
 
     public Missile missile;
-    Collider[] targets;
     Collider closestTarget;
     float explosionRadius;
 
@@ -17,16 +16,25 @@ public class MissileBehavior : ProjectileBehavior {
         veloc = speed;
     }
 
-    void Start()
+    void OnEnable()
+    {
+        base.OnEnable();
+        /*foreach (Collider potenTarget in targets)
+        {
+            potenTarget = null;
+        }*/
+    }
+
+    /*void Start()
     {
         if (isFriendly)
-            gameController.GetComponent<PlayerProjectileList>().addMissile(gameObject);
-    }
+            gameController.GetComponent<PlayerProjectileList>().removeWeapon(gameObject);
+    }*/
 
     void FixedUpdate()
     {
         //find the closest enemy
-        if (closestTarget != null)
+        if (closestTarget != null && closestTarget.gameObject.activeSelf)
         {
             Vector3 targetPos = closestTarget.transform.position;
             targetPos.z = 0.0f;
@@ -34,17 +42,21 @@ public class MissileBehavior : ProjectileBehavior {
         }
         else //keep searching the closest enemy available
         {
-            targets = Physics.OverlapSphere(transform.position, 25.0f, 1 << 8, QueryTriggerInteraction.Collide);
+            Collider[] targets;
+            targets = Physics.OverlapSphere(transform.position, 25.0f, 1 << 8 | 1 << 15, QueryTriggerInteraction.Collide);
             float dist = Mathf.Infinity;
             Vector3 pos = transform.position;
             foreach (Collider potenTarget in targets)
             {
-                Vector3 difference = potenTarget.transform.position - pos;
-                float currentDist = difference.sqrMagnitude;
-                if (currentDist < dist)
+                if (potenTarget.gameObject.activeSelf)
                 {
-                    closestTarget = potenTarget;
-                    dist = currentDist;
+                    Vector3 difference = potenTarget.transform.position - pos;
+                    float currentDist = difference.sqrMagnitude;
+                    if (currentDist < dist)
+                    {
+                        closestTarget = potenTarget;
+                        dist = currentDist;
+                    }
                 }
             }
         }
@@ -57,14 +69,18 @@ public class MissileBehavior : ProjectileBehavior {
         if (!isFriendly || isHit)
             return;
 
+        GameObject exp = gameController.GetComponent<SpecialFXPool>().playMissileExplosion();
         if (other.GetComponent<BossArmorBehavior>() != null)
         {
-            gameController.GetComponent<PlayerProjectileList>().removeMissile(gameObject);
-            Destroy(gameObject);
+            //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
+            exp.transform.position = transform.position;
+            exp.SetActive(true);
             return;
         }
 
-        enemy = GetComponent<OnHitHandler>().OnHitHandle(other);
+        enemy = GetComponent<OnHitHandler>().OnHitHandle(other, gameController);
 
         if (enemy == null)
             return;
@@ -72,24 +88,16 @@ public class MissileBehavior : ProjectileBehavior {
         if (enemy.getDeathStatus())
             return;
 
+        isHit = true;
         if (enemy.takeDamage(missile.damage) <= 0)
         {
-            enemy.DropOnDeath(other.transform.position, other.transform.rotation);
-            isHit = true;
-            if (!enemy.isBoss())
-            {
-                gameController.ModifyScore(enemy.getScoreValue());
-                enemy.PlayExplosion(other.transform.position, other.transform.rotation);
-                Destroy(other.gameObject);
-            }
-            else
-            {
-                BE = other.GetComponent<FirstBossRoutine>();
-                BE.killBoss();
-            }
+            GetComponent<OnHitHandler>().OnHitLogic(other, gameController, enemy);
         }
 
-        gameController.GetComponent<PlayerProjectileList>().removeMissile(gameObject);
-        Destroy(gameObject);
+        //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+        //Destroy(gameObject);
+        exp.transform.position = transform.position;
+        exp.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

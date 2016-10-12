@@ -4,10 +4,6 @@ using System.Collections;
 public class DestroybyContact : MonoBehaviour {
     
 	GameController gameController;
-    PlayerAttackType hitby;
-    ProjectileBehavior contact;
-    Bullet bullet;
-    Missile missile;
 
     void Start()
 	{
@@ -15,9 +11,6 @@ public class DestroybyContact : MonoBehaviour {
 		GameObject target = GameObject.FindWithTag("GameController");
         if(target.GetComponent<GameController>() != null)
 		    gameController = target.GetComponent<GameController>();
-        bullet = new Bullet();
-        missile = new Missile();
-        contact = null;
     }
 
     void Update()
@@ -31,7 +24,11 @@ public class DestroybyContact : MonoBehaviour {
             !gameController.playerDied && !gameController.getShieldStatus())
         {
             gameController.setPlayerDeathFlag(true);
-            Destroy(player.gameObject);
+            player.gameObject.SetActive(false);
+            GameObject exp = gameController.GetComponent<SpecialFXPool>().playPlayerExplosion();
+            exp.transform.position = player.transform.position;
+            exp.SetActive(true);
+            //Destroy(player.gameObject);
             if (gameController.playerLives == 0)
             {
                 gameController.setGameOver();

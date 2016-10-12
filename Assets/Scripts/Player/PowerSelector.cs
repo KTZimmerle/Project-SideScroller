@@ -9,9 +9,14 @@ public class PowerSelector : MonoBehaviour {
 
     void Awake()
     {
-        collectedPowerUps = 0;
         gameUI = (GameUI) FindObjectOfType(typeof(GameUI));
+        collectedPowerUps = 0;
     }
+
+    /*void OnEnable()
+    {
+        collectedPowerUps = 0;
+    }*/
 
     public int GetCollectedPowUps()
     {
@@ -44,6 +49,7 @@ public class PowerSelector : MonoBehaviour {
                     break;
                 p.missilePowUp = true;
                 gameUI.Missile.image.fillCenter = false;
+                gameUI.ClearText(gameUI.Missile);
                 collectedPowerUps = 0;
                 break;
             case 3:
@@ -52,6 +58,8 @@ public class PowerSelector : MonoBehaviour {
                 p.altfirePowUp = true;
                 p.laserPowUp = false;
                 gameUI.AltFire.image.fillCenter = false;
+                gameUI.RestoreLaserText();
+                gameUI.ClearText(gameUI.AltFire);
                 collectedPowerUps = 0;
                 break;
             case 4:
@@ -60,6 +68,8 @@ public class PowerSelector : MonoBehaviour {
                 p.laserPowUp = true;
                 p.altfirePowUp = false;
                 gameUI.Laser.image.fillCenter = false;
+                gameUI.RestoreAltFireText();
+                gameUI.ClearText(gameUI.Laser);
                 collectedPowerUps = 0;
                 break;
             case 5:
@@ -68,6 +78,7 @@ public class PowerSelector : MonoBehaviour {
                 p.ActivateShields();
                 p.isShielded = true;
                 gameUI.Shield.image.fillCenter = false;
+                gameUI.ClearText(gameUI.Shield);
                 collectedPowerUps = 0;
                 break;
             case 6:
@@ -113,7 +124,8 @@ public class PowerSelector : MonoBehaviour {
         if (pickup.CompareTag("PickUp"))
         {
             IncrementCounter();
-            Destroy(pickup.gameObject);
+            pickup.gameObject.SetActive(false);
+            //Destroy(pickup.gameObject);
         }
     }
 }

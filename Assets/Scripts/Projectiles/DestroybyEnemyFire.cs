@@ -23,11 +23,15 @@ public class DestroybyEnemyFire : MonoBehaviour {
 
     public void HandlePlayerHit(Collider player)
     {
-        if (player.CompareTag("PlayerShip") && !gameController.Invincible && 
+        if (player.CompareTag("PlayerShip") && !gameController.Invincible &&
             !gameController.playerDied && !gameController.getShieldStatus())
         {
             gameController.setPlayerDeathFlag(true);
-            Destroy(player.gameObject);
+            player.gameObject.SetActive(false);
+            GameObject exp = gameController.GetComponent<SpecialFXPool>().playPlayerExplosion();
+            exp.transform.position = player.transform.position;
+            exp.SetActive(true);
+            //Destroy(player.gameObject);
             if (gameController.playerLives == 0)
             {
                 gameController.setGameOver();

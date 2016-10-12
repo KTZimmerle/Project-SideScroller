@@ -19,6 +19,11 @@ public class GameUI : MonoBehaviour {
     public Button SuperBomb;
     public double speedmultiplier;
 
+    public void ClearText(Button b)
+    {
+        b.GetComponentInChildren<Text>().text = "";
+    }
+
     public void UpdateScore(int score)
     {
         totalScore.text = "Score: " + score;
@@ -57,6 +62,39 @@ public class GameUI : MonoBehaviour {
         Laser.image.fillCenter = false;
         Shield.image.fillCenter = false;
         SuperBomb.image.fillCenter = false;
+    }
+
+    public void RestoreButtonText(bool hasMissile, bool hasAltfire, bool hasLaser)
+    {
+        if ((hasAltfire || hasLaser) && hasMissile)
+        {
+            RestoreAltFireText();
+            RestoreLaserText();
+        }
+        else
+        {
+            RestoreMissileText();
+        }
+    }
+
+    public void RestoreShieldText()
+    {
+        Shield.GetComponentInChildren<Text>().text = "Shield";
+    }
+
+    public void RestoreMissileText()
+    {
+        Missile.GetComponentInChildren<Text>().text = "Missile";
+    }
+
+    public void RestoreAltFireText()
+    {
+        AltFire.GetComponentInChildren<Text>().text = "Alt Fire";
+    }
+
+    public void RestoreLaserText()
+    {
+        Laser.GetComponentInChildren<Text>().text = "Laser";
     }
 
     public void UpdateSpeed()

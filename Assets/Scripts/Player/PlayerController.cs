@@ -15,19 +15,24 @@ public class PlayerController : MonoBehaviour {
     float flickerTime;
 
 	void Awake () {
-        flickerTime = 4.0f;
-        firerate = cooldownRate;
         powers = GetComponent<PowerUpSystem>();
         selector = GetComponent<PowerSelector>();
+        Camera c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        //Vector3 bottomleft = new Vector3(-10.0f, -4.5f, 0.0f);
+        //Vector3 topright = new Vector3(10.0f, 4.5f, 0.0f);
+        Vector3 bottomleft = c.ScreenToWorldPoint(new Vector3(0.0f, 0.0f, c.nearClipPlane + 2.0f));
+        Vector3 topright = c.ScreenToWorldPoint(new Vector3(c.pixelWidth, c.pixelHeight, c.nearClipPlane + 2.0f));
+        gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);
+        gameObject.SetActive(false);
     }
 
-    void Start()
+    void OnEnable()
     {
+        speed = 250.0f;
+        flickerTime = 4.0f;
+        firerate = cooldownRate;
         if (revived)
             StartCoroutine(flicker());
-        Vector3 bottomleft = new Vector3(-10.0f, -4.5f, 0.0f);
-        Vector3 topright = new Vector3(10.0f, 4.5f, 0.0f);
-        gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);/**/
     }
     
 	void FixedUpdate () {
@@ -89,11 +94,11 @@ public class PlayerController : MonoBehaviour {
             }
 
         //The ship turns side ways based on up and down directions - KTZ
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(30.0f, 0.0f, 0.0f), 0.1f);
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(-30.0f, 0.0f, 0.0f), 0.1f);
         }
@@ -102,19 +107,19 @@ public class PlayerController : MonoBehaviour {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0.0f, 0.0f, 0.0f), 0.1f);
         }
 
-        if (Input.GetKey(KeyCode.Keypad0) || Input.GetKey(KeyCode.V))
+        if (Input.GetKey(KeyCode.Keypad0) || Input.GetKey(KeyCode.Z))
         {
             Shoot();
             powers.AltShoot();
             powers.LaserShoot();
         }
 
-        if (Input.GetKey(KeyCode.KeypadPeriod) || Input.GetKey(KeyCode.C))
+        if (Input.GetKey(KeyCode.KeypadPeriod) || Input.GetKey(KeyCode.X))
         {
             powers.FireMissiles();
         }
 
-        if (Input.GetKey(KeyCode.KeypadEnter) || Input.GetKey(KeyCode.Z))
+        if (Input.GetKey(KeyCode.KeypadEnter) || Input.GetKey(KeyCode.C))
         {
             selector.selectPower(powers);
         }
@@ -122,20 +127,22 @@ public class PlayerController : MonoBehaviour {
 
 	void Shoot()
 	{
-        int numBullets = GameObject.FindGameObjectWithTag("GameController").GetComponent<PlayerProjectileList>().getBullets();
-        if (firerate < 0.0f && numBullets
-            < PROJECTILE_LIMIT && !powers.laserPowUp)
+        int numBullets = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().getBullets();
+        GameObject proj = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().RequestBullet();
+        if (firerate < 0.0f && proj != null && !powers.laserPowUp)
         {
             foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
             {
                 if (ps.CompareTag("Muzzle_FX"))
                     ps.Play();
             }
-            GameObject clone;
+            //GameObject clone;
             Vector3 offsetX = transform.position;
             offsetX.x += 0.75f;
-			clone = Instantiate (projectile, offsetX, transform.rotation) as GameObject;
-            clone.GetComponent<ProjectileBehavior>().isFriendly = true;
+            proj.GetComponent<ProjectileBehavior>().isFriendly = true;
+            proj.transform.position = offsetX;
+            proj.gameObject.SetActive(true);
+			//clone = Instantiate (projectile, offsetX, transform.rotation) as GameObject;
             firerate = cooldownRate;
 		}
 	}

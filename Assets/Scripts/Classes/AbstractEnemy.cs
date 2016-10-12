@@ -3,12 +3,16 @@ using System.Collections;
 
 public class AbstractEnemy {
     
-    public AbstractEnemy() { health = 1; scoreValue = 0; isDead = false; explode = null; drop = null; }
+    public AbstractEnemy() { health = 1; scoreValue = 0; isDead = false; hasDrop = false; }
     protected int health;
     protected int scoreValue;
     protected bool isDead;
-    protected GameObject explode;
-    protected GameObject drop;
+    protected bool hasDrop;
+
+    public virtual void Init(int hp)
+    {
+
+    }
 
     public virtual int takeDamage(int dmg)
     {
@@ -24,11 +28,13 @@ public class AbstractEnemy {
 
     public virtual void DropOnDeath(Vector3 pos, Quaternion rot)
     {
-        if (drop == null)
+        /*if (drop == null)
             return;
 
-        GameObject clone;
-        clone = MonoBehaviour.Instantiate(drop, pos, rot) as GameObject;
+        drop.transform.position = pos;
+        drop.transform.rotation = rot;
+        drop.SetActive(true);*/
+        //clone = MonoBehaviour.Instantiate(drop, pos, rot) as GameObject;
     }
 
     public virtual bool getDeathStatus()
@@ -40,7 +46,4 @@ public class AbstractEnemy {
     {
         return false;
     }
-
-    public virtual void PlayExplosion(Vector3 pos, Quaternion rot)
-    { }
 }

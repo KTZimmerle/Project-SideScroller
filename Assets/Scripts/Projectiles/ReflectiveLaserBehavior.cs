@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class ReflectiveLaserBehavior : LaserBehavior {
-
-    public GameObject reflectHelper;
+    
     bool laserReflected;
 
     // Use this for initialization
@@ -12,9 +11,20 @@ public class ReflectiveLaserBehavior : LaserBehavior {
         /*GetComponent<Rigidbody>().velocity = new Vector3(1.0f * Mathf.Cos(Mathf.Deg2Rad * angle),
                                                          1.0f * Mathf.Sin(Mathf.Deg2Rad * angle), 0.0f);*/
         base.Awake();
+    }
+
+    void OnEnable()
+    {
+        base.OnEnable();
         tailX = 0.0f;
         headY = 0.0f;
         laserReflected = false;
+    }
+
+    void OnDisable()
+    {
+        base.OnDisable();
+        //GameObject.FindGameObjectWithTag("Helper").GetComponent<ReflectHelper>().AddBossRLaser(gameObject);
     }
 
     void Update()
@@ -46,6 +56,6 @@ public class ReflectiveLaserBehavior : LaserBehavior {
         int newAngle = (angle < 0.0f) ? -angle : 360 - angle;
         laserReflected = true;
         stopGrowth = 0;
-        reflectHelper.GetComponent<ReflectHelper>().HelpReflectLaser(transform.position + points[1], newAngle);
+        GameObject.FindGameObjectWithTag("Helper").GetComponent<ReflectHelper>().HelpReflectLaser(transform.position + points[1], newAngle);
     }
 }

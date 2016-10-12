@@ -7,7 +7,6 @@ public class TrackingMover : MonoBehaviour {
     public int scoreValue;
     public EnemyShip ES;
     float seconds;
-    public Collider[] search;
     public GameObject explosion;
     Vector3 direction;
     public float speed;
@@ -16,14 +15,23 @@ public class TrackingMover : MonoBehaviour {
     {
         //base.Awake();
         ES = new EnemyShip(hitPoints, scoreValue, explosion);
+        gameObject.SetActive(false);
+    }
+
+    void OnEnable()
+    {
         seconds = 1.0f;
-        search = Physics.OverlapSphere(transform.position, 25.0f, 1 << 11, QueryTriggerInteraction.Collide);
         findTarget();
 
         GetComponent<Rigidbody>().velocity = direction * speed;
     }
-	
-	void Update () {
+
+    void OnDisable()
+    {
+        ES.Init(hitPoints);
+    }
+
+    void Update () {
         seconds -= Time.deltaTime;
 
         //check if a second has passed by before recalculating
@@ -46,8 +54,8 @@ public class TrackingMover : MonoBehaviour {
 
     void findTarget()
     {
-        search = Physics.OverlapSphere(transform.position, 25.0f, 1 << 11, QueryTriggerInteraction.Collide);
-        if (search.Length > 0 && search[0] != null)
+        Collider[] search = Physics.OverlapSphere(transform.position, 25.0f, 1 << 11, QueryTriggerInteraction.Collide);
+        if (search.Length > 0 && search[0] != null && search[0].gameObject.activeSelf)
         {
             Vector3 heading = search[0].transform.position - transform.position;
             float distance = heading.magnitude;

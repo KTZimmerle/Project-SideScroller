@@ -7,7 +7,13 @@ public class FirstBossRoutineHard : FirstBossRoutine
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    protected void OnEnable()
+    {
+        base.OnEnable();
         BossAttacks = HardBossRoutine();
+        StartCoroutine(BossAttacks);
     }
 
     IEnumerator HardBossRoutine()
@@ -27,14 +33,14 @@ public class FirstBossRoutineHard : FirstBossRoutine
             yield return new WaitForSeconds(1.0f);
             for (int i = 0; i < 75; i++)
             {
-                BE.Shoot(projectile, gunPointOne.transform.position, projectile.transform.rotation, 1.0f);
-                BE.Shoot(projectile, gunPointTwo.transform.position, projectile.transform.rotation, 1.0f);
-                BE.Shoot(projectile, gunPointThree.transform.position, projectile.transform.rotation, 1.0f);
-                BE.Shoot(projectile, gunPointFour.transform.position, projectile.transform.rotation, 1.0f);
-                BE.Shoot(projectile, gunPointOne.transform.position, projectile.transform.rotation, 1.0f, 0.25f);
-                BE.Shoot(projectile, gunPointTwo.transform.position, projectile.transform.rotation, 1.0f, 0.125f);
-                BE.Shoot(projectile, gunPointThree.transform.position, projectile.transform.rotation, 1.0f, -0.125f);
-                BE.Shoot(projectile, gunPointFour.transform.position, projectile.transform.rotation, 1.0f, -0.25f);
+                BE.Shoot(FireBullet(), gunPointOne.transform.position, projectile.transform.rotation, 1.0f);
+                BE.Shoot(FireBullet(), gunPointTwo.transform.position, projectile.transform.rotation, 1.0f);
+                BE.Shoot(FireBullet(), gunPointThree.transform.position, projectile.transform.rotation, 1.0f);
+                BE.Shoot(FireBullet(), gunPointFour.transform.position, projectile.transform.rotation, 1.0f);
+                BE.Shoot(FireBullet(), gunPointOne.transform.position, projectile.transform.rotation, 1.0f, 0.25f);
+                BE.Shoot(FireBullet(), gunPointTwo.transform.position, projectile.transform.rotation, 1.0f, 0.125f);
+                BE.Shoot(FireBullet(), gunPointThree.transform.position, projectile.transform.rotation, 1.0f, -0.125f);
+                BE.Shoot(FireBullet(), gunPointFour.transform.position, projectile.transform.rotation, 1.0f, -0.25f);
                 foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
                 {
                     if (ps.CompareTag("Muzzle_FX"))
@@ -46,31 +52,31 @@ public class FirstBossRoutineHard : FirstBossRoutine
             yield return new WaitForSeconds(0.5f);
 
             //phase 2
-            GetComponent<Rigidbody>().velocity = transform.up * speed;
+            GetComponent<Rigidbody>().velocity = transform.up * veloc;
             StartCoroutine(RotateTask(20.0f));
             yield return new WaitForSeconds(0.5f);
             //transform.rotation = Quaternion.Euler(0.0f, 0.0f, 20.0f);
 
             for (int i = 0; i < 20; i++)
             {
-                BE.Shoot(projectileTwo, gunPointFive.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSix.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSeven.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointEight.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointFive.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSix.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSeven.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointEight.transform.position, transform.rotation);
                 StartCoroutine(RotateTask(0.0f));
                 //transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                 yield return new WaitForSeconds(0.3f);
-                BE.Shoot(projectileTwo, gunPointFive.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSix.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSeven.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointEight.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointFive.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSix.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSeven.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointEight.transform.position, transform.rotation);
                 StartCoroutine(RotateTask(-20.0f));
                 //transform.rotation = Quaternion.Euler(0.0f, 0.0f, -20.0f);
                 yield return new WaitForSeconds(0.3f);
-                BE.Shoot(projectileTwo, gunPointFive.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSix.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSeven.transform.position, transform.rotation);
-                BE.Shoot(projectileTwo, gunPointEight.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointFive.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSix.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSeven.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointEight.transform.position, transform.rotation);
                 StartCoroutine(RotateTask(20.0f));
                 yield return new WaitForSeconds(0.4f);
                 //transform.rotation = Quaternion.Euler(0.0f, 0.0f, 20.0f);
@@ -99,8 +105,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
                 if (ps.CompareTag("Laser_FX"))
                     ps.Play();
             }
-            BE.ShootLaser(laser, lasPointOne.transform.position, laser.transform.rotation);
-            BE.ShootLaser(laser, lasPointTwo.transform.position, laser.transform.rotation);
+            BE.ShootLaser(FireLaser(), lasPointOne.transform.position, laser.transform.rotation);
+            BE.ShootLaser(FireLaser(), lasPointTwo.transform.position, laser.transform.rotation);
             StartCoroutine(LaserPattern);
             yield return new WaitForSeconds(20.0f);
 
@@ -155,8 +161,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
 
         for (int i = 0; i < 3; i++)
         {
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[i * 2]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[i * 2 + 1]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[i * 2]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[i * 2 + 1]);
             yield return new WaitForSeconds(1.5f);
             if (stopLaser)
             {
@@ -164,8 +170,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
                 yield break;
             }
 
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[i * 2 + 1]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[i * 2]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[i * 2 + 1]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[i * 2]);
             yield return new WaitForSeconds(2.0f);
             if (stopLaser)
             {
@@ -186,8 +192,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
 
         for (int i = 0; i < 3; i++)
         {
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[i * 2]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[i * 2 + 1]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[i * 2]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[i * 2 + 1]);
             yield return new WaitForSeconds(1.5f);
             if (stopLaser)
             {
@@ -195,8 +201,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
                 yield break;
             }
 
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[((i * 2 + 1) + 2) % 6]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[((i * 2) + 2) % 6]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[((i * 2 + 1) + 2) % 6]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[((i * 2) + 2) % 6]);
             yield return new WaitForSeconds(2.0f);
             if (stopLaser)
             {
@@ -217,8 +223,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
 
         for (int i = 0; i < 3; i++)
         {
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[5 - (i * 2)]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[4 - (i * 2)]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[5 - (i * 2)]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[4 - (i * 2)]);
             yield return new WaitForSeconds(1.5f);
             if (stopLaser)
             {
@@ -226,8 +232,8 @@ public class FirstBossRoutineHard : FirstBossRoutine
                 yield break;
             }
 
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[i * 2]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[i * 2 + 1]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[i * 2]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[i * 2 + 1]);
             yield return new WaitForSeconds(2.0f);
             if (stopLaser)
             {

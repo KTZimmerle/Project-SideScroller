@@ -14,7 +14,8 @@ public class GameController : MonoBehaviour {
 
     GameUI gameUI;
     SpawnWaves waves;
-	public int score = 0;
+    GameObject StarFighter;
+    public int score = 0;
 	public int extraLifeReq = 2000;
     int reqScore;
 	public bool Invincible = false;
@@ -35,10 +36,12 @@ public class GameController : MonoBehaviour {
         gameUI.Initialize(playerLives, score, 0);
 
         //Spawn Player for the first time
-        Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
-        Quaternion spawnRotate = PlayerShip.transform.rotation;
-		Instantiate (PlayerShip, spawnPos, spawnRotate);
-		StartCoroutine (waves.spawnWaves());
+        StarFighter = GetComponent<ShipPool>().SpawnStarFighter();
+        StarFighter.transform.position = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
+        StarFighter.transform.rotation = PlayerShip.transform.rotation;
+        StarFighter.gameObject.SetActive(true);
+        //Instantiate (PlayerShip, spawnPos, spawnRotate);
+        StartCoroutine (waves.spawnWaves());
 	}
 	
 	void Update()
@@ -81,7 +84,9 @@ public class GameController : MonoBehaviour {
         gameUI.UpdateLives(playerLives);
 		if(modifyLives < 0)
 		{
-            gameUI.DeHighlightAll();
+            //gameUI.DeHighlightAll();
+            PowerUpSystem ps = StarFighter.GetComponent<PowerUpSystem>();
+            gameUI.RestoreButtonText(ps.missilePowUp, ps.altfirePowUp, ps.laserPowUp);
             gameUI.speedmultiplier = 1.0f;
             gameUI.SpeedupText.text = "Speed x 1.0";
             StartCoroutine (RespawnPlayer());
@@ -91,12 +96,16 @@ public class GameController : MonoBehaviour {
 	IEnumerator RespawnPlayer()
 	{
 		yield return new WaitForSeconds (playerSpawnWait);
-        GameObject clone;
-		Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
-		Quaternion spawnRotate = PlayerShip.transform.rotation;
-		clone = Instantiate (PlayerShip, spawnPos, spawnRotate) as GameObject;
-        clone.GetComponent<PlayerController>().revived = true;
-		Invincible = true;
+		/*Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
+		Quaternion spawnRotate = PlayerShip.transform.rotation;*/
+        StarFighter = GetComponent<ShipPool>().SpawnStarFighter();
+        StarFighter.transform.position = new Vector3(RespawnPoint.transform.position.x, 0.0f, 0.0f);
+        StarFighter.transform.rotation = PlayerShip.transform.rotation;
+        StarFighter.GetComponent<PlayerController>().revived = true;
+        StarFighter.gameObject.SetActive(true);
+        //clone = Instantiate (PlayerShip, spawnPos, spawnRotate) as GameObject;
+        //clone.GetComponent<PlayerController>().revived = true;
+        Invincible = true;
 		//transperency.a = 0.5f;
 		invincibilityTimer = playerInvincibilityTimer;
         setPlayerDeathFlag(false);

@@ -7,8 +7,8 @@ public class RotatorMover : MonoBehaviour {
     public int scoreValue;
     public EnemyShip ES;
     public GameObject projectile;
-    //GameObject target;
-    public Collider[] search;
+    GameObject proj;
+    Collider player;
     public GameObject explosion;
     float seconds;
     float secondsToShoot;
@@ -19,21 +19,34 @@ public class RotatorMover : MonoBehaviour {
 
     void Awake()
     {
+        player = null;
+        proj = Instantiate(projectile);
         ES = new EnemyShip(hitPoints, scoreValue, explosion);
         minSpeed = 1;
         maxSpeed = 4;
+        rotSpeed = 100.0f;
+        gameObject.SetActive(false);
+    }
+
+    void OnEnable()
+    {
         seconds = 3.0f;
         secondsToShoot = 2.5f;
         secondsToScan = 1.0f;
-        rotSpeed = 100.0f;
         float speed = Random.Range(minSpeed, maxSpeed);
         if (GetComponent<Rigidbody>().transform.position.y < 0.0f)
             GetComponent<Rigidbody>().velocity = transform.up * speed;
         else
             GetComponent<Rigidbody>().velocity = -transform.up * speed;
     }
-    
-	void Update () 
+
+    void OnDisable()
+    {
+        ES.Init(hitPoints);
+        player = null;
+    }
+
+    void Update () 
     {
         if (seconds > 0.0f)
         {
@@ -47,10 +60,10 @@ public class RotatorMover : MonoBehaviour {
         }
 
         //find a player ship to target and lock on to
-        if (search.Length > 0 && search[0] != null)
+        if (player != null)
         {
 
-            Vector3 targetPos = search[0].transform.position;
+            Vector3 targetPos = player.transform.position;
             targetPos.z = 0.0f;
             transform.right = targetPos - transform.position;
 
@@ -62,7 +75,8 @@ public class RotatorMover : MonoBehaviour {
                     if(ps.CompareTag("Muzzle_FX"))
                         ps.Play(false);
                 }
-                ES.Shoot(projectile, transform.position, Quaternion.Euler(0.0f, 0.0f, 180.0f) * transform.rotation);
+                ES.Shoot(proj, transform.position, Quaternion.Euler(0.0f, 0.0f, 180.0f) * transform.rotation);
+                //ES.Shoot(projectile, transform.position, Quaternion.Euler(0.0f, 0.0f, 180.0f) * transform.rotation);
                 secondsToShoot = 2.5f;
             }
             else
@@ -70,6 +84,8 @@ public class RotatorMover : MonoBehaviour {
 
             if (secondsToShoot < 2.0f)
                 PlayEffects();
+            if (!player.gameObject.activeSelf)
+                player = null;
         }
         else //keep searching for a new player ship
         {
@@ -77,8 +93,11 @@ public class RotatorMover : MonoBehaviour {
                 PauseEffects();
             if(secondsToScan < 0.0f)
             {
+                Collider[] search;
                 secondsToScan = 1.0f;
                 search = Physics.OverlapSphere(transform.position, 25.0f, 1 << 11, QueryTriggerInteraction.Collide);
+                if(search.Length > 0)
+                    player = search[0];
             }
         }
     }

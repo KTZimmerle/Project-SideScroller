@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FirstBossRoutine : MonoBehaviour {
 
     public int hitPoints;
     public int scoreValue;
+    public float veloc;
     public float speed;
     public bool notDead;
     public BossShip BE;
     public GameObject projectile;
     public GameObject projectileTwo;
     public GameObject laser;
-    public GameObject reflectLaser;
     public GameObject gunPointOne;
     public GameObject gunPointTwo;
     public GameObject gunPointThree;
@@ -28,21 +29,42 @@ public class FirstBossRoutine : MonoBehaviour {
     protected IEnumerator LaserPattern;
     protected bool stopLaser = false;
 
-    // Use this for initialization
-    protected virtual void Awake()
+    void Init()
     {
         BossAttacks = BossRoutine();
         notDead = true;
-        speed = 1.0f;
+        veloc = 1.0f;
+        GetComponent<Rigidbody>().velocity = transform.right * speed;
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.SetActive(true);
+    }
+
+    // Use this for initialization
+    protected virtual void Awake()
+    {
         BE = new BossShip(hitPoints, scoreValue);
         GameObject target = GameObject.FindWithTag("GameController");
         if (target.GetComponent<GameController>() != null)
             gameController = target.GetComponent<GameController>();
+        gameObject.SetActive(false);
+    }
+    
+
+    protected void OnEnable()
+    {
+        Init();
+        if(GetComponent<FirstBossRoutineHard>() == null)
+            StartCoroutine(BossAttacks);
+    }
+
+    void OnDisable()
+    {
+        BE.Init(hitPoints);
+        //CancelInvoke();
     }
 
     protected void Start()
     {
-        StartCoroutine(BossAttacks);
     }
     
     IEnumerator BossRoutine()
@@ -60,10 +82,10 @@ public class FirstBossRoutine : MonoBehaviour {
             yield return new WaitForSeconds(2.0f);
             for (int i = 0; i < 50; i++)
             {
-                BE.Shoot(projectile, gunPointOne.transform.position, projectile.transform.rotation);
-                BE.Shoot(projectile, gunPointTwo.transform.position, projectile.transform.rotation);
-                BE.Shoot(projectile, gunPointThree.transform.position, projectile.transform.rotation);
-                BE.Shoot(projectile, gunPointFour.transform.position, projectile.transform.rotation);
+                BE.Shoot(FireBullet(), gunPointOne.transform.position, transform.rotation);
+                BE.Shoot(FireBullet(), gunPointTwo.transform.position, transform.rotation);
+                BE.Shoot(FireBullet(), gunPointThree.transform.position, transform.rotation);
+                BE.Shoot(FireBullet(), gunPointFour.transform.position, transform.rotation);
                 foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
                 {
                     if (ps.CompareTag("Muzzle_FX"))
@@ -74,14 +96,14 @@ public class FirstBossRoutine : MonoBehaviour {
             yield return new WaitForSeconds(2.0f);
 
             //phase 2
-            GetComponent<Rigidbody>().velocity = transform.up * speed;
+            GetComponent<Rigidbody>().velocity = transform.up * veloc;
 
             for(int i = 0; i < 16; i++)
             {
-                BE.Shoot(projectileTwo, gunPointFive.transform.position, projectileTwo.transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSix.transform.position, projectileTwo.transform.rotation);
-                BE.Shoot(projectileTwo, gunPointSeven.transform.position, projectileTwo.transform.rotation);
-                BE.Shoot(projectileTwo, gunPointEight.transform.position, projectileTwo.transform.rotation);
+                BE.Shoot(FireBolt(), gunPointFive.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSix.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointSeven.transform.position, transform.rotation);
+                BE.Shoot(FireBolt(), gunPointEight.transform.position, transform.rotation);
                 yield return new WaitForSeconds(1.0f);
 
                 if (!(this.transform.position.y > -1.8f && this.transform.position.y < 1.8f))
@@ -101,8 +123,8 @@ public class FirstBossRoutine : MonoBehaviour {
             //phase 3
             yield return new WaitForSeconds(2.0f);
             PlayLasFX();
-            BE.ShootLaser(laser, lasPointOne.transform.position, laser.transform.rotation);
-            BE.ShootLaser(laser, lasPointTwo.transform.position, laser.transform.rotation);
+            BE.ShootLaser(FireLaser(), lasPointOne.transform.position, transform.rotation);
+            BE.ShootLaser(FireLaser(), lasPointTwo.transform.position, transform.rotation);
             LaserPattern = LaserPatternEasy();
             StartCoroutine(LaserPattern);
             yield return new WaitForSeconds(16.0f);
@@ -117,7 +139,9 @@ public class FirstBossRoutine : MonoBehaviour {
             return;
         
         StopCoroutine(BossAttacks);
-        StartCoroutine(destroyBoss());
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //StartCoroutine(destroyBoss());
+        InvokeRepeating("destroyBoss", 3.0f, 0.5f);
         notDead = false;
         stopLaser = true;
         gameController.ModifyScore(BE.getScoreValue());
@@ -125,18 +149,49 @@ public class FirstBossRoutine : MonoBehaviour {
 
     }
 
-    IEnumerator destroyBoss()
+    void destroyBoss()
+    {
+        if (transform.GetChild(2).gameObject.activeSelf)
+        {
+            //Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+            transform.GetChild(2).gameObject.SetActive(false);
+        }
+        else if (transform.GetChild(1).gameObject.activeSelf)
+        {
+            transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else if (transform.GetChild(0).gameObject.activeSelf)
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            CancelInvoke();
+            Invoke("destroyCore", 1.0f);
+        }
+        //gameObject.SetActive(false);
+        //Destroy(gameObject);
+    }
+
+    void destroyCore()
+    {
+        gameObject.SetActive(false);
+    }
+
+    /*IEnumerator destroyBoss()
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         yield return new WaitForSeconds(1.0f);
         while (transform.childCount > 0)
         {
-            Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+            //Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+            transform.GetChild(transform.childCount - 1).gameObject.SetActive(false);
             yield return new WaitForSeconds(0.5f);
         }
         yield return new WaitForSeconds(1.0f);
-        Destroy(gameObject);
-    }
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
+    }*/
 
     IEnumerator LaserPatternEasy()
     {
@@ -150,8 +205,8 @@ public class FirstBossRoutine : MonoBehaviour {
 
         for (int i = 0; i < 3; i++)
         {
-            BE.ShootLaser(reflectLaser, gunPointSix.transform.position, laser.transform.rotation, angles[i * 2]);
-            BE.ShootLaser(reflectLaser, gunPointSeven.transform.position, laser.transform.rotation, angles[i * 2 + 1]);
+            BE.ShootRLaser(gunPointSix.transform.position, angles[i * 2]);
+            BE.ShootRLaser(gunPointSeven.transform.position, angles[i * 2 + 1]);
             yield return new WaitForSeconds(4.0f);
             if (stopLaser)
             {
@@ -177,5 +232,20 @@ public class FirstBossRoutine : MonoBehaviour {
             if (ps.CompareTag("Laser_FX"))
                 ps.time = ps.startLifetime - (ps.startLifetime * 0.95f);
         }
+    }
+
+    protected GameObject FireBullet()
+    {
+        return gameController.GetComponent<ProjectilePool>().FireNextBullet(this.gameObject);
+    }
+
+    protected GameObject FireBolt()
+    {
+        return gameController.GetComponent<ProjectilePool>().FireNextBolt(this.gameObject);
+    }
+
+    protected GameObject FireLaser()
+    {
+        return gameController.GetComponent<ProjectilePool>().FireNextLaser(this.gameObject);
     }
 }

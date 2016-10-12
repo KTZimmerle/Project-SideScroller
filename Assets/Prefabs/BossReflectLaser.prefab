@@ -16,7 +16,7 @@ GameObject:
   - 114: {fileID: 11439062}
   m_Layer: 13
   m_Name: BossReflectLaser
-  m_TagString: BossLaser
+  m_TagString: ReflectLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

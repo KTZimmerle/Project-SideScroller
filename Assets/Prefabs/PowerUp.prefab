@@ -33,7 +33,7 @@ GameObject:
   - 23: {fileID: 2368140}
   - 108: {fileID: 10886452}
   - 114: {fileID: 11433380}
-  m_Layer: 0
+  m_Layer: 28
   m_Name: PowerUp(Model)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,8 +46,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 142138}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -3.2604802, y: 0.28894788, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.9600067, y: 0.23817305, z: 0}
   m_LocalScale: {x: 25.000004, y: 25, z: 25}
   m_Children:
   - {fileID: 427206}
@@ -154,7 +154,7 @@ Light:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 142138}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 6
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 0, a: 1}
@@ -228,7 +228,6 @@ MonoBehaviour:
   speed: -1
   followPlayer: 0
   player: {fileID: 0}
-  drop: {fileID: 0}
   angle: 0
 --- !u!114 &11433380
 MonoBehaviour:

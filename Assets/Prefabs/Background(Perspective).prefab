@@ -12,7 +12,7 @@ GameObject:
   - 64: {fileID: 6481370}
   - 23: {fileID: 2371354}
   - 114: {fileID: 11460658}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Background(Perspective)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -80,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.52, y: 5.53, z: 0}
+  m_LocalPosition: {x: 4.52, y: 4.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 471640}
@@ -209,7 +209,6 @@ MonoBehaviour:
   hitPoints: 40
   scoreValue: 50
   projectile: {fileID: 117568, guid: ed5b423227355004382cd4894fad47ac, type: 2}
-  search: []
   explosion: {fileID: 0}
 --- !u!114 &11465564
 MonoBehaviour:

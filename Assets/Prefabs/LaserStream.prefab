@@ -16,13 +16,13 @@ GameObject:
   - 114: {fileID: 11442484}
   - 199: {fileID: 19934016}
   - 198: {fileID: 19811968}
-  m_Layer: 0
+  m_Layer: 28
   m_Name: LaserStream
-  m_TagString: PlayerLaser
+  m_TagString: PlayerWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &492008
 Transform:
   m_ObjectHideFlags: 1

@@ -3,19 +3,28 @@ using System.Collections;
 
 public class AltfireBehavior : ProjectileBehavior {
 
+    public float rotation;
     // Use this for initialization
     protected override void Awake()
     {
         base.Awake();
-	}
+        //transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotation) * transform.rotation;
+    }
 
-    void Start()
+    /*void Start()
     {
         if(isFriendly)
-            gameController.GetComponent<PlayerProjectileList>().addAltFire(gameObject);
+            gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+    }*/
+
+    void OnEnable()
+    {
+        base.OnEnable();
+        //transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotation) * Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        GetComponent<Rigidbody>().velocity = transform.right * speed;
     }
-	
-	void FixedUpdate ()
+
+    void FixedUpdate ()
     {
         if (isFriendly)
             GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.y, 0.0f) * acceleration;
@@ -28,12 +37,13 @@ public class AltfireBehavior : ProjectileBehavior {
 
         if (other.GetComponent<BossArmorBehavior>() != null)
         {
-            gameController.GetComponent<PlayerProjectileList>().removeAltFire(gameObject);
-            Destroy(gameObject);
+            //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
             return;
         }
         
-        enemy = GetComponent<OnHitHandler>().OnHitHandle(other);
+        enemy = GetComponent<OnHitHandler>().OnHitHandle(other, gameController);
 
         if (enemy == null)
             return;
@@ -41,25 +51,14 @@ public class AltfireBehavior : ProjectileBehavior {
         if (enemy.getDeathStatus())
             return;
 
+        isHit = true;
         if (enemy.takeDamage(bullet.damage) <= 0)
         {
-            gameController.ModifyScore(enemy.getScoreValue());
-            enemy.DropOnDeath(other.transform.position, other.transform.rotation);
-            isHit = true;
-            if (!enemy.isBoss())
-            {
-                gameController.ModifyScore(enemy.getScoreValue());
-                enemy.PlayExplosion(other.transform.position, other.transform.rotation);
-                Destroy(other.gameObject);
-            }
-            else
-            {
-                BE = other.GetComponent<FirstBossRoutine>();
-                BE.killBoss();
-            }
+            GetComponent<OnHitHandler>().OnHitLogic(other, gameController, enemy);
         }
 
-        gameController.GetComponent<PlayerProjectileList>().removeAltFire(gameObject);
-        Destroy(gameObject);
+        //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

@@ -3,12 +3,17 @@ using System.Collections;
 
 public class BossShip : AbstractEnemy
 {
-    public BossShip(int hp = 20, int score = 1000, GameObject exp = null, GameObject d = null)
+    public BossShip(int hp = 20, int score = 1000, bool d = false)
     {
         health = hp;
         scoreValue = score;
-        explode = exp;
-        drop = d;
+        hasDrop = d;
+    }
+
+    public override void Init(int hp)
+    {
+        health = hp;
+        isDead = false;
     }
 
     public override int takeDamage(int dmg)
@@ -23,38 +28,52 @@ public class BossShip : AbstractEnemy
 
     public void Shoot(GameObject proj, Vector3 pos, Quaternion rot, float speedChg = 0.0f, float angle = 0.0f)
     {
-        GameObject clone;
-        clone = MonoBehaviour.Instantiate(proj, pos, rot) as GameObject;
-        clone.GetComponent<ProjectileBehavior>().isFriendly = false;
-        clone.GetComponent<ProjectileBehavior>().angle = angle;
-        clone.GetComponent<ProjectileBehavior>().speed += speedChg;
-        clone.SetActive(true);
+        /*GameObject clone;
+        clone = MonoBehaviour.Instantiate(proj, pos, rot) as GameObject;*/
+        proj.GetComponent<ProjectileBehavior>().isFriendly = false;
+        proj.GetComponent<ProjectileBehavior>().angle = angle;
+        proj.GetComponent<ProjectileBehavior>().veloc += speedChg;
+        proj.transform.position = pos;
+        proj.transform.rotation = rot;
+        proj.SetActive(true);
     }
 
     public void ShootLaser(GameObject laser, Vector3 pos, Quaternion rot, int angle = 0)
     {
-        GameObject clone;
-        clone = MonoBehaviour.Instantiate(laser, pos, rot) as GameObject;
-        if (clone.GetComponent<ReflectiveLaserBehavior>() != null)
+        /*GameObject clone;
+        clone = MonoBehaviour.Instantiate(laser, pos, rot) as GameObject;*/
+        /*if (laser.GetComponent<ReflectiveLaserBehavior>() != null)
         {
-            clone.GetComponent<ReflectiveLaserBehavior>().isFriendly = false;
-            clone.GetComponent<ReflectiveLaserBehavior>().angle = angle;
+            laser.GetComponent<ReflectiveLaserBehavior>().isFriendly = false;
+            laser.GetComponent<ReflectiveLaserBehavior>().angle = angle;
         }
         else
         {
-            clone.GetComponent<LaserBehavior>().isFriendly = false;
-            clone.GetComponent<LaserBehavior>().angle = angle;
-        }
-        clone.SetActive(true);
+            laser.GetComponent<LaserBehavior>().isFriendly = false;
+            laser.GetComponent<LaserBehavior>().angle = angle;
+        }*/
+        laser.GetComponent<LaserBehavior>().isFriendly = false;
+        laser.GetComponent<LaserBehavior>().angle = angle;
+        laser.transform.position = pos;
+        laser.transform.rotation = rot;
+        laser.SetActive(true);
+    }
+
+    public void ShootRLaser(Vector3 pos, int angle = 0)
+    {
+        GameObject reflectHelper = GameObject.FindGameObjectWithTag("Helper");
+        reflectHelper.GetComponent<ReflectHelper>().HelpReflectLaser(pos, angle);
     }
 
     public override void DropOnDeath(Vector3 pos, Quaternion rot)
     {
-        if (drop == null)
+        /*if (drop == null)
             return;
-
-        GameObject clone;
-        clone = MonoBehaviour.Instantiate(drop, pos, rot) as GameObject;
+        
+        drop.transform.position = pos;
+        drop.transform.rotation = rot;
+        drop.SetActive(true);*/
+        //clone = MonoBehaviour.Instantiate(drop, pos, rot) as GameObject;
     }
 
     public override bool isBoss()
@@ -62,9 +81,9 @@ public class BossShip : AbstractEnemy
         return true;
     }
 
-    public override void PlayExplosion(Vector3 pos, Quaternion rot)
+    /*public override void PlayExplosion(Vector3 pos, Quaternion rot)
     {
         GameObject clone;
         clone = MonoBehaviour.Instantiate(explode, pos, rot) as GameObject;
-    }
+    }*/
 }
