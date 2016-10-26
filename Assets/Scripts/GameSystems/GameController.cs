@@ -9,11 +9,13 @@ public class GameController : MonoBehaviour {
     
 	public float playerSpawnWait;
 	public float playerInvincibilityTimer;
+    float delayTime;
 	float invincibilityTimer;
 	public int playerLives = 2;
 
     GameUI gameUI;
     SpawnWaves waves;
+    HighScore highScores;
     GameObject StarFighter;
     public int score = 0;
 	public int extraLifeReq = 2000;
@@ -21,11 +23,14 @@ public class GameController : MonoBehaviour {
 	public bool Invincible = false;
     bool shielded = false;
     public bool playerDied = false;
-	//Color transperency;
-    
-	// Use this for initialization
-	void Start () 
+    bool gameEnd = false;
+    public bool isScoreCalced = false;
+    //Color transperency;
+
+    // Use this for initialization
+    void Start () 
 	{
+        delayTime = 5.0f;
         reqScore = 0;
         score = 0;
 		//transperency = PlayerShip.GetComponent<Renderer>().sharedMaterial.color;
@@ -33,6 +38,7 @@ public class GameController : MonoBehaviour {
 
         gameUI = GetComponent<GameUI>();
         waves = GetComponent<SpawnWaves>();
+        highScores = GetComponent<HighScore>();
         gameUI.Initialize(playerLives, score, 0);
 
         //Spawn Player for the first time
@@ -50,21 +56,42 @@ public class GameController : MonoBehaviour {
         {
             //start the game
             //Application.LoadLevel("Title Screen");
-            SceneManager.LoadScene(0);
+            if(isScoreCalced || !gameEnd)
+                SceneManager.LoadScene(0);
 
         }
 
-		if(Invincible)
+		if(Invincible && invincibilityTimer > 0.0f)
 		{
+			invincibilityTimer -= Time.deltaTime;
 			if(invincibilityTimer <= 0.0f)
 			{
 				Invincible = false;
                 //transperency.a = 1.0f;
             }
-			invincibilityTimer -= Time.deltaTime;
 		}
+
+        if (GetComponent<SpawnWaves>().GameOverFlag && !gameEnd)
+        {
+            gameEnd = true;
+            //StartCoroutine(PostGameState());
+        }
+
+        if (gameEnd && delayTime >= 0.0f)
+        {
+            delayTime -= Time.deltaTime;
+            if (delayTime < 0.0f)
+                PostGameState();
+        }
 	}
 
+    void PostGameState()
+    {
+
+        highScores.CompareHighScores(score);
+        gameUI.DisplayHighScores();
+
+    }
 	
 	public void ModifyScore (int modifyScore)
     {
@@ -86,7 +113,7 @@ public class GameController : MonoBehaviour {
 		{
             //gameUI.DeHighlightAll();
             PowerUpSystem ps = StarFighter.GetComponent<PowerUpSystem>();
-            gameUI.RestoreButtonText(ps.missilePowUp, ps.altfirePowUp, ps.laserPowUp);
+            gameUI.RestoreButtonText(ps.altfirePowUp, ps.laserPowUp);
             gameUI.speedmultiplier = 1.0f;
             gameUI.SpeedupText.text = "Speed x 1.0";
             StartCoroutine (RespawnPlayer());

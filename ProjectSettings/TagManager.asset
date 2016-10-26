@@ -25,6 +25,7 @@ TagManager:
   - Muzzle_FX
   - Explosion_FX
   - MissileProjectile
+  - UserInput
   layers:
   - Default
   - TransparentFX

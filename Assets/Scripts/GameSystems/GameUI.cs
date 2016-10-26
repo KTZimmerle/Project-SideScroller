@@ -11,13 +11,24 @@ public class GameUI : MonoBehaviour {
     public Text SpeedupText;
     public Text NextWave;
     public Text BossIncoming;
+    public Text HitRatio;
     public Button Speedup;
     public Button Missile;
     public Button AltFire;
     public Button Laser;
     public Button Shield;
     public Button SuperBomb;
+    public Image RazorIcon;
+    public Image SwooperIcon;
+    public Image PowerShipIcon;
+    public Image BlasterIcon;
+    public Image HunterIcon;
+    public Text HighScoresTitle;
+    public Text[] HighScores;
+    public Image WarningIcon;
+    public InputField InitialsField;
     public double speedmultiplier;
+    //public int numHighScores;
 
     public void ClearText(Button b)
     {
@@ -48,6 +59,7 @@ public class GameUI : MonoBehaviour {
     {
         speedmultiplier = 1.0;
         gameOverText.text = "";
+        HitRatio.text = "";
         playerLivesText.text = "Lives: " + (playerLives);
         totalScore.text = "Score: " + score;
         waveText.text = "Wave: " + waveCount;
@@ -64,9 +76,9 @@ public class GameUI : MonoBehaviour {
         SuperBomb.image.fillCenter = false;
     }
 
-    public void RestoreButtonText(bool hasMissile, bool hasAltfire, bool hasLaser)
+    public void RestoreButtonText(bool hasAltfire, bool hasLaser)
     {
-        if ((hasAltfire || hasLaser) && hasMissile)
+        if (hasAltfire || hasLaser)
         {
             RestoreAltFireText();
             RestoreLaserText();
@@ -127,5 +139,44 @@ public class GameUI : MonoBehaviour {
         BossIncoming.enabled = true;
         yield return new WaitForSeconds(2.0f);
         BossIncoming.text = "";
+    }
+
+    public IEnumerator displayHitRatio(float percentage, int hits, float enemies, int bonusPoints)
+    {
+        HitRatio.text = "Hit Rate: " + hits + "/" + enemies + "\n";
+        yield return new WaitForSeconds(1.0f);
+        HitRatio.text += percentage.ToString("F2") + "%\n";
+        GetComponent<ScoreBoard>().tallyEnemiesDestroyed();
+        yield return new WaitForSeconds(1.0f);
+        if (hits/enemies == 1.0f)
+            HitRatio.text += "Perfect!\n";
+        HitRatio.text += "Bonus: " + bonusPoints;
+        GetComponent<GameController>().ModifyScore(bonusPoints);
+        yield return new WaitForSeconds(2.0f);
+        HitRatio.text = "";
+        RazorIcon.gameObject.SetActive(false);
+        SwooperIcon.gameObject.SetActive(false);
+        PowerShipIcon.gameObject.SetActive(false);
+        BlasterIcon.gameObject.SetActive(false);
+        HunterIcon.gameObject.SetActive(false);
+    }
+
+    public void DisplayHighScores()
+    {
+        if (HighScores == null)
+            return;
+
+        GetComponent<HighScore>().loadScores(HighScoresTitle, HighScores);
+        HighScoresTitle.gameObject.SetActive(true);/**/
+        for (int i = 0; i < 10; i++)
+        {
+            HighScores[i].gameObject.SetActive(true);
+        }
+        gameOverText.text = "";
+    }
+
+    public Text RequestPlacementText(int pos)
+    {
+        return HighScores[pos];
     }
 }

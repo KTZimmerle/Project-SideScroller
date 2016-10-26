@@ -10,12 +10,8 @@ public class SpawnWaves : MonoBehaviour {
     const int MAX_PLATFORM_SIZE = 25;
     const int MAX_HUNTER_SIZE = 5;
     int waveCount = 0;
-    bool GameOverFlag;
-    bool EnemiesRemaining;
+    public bool GameOverFlag;
     public bool bossAlive;
-    public Vector3 spawnRange;
-    public Vector3 spawnRangeTwo;
-    public Vector3 spawnRangeThree;
     public int HazardLimit;
     public float startWait;
     public GameObject Hazard;
@@ -32,6 +28,9 @@ public class SpawnWaves : MonoBehaviour {
     int numHunters = 2;
     int squadSize = 5;
     int extraSpawn = 1;
+    int bonusPoints;
+    int totalEnemies;
+    int enemiesRemaining;
     public float spawnWait;
     public float waveBreak;
     public float bossWait;
@@ -40,16 +39,18 @@ public class SpawnWaves : MonoBehaviour {
     bool BEOneisHM = false;
     GameUI gameUI;
     ShipPool sPool;
+    Camera c;
 
     void Start ()
     {
+        HazardLimit = 10;
+        c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         subtractTime = 0.0f;
         GameOverFlag = false;
         gameUI = GetComponent<GameUI>();
         BEOne = BossOne.GetComponent<FirstBossRoutine>();
         BEOneHM = BossOneHM.GetComponent<FirstBossRoutineHard>();
         bossAlive = false;
-        EnemiesRemaining = false;
     }
 
     void Spawner()
@@ -59,81 +60,108 @@ public class SpawnWaves : MonoBehaviour {
             BEOneisHM = true;
         }
         gameUI.UpdateWave(waveCount);
+
+        totalEnemies = HazardLimit + extraSpawn;
+
+
         if (waveCount > 2)
         {
-            Vector3 spawnPos = Vector3.zero;
-            StartCoroutine(SpawnFormationOne(spawnPos));
+            totalEnemies += numFormations * squadSize;
+            StartCoroutine(SpawnFormationOne());
         }
 
         if (waveCount > 6)
         {
-            Vector3 spawnPos = Vector3.zero;
-            StartCoroutine(SpawnFormationTwo(spawnPos));
+            totalEnemies += numPlatforms;
+            StartCoroutine(SpawnFormationTwo());
         }
 
         if (waveCount > 10)
         {
-            Vector3 spawnPos = Vector3.zero;
-            StartCoroutine(SpawnShipHunter(spawnPos));
+            totalEnemies += numHunters;
+            StartCoroutine(SpawnShipHunter());
         }
     }
 
     public IEnumerator spawnWaves()
     {
+        bonusPoints = 100;
         yield return new WaitForSeconds(startWait);
         while (!GameOverFlag)
         {
-
             waveCount += 1;
             Spawner();
+            enemiesRemaining = totalEnemies;
 
+
+            int nextSpawn = 1;
             for (int i = 0; i < HazardLimit; i++)
             {
                 GameObject Razer = GetComponent<ShipPool>().SpawnRazer();
-                Razer.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+                //Razer.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+                Razer.transform.position = c.ScreenToWorldPoint(new Vector3(c.pixelWidth, 
+                                           Random.Range(0.0f + c.pixelHeight * 0.1f, c.pixelHeight - c.pixelHeight * 0.1f), 
+                                           c.nearClipPlane + 4.0f));
                 Razer.transform.rotation = Quaternion.identity;
                 Razer.SetActive(true);
+                if (nextSpawn/(extraSpawn+1.0f) < (i / (float)HazardLimit))
+                {
+                    SpawnPowerShip();
+                    nextSpawn++;
+                }
                 //Instantiate(Hazard, spawnPos, spawnRotate);
                 yield return new WaitForSeconds(spawnWait);
             }
+            yield return new WaitWhile(() => (enemiesRemaining > 0));
+            yield return new WaitForSeconds(2.0f);
             
-            yield return new WaitWhile(() => EnemiesRemaining);
-
             //Spawn a boss
             if (waveCount % 5 == 0)
             {
                 GetComponent<GameController>().starIncomingBossMessage();
                 yield return new WaitForSeconds(6.0f);
                 setBossStatus(true);
-                StartCoroutine(StartBossRoutine(Vector3.zero));
+                StartCoroutine(StartBossRoutine());
                 yield return new WaitWhile(() => bossAlive);
                 yield return new WaitForSeconds(8.0f);
             }
             
-            StartCoroutine(SpawnPowerShips(Vector3.zero));
-            if(!GameOverFlag)
+            //StartCoroutine(SpawnPowerShips());
+            if (!GameOverFlag)
+            {
+                GetComponent<ScoreBoard>().setEnemyCount(totalEnemies);
+                GetComponent<ScoreBoard>().tallyScore(bonusPoints);
+                yield return new WaitForSeconds(waveBreak + 1.0f);
+                if (0 == waveCount % 5 && extraSpawn < MAX_POWERSHIP_SIZE)
+                    extraSpawn += 1;
                 GetComponent<GameController>().startNextWaveMessage();
-            yield return new WaitForSeconds(waveBreak);
+                yield return new WaitForSeconds(waveBreak);
+            }
+
             if(HazardLimit < MAX_HAZARD_SIZE)
                 HazardLimit += 2;
 
-            if (waveCount > 3)
-                if (waveCount % 2 == 0 && numFormations < MAX_FORMATION_SIZE)
+            if (waveCount > 5) // was 3
+                if (waveCount % 3 == 0 && numFormations < MAX_FORMATION_SIZE)// was 2
                 {
                     subtractTime += 0.2f;
                     numFormations += 1;
                 }
 
             if (waveCount > 7)
-                if (waveCount % 2 == 0 && numPlatforms < MAX_PLATFORM_SIZE)
+                if (waveCount % 3 == 0 && numPlatforms < MAX_PLATFORM_SIZE)//was 2
                     numPlatforms += 1;
 
             if (waveCount > 22)
                 if (waveCount % 23 == 0 && numHunters < MAX_HUNTER_SIZE)
                     numHunters += 1;
 
-            if (waveCount % 3 == 0 && squadSize < MAX_SQUAD_SIZE)
-                squadSize += 1;
+            if(waveCount > 5)
+                if (waveCount % 3 == 0 && squadSize < MAX_SQUAD_SIZE)//was 3
+                    squadSize += 1;
+
+            //each successful round gives a bigger bonus
+            bonusPoints += 100;
         }
     }
 
@@ -155,13 +183,15 @@ public class SpawnWaves : MonoBehaviour {
     }*/
 
     //enemy formations
-    IEnumerator SpawnFormationOne(Vector3 spawnPt)
+    IEnumerator SpawnFormationOne()
     {
         yield return new WaitForSeconds(startWait + 2.0f);
-        EnemiesRemaining = true;
         for (int j = 0; j < numFormations; j++)
         {
-            spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+            //spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+            Vector3 spawnPt = c.ScreenToWorldPoint(new Vector3(c.pixelWidth,
+                                           Random.Range(0.0f + c.pixelHeight * 0.1f, c.pixelHeight - c.pixelHeight * 0.1f),
+                                           c.nearClipPlane + 4.0f));/**/
             for (int i = 0; i < squadSize; i++)
             {
                 GameObject Swooper = GetComponent<ShipPool>().SpawnSwooper();
@@ -173,28 +203,41 @@ public class SpawnWaves : MonoBehaviour {
             }
             yield return new WaitForSeconds(4.0f - subtractTime);
         }
-        EnemiesRemaining = false;
+        //enemiesRemaining -= squadSize * numFormations;
     }
 
-    IEnumerator SpawnFormationTwo(Vector3 spawnPt)
+    IEnumerator SpawnFormationTwo()
     {
-
         yield return new WaitForSeconds(startWait + 2.0f);
         for (int i = 0; i < numPlatforms; i++)
         {
-            spawnRangeTwo.y *= CoinFlip(1, -1);
+            //spawnRangeTwo.y *= CoinFlip(1, -1);
             yield return new WaitForSeconds(Random.Range(1.0f, 5.0f));
             GameObject Blaster = GetComponent<ShipPool>().SpawnBlaster();
-            Blaster.transform.position = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
+            //Blaster.transform.position = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
+            Blaster.transform.position = c.ScreenToWorldPoint(new Vector3(Random.Range(c.pixelWidth * 0.4f, c.pixelWidth * 0.9f),
+                                         CoinFlip(-c.pixelHeight * 0.1f, c.pixelHeight * 1.1f),
+                                         c.nearClipPlane + 4.0f));
             Blaster.transform.rotation = Quaternion.identity;
             Blaster.SetActive(true);
             //spawnPt = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
             //Quaternion spawnRotate = Quaternion.identity;
             //Instantiate(EnemyShipTwo, spawnPt, spawnRotate);
         }
+        //enemiesRemaining -= numPlatforms;
     }
 
-    IEnumerator SpawnPowerShips(Vector3 spawnPt)
+    void SpawnPowerShip()
+    {
+        GameObject PowerShip = GetComponent<ShipPool>().SpawnPowerShip();
+        PowerShip.transform.position = c.ScreenToWorldPoint(new Vector3(c.pixelWidth * 1.1f,
+                                        Random.Range(0.0f + c.pixelHeight * 0.25f, c.pixelHeight - c.pixelHeight * 0.25f),
+                                        c.nearClipPlane + 4.0f));
+        PowerShip.transform.rotation = Quaternion.identity;
+        PowerShip.SetActive(true);
+    }
+
+    /*IEnumerator SpawnPowerShips()
     {
         if (0 == waveCount % 5 && extraSpawn < MAX_POWERSHIP_SIZE)
             extraSpawn += 1;
@@ -203,7 +246,10 @@ public class SpawnWaves : MonoBehaviour {
         while (iter < extraSpawn)
         {
             GameObject PowerShip = GetComponent<ShipPool>().SpawnPowerShip();
-            PowerShip.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y / 2, spawnRange.y / 2), spawnRange.z);
+            PowerShip.transform.position = c.ScreenToWorldPoint(new Vector3(c.pixelWidth * 1.1f,
+                                           Random.Range(0.0f + c.pixelHeight * 0.25f, c.pixelHeight - c.pixelHeight * 0.25f),
+                                           c.nearClipPlane + 4.0f));
+            //PowerShip.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y / 2, spawnRange.y / 2), spawnRange.z);
             PowerShip.transform.rotation = Quaternion.identity;
             PowerShip.SetActive(true);
             //spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y/2, spawnRange.y/2), spawnRange.z);
@@ -212,13 +258,16 @@ public class SpawnWaves : MonoBehaviour {
             iter++;
             yield return new WaitForSeconds(spawnWait);
         }
-    }
+    }*/
 
-    IEnumerator StartBossRoutine(Vector3 spawnPt)
+    IEnumerator StartBossRoutine()
     {
         yield return new WaitForSeconds(bossWait);
         GameObject boss;
-        spawnPt = new Vector3(13.0f, 0.0f, 0.0f);
+        //Vector3 spawnPt = new Vector3(13.0f, 0.0f, 0.0f);
+        Vector3 spawnPt = c.ScreenToWorldPoint(new Vector3(c.pixelWidth + c.pixelWidth * 0.15f,
+                          c.pixelHeight * 0.5f,
+                          c.nearClipPlane + 4.0f));
 
         bossAlive = true;
         if(!BEOneisHM)
@@ -243,22 +292,51 @@ public class SpawnWaves : MonoBehaviour {
         bossAlive = false;
     }
 
-    IEnumerator SpawnShipHunter(Vector3 spawnPt)
+    IEnumerator SpawnShipHunter()
     {
         yield return new WaitForSeconds(1.0f);
         for (int i = 0; i < numHunters; i++)
         {
-            spawnRangeThree.x *= CoinFlip(1, -1);
             GameObject Hunter = GetComponent<ShipPool>().SpawnHunter();
-            Hunter.transform.position = new Vector3(spawnRangeThree.x, Random.Range(-spawnRangeThree.y, spawnRangeThree.y), spawnRangeThree.z);
+            //Hunter.transform.position = new Vector3(spawnRangeThree.x, Random.Range(-spawnRangeThree.y, spawnRangeThree.y), spawnRangeThree.z);
+            Hunter.transform.position = c.ScreenToWorldPoint(new Vector3(CoinFlip(0, c.pixelWidth),
+                                        Random.Range(0.0f + c.pixelHeight * 0.1f, c.pixelHeight - c.pixelHeight * 0.1f),
+                                        c.nearClipPlane + 4.0f));
             Hunter.transform.rotation = Quaternion.identity;
+            if (Hunter.transform.position.x < 0.0f)
+            {
+                gameUI.WarningIcon.GetComponent<RectTransform>().anchorMax = new Vector2(0.0f, 0.5f);
+                gameUI.WarningIcon.GetComponent<RectTransform>().anchorMin = new Vector2(0.0f, 0.5f);
+                gameUI.WarningIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(128.0f, 0.0f);
+            }
+            else
+            {
+                gameUI.WarningIcon.GetComponent<RectTransform>().anchorMax = new Vector2(1.0f, 0.5f);
+                gameUI.WarningIcon.GetComponent<RectTransform>().anchorMin = new Vector2(1.0f, 0.5f);
+                gameUI.WarningIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(-128.0f, 0.0f);
+            }
+
+            for (int j = 0; j < 5; j++)
+            {
+                gameUI.WarningIcon.gameObject.SetActive(true);
+                yield return new WaitForSeconds(0.1f);
+                gameUI.WarningIcon.gameObject.SetActive(false);
+                yield return new WaitForSeconds(0.1f);
+            }
+            //spawnRangeThree.x *= CoinFlip(1, -1);
             Hunter.SetActive(true);
             //Instantiate(EnemyShipThree, spawnPt, spawnRotate);
-            yield return new WaitForSeconds(4.0f);
+            yield return new WaitForSeconds(3.0f);
         }
+        //enemiesRemaining -= numHunters;
     }
 
-    int CoinFlip(int resultOne, int resultTwo)
+    public void decrementEnemyCount()
+    {
+        enemiesRemaining--;
+    }
+
+    float CoinFlip(float resultOne, float resultTwo)
     {
         return Random.Range(0, 2) > 0 ? resultOne : resultTwo;
     }

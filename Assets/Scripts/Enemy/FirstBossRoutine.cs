@@ -23,14 +23,20 @@ public class FirstBossRoutine : MonoBehaviour {
     public GameObject gunPointEight;
     public GameObject lasPointOne;
     public GameObject lasPointTwo;
+    public GameObject sml_explosion;
+    public GameObject med_explosion;
+    public GameObject lrg_explosion;
     GameController gameController;
 
     protected IEnumerator BossAttacks;
     protected IEnumerator LaserPattern;
     protected bool stopLaser = false;
+    protected Vector3 stopPoint;
+    protected bool isMoving;
 
     void Init()
     {
+        isMoving = true;
         BossAttacks = BossRoutine();
         notDead = true;
         veloc = 1.0f;
@@ -42,6 +48,7 @@ public class FirstBossRoutine : MonoBehaviour {
     // Use this for initialization
     protected virtual void Awake()
     {
+        isMoving = true;
         BE = new BossShip(hitPoints, scoreValue);
         GameObject target = GameObject.FindWithTag("GameController");
         if (target.GetComponent<GameController>() != null)
@@ -53,8 +60,6 @@ public class FirstBossRoutine : MonoBehaviour {
     protected void OnEnable()
     {
         Init();
-        if(GetComponent<FirstBossRoutineHard>() == null)
-            StartCoroutine(BossAttacks);
     }
 
     void OnDisable()
@@ -65,11 +70,25 @@ public class FirstBossRoutine : MonoBehaviour {
 
     protected void Start()
     {
+        Camera c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        stopPoint = c.ScreenToWorldPoint(new Vector3(c.pixelWidth * 0.825f, 0, c.nearClipPlane + 4.0f));
+        sml_explosion = gameController.GetComponent<SpecialFXPool>().playSmallExplosion();
+        lrg_explosion = gameController.GetComponent<SpecialFXPool>().playLargeExplosion();
+    }
+
+    void Update()
+    {
+        if (transform.position.x <= stopPoint.x && isMoving)
+        {
+            if(GetComponent<FirstBossRoutineHard>() == null)
+                StartCoroutine(BossAttacks);
+            isMoving = false;
+        }
     }
     
     IEnumerator BossRoutine()
     {
-        yield return new WaitForSeconds(2.0f);
+        //yield return new WaitForSeconds(2.0f);
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
         {
@@ -80,18 +99,22 @@ public class FirstBossRoutine : MonoBehaviour {
         {
             //phase 1
             yield return new WaitForSeconds(2.0f);
-            for (int i = 0; i < 50; i++)
+            for(int j = 0; j < 10; j++)
             {
-                BE.Shoot(FireBullet(), gunPointOne.transform.position, transform.rotation);
-                BE.Shoot(FireBullet(), gunPointTwo.transform.position, transform.rotation);
-                BE.Shoot(FireBullet(), gunPointThree.transform.position, transform.rotation);
-                BE.Shoot(FireBullet(), gunPointFour.transform.position, transform.rotation);
-                foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
+                for (int i = 0; i < 5; i++)
                 {
-                    if (ps.CompareTag("Muzzle_FX"))
-                        ps.Play();
+                    BE.Shoot(FireBullet(), gunPointOne.transform.position, transform.rotation);
+                    BE.Shoot(FireBullet(), gunPointTwo.transform.position, transform.rotation);
+                    BE.Shoot(FireBullet(), gunPointThree.transform.position, transform.rotation);
+                    BE.Shoot(FireBullet(), gunPointFour.transform.position, transform.rotation);
+                    foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
+                    {
+                        if (ps.CompareTag("Muzzle_FX"))
+                            ps.Play();
+                    }
+                    yield return new WaitForSeconds(0.2f);
                 }
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.5f);
             }
             yield return new WaitForSeconds(2.0f);
 
@@ -137,8 +160,9 @@ public class FirstBossRoutine : MonoBehaviour {
     {
         if (!notDead)
             return;
-        
+
         StopCoroutine(BossAttacks);
+        StartCoroutine("startExploding");
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         //StartCoroutine(destroyBoss());
         InvokeRepeating("destroyBoss", 3.0f, 0.5f);
@@ -146,7 +170,6 @@ public class FirstBossRoutine : MonoBehaviour {
         stopLaser = true;
         gameController.ModifyScore(BE.getScoreValue());
         //GetComponent<BoxCollider>().enabled = false;
-
     }
 
     void destroyBoss()
@@ -154,19 +177,30 @@ public class FirstBossRoutine : MonoBehaviour {
         if (transform.GetChild(2).gameObject.activeSelf)
         {
             //Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+            med_explosion = gameController.GetComponent<SpecialFXPool>().playMediumExplosion();
+            med_explosion.transform.position = transform.GetChild(2).transform.position + new Vector3(0.0f, 0.75f, 0.0f);
+            med_explosion.SetActive(true);
             transform.GetChild(2).gameObject.SetActive(false);
         }
         else if (transform.GetChild(1).gameObject.activeSelf)
         {
+            med_explosion = gameController.GetComponent<SpecialFXPool>().playMediumExplosion();
+            med_explosion.transform.position = transform.GetChild(1).transform.position + new Vector3(0.0f, -0.75f, 0.0f);
+            med_explosion.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(false);
         }
         else if (transform.GetChild(0).gameObject.activeSelf)
         {
+            med_explosion = gameController.GetComponent<SpecialFXPool>().playMediumExplosion();
+            med_explosion.transform.position = transform.GetChild(0).transform.position + new Vector3(0.5f, 0.0f, 0.0f);
+            med_explosion.SetActive(true);
             transform.GetChild(0).gameObject.SetActive(false);
         }
         else
         {
             CancelInvoke();
+            lrg_explosion.transform.position = transform.position + new Vector3(0.0f, 0.0f, -0.5f); ;
+            lrg_explosion.SetActive(true);
             Invoke("destroyCore", 1.0f);
         }
         //gameObject.SetActive(false);
@@ -248,4 +282,70 @@ public class FirstBossRoutine : MonoBehaviour {
     {
         return gameController.GetComponent<ProjectilePool>().FireNextLaser(this.gameObject);
     }
+
+    protected IEnumerator startExploding()
+    {
+        GameObject[] explosionPtsR = transform.GetChild(0).GetComponent<ExplosionPt_Retriever>().RetrievePoints();
+        GameObject[] explosionPtsB = transform.GetChild(1).GetComponent<ExplosionPt_Retriever>().RetrievePoints();
+        GameObject[] explosionPtsT = transform.GetChild(2).GetComponent<ExplosionPt_Retriever>().RetrievePoints();
+
+        while (transform.GetChild(2).gameObject.activeSelf ||
+               transform.GetChild(1).gameObject.activeSelf ||
+               transform.GetChild(0).gameObject.activeSelf)
+        {
+            if (transform.GetChild(2).gameObject.activeSelf)
+            {
+                foreach (GameObject exp in explosionPtsT)
+                {
+                    sml_explosion = gameController.GetComponent<SpecialFXPool>().playSmallExplosion();
+                    sml_explosion.transform.position = transform.GetChild(2).transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), -1.5f);
+                    sml_explosion.SetActive(true);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                //smallExplosions(transform.GetChild(2).transform.position, explosionPtsT);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+
+            if (transform.GetChild(1).gameObject.activeSelf)
+            {
+                foreach (GameObject exp in explosionPtsB)
+                {
+                    sml_explosion = gameController.GetComponent<SpecialFXPool>().playSmallExplosion();
+                    sml_explosion.transform.position = transform.GetChild(1).transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), -1.5f);
+                    sml_explosion.SetActive(true);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                //smallExplosions(transform.GetChild(1).transform.position, explosionPtsB);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+
+            if (transform.GetChild(0).gameObject.activeSelf)
+            {
+                foreach (GameObject exp in explosionPtsR)
+                {
+                    sml_explosion = gameController.GetComponent<SpecialFXPool>().playSmallExplosion();
+                    sml_explosion.transform.position = transform.GetChild(0).transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), -1.5f);
+                    sml_explosion.SetActive(true);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                //smallExplosions(transform.GetChild(0).transform.position, explosionPtsR);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(3.0f);
+    }
+
+    /*protected IEnumerator smallExplosions(Vector3 childPos, GameObject[] explosionPts)
+    {
+        foreach (GameObject exp in explosionPts)
+        {
+            sml_explosion = gameController.GetComponent<SpecialFXPool>().playSmallExplosion();
+            sml_explosion.transform.position = childPos + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0.0f);
+            sml_explosion.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }*/
 }

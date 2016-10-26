@@ -13,12 +13,25 @@ public class FirstBossRoutineHard : FirstBossRoutine
     {
         base.OnEnable();
         BossAttacks = HardBossRoutine();
-        StartCoroutine(BossAttacks);
+    }
+
+    void Start()
+    {
+        base.Start();
+    }
+
+    void Update()
+    {
+        if (transform.position.x <= stopPoint.x && isMoving)
+        {
+            StartCoroutine(BossAttacks);
+            isMoving = false;
+        }
     }
 
     IEnumerator HardBossRoutine()
     {
-        yield return new WaitForSeconds(1.45f);
+        //yield return new WaitForSeconds(1.45f);
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
         {

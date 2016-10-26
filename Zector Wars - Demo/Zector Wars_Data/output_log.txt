@@ -1,0 +1,637 @@
+Mono path[0] = 'C:/Users/Todandict/Desktop/Current Projects/Zector Wars/Zector Wars - Demo/Zector Wars_Data/Managed'
+Mono path[1] = 'C:/Users/Todandict/Desktop/Current Projects/Zector Wars/Zector Wars - Demo/Zector Wars_Data/Mono'
+Mono config path = 'C:/Users/Todandict/Desktop/Current Projects/Zector Wars/Zector Wars - Demo/Zector Wars_Data/Mono/etc'
+PlayerConnection initialized from C:/Users/Todandict/Desktop/Current Projects/Zector Wars/Zector Wars - Demo/Zector Wars_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55007
+Multi-casting "[IP] 192.168.159.1 [Port] 55007 [Flags] 3 [Guid] 1293484255 [EditorId] 611702748 [Version] 1048832 [Id] WindowsPlayer(GameCreator-pc) [Debug] 1" to [225.0.0.222:54997]...
+Waiting for connection from host on [192.168.159.1:55007]...
+PlayerConnection accepted from [192.168.0.110] handle:0x290
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56255
+PlayerConnection already initialized - listening to [192.168.159.1:55007]
+Initialize engine version: 5.4.1f1 (649f48bbbf0f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: Intel(R) HD Graphics 4600 (ID=0x416)
+    Vendor:   Intel
+    VRAM:     1792 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.047 seconds
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Todandict\Desktop\Current Projects\Zector Wars\Zector Wars - Demo\Zector Wars_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 59Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.263712 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 2b80 -> priority: 1 
+  Thread -> id: 2d30 -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 5.164755 ms
+System memory in use before: 189.8 MB.
+System memory in use after: 190.2 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 6343.
+Total: 2.627067 ms (FindLiveObjects: 0.276690 ms CreateObjectMapping: 0.226655 ms MarkObjects: 1.965061 ms  DeleteObjects: 0.153099 ms)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+UnloadTime: 4.988562 ms
+System memory in use before: 192.8 MB.
+System memory in use after: 189.5 MB.
+
+Unloading 837 unused Assets to reduce memory usage. Loaded Objects now: 386.
+Total: 1.610965 ms (FindLiveObjects: 0.345542 ms CreateObjectMapping: 0.047041 ms MarkObjects: 0.254453 ms  DeleteObjects: 0.963500 ms)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+Skipping profile frame. Receiver can not keep up with the amount of data sent
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Network/PlayerCommunicator/GeneralConnection.cpp Line: 351)
+
+UnloadTime: 0.488378 ms
+Waiting for finish

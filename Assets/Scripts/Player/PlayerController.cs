@@ -13,17 +13,23 @@ public class PlayerController : MonoBehaviour {
     PowerSelector selector;
     Rect gameBounds;
     float flickerTime;
+    PauseGame pause;
 
 	void Awake () {
+        pause = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().GetComponent<PauseGame>();
         powers = GetComponent<PowerUpSystem>();
         selector = GetComponent<PowerSelector>();
-        Camera c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         //Vector3 bottomleft = new Vector3(-10.0f, -4.5f, 0.0f);
         //Vector3 topright = new Vector3(10.0f, 4.5f, 0.0f);
+        gameObject.SetActive(false);
+    }
+
+    void Start()
+    {
+        Camera c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         Vector3 bottomleft = c.ScreenToWorldPoint(new Vector3(0.0f, 0.0f, c.nearClipPlane + 2.0f));
         Vector3 topright = c.ScreenToWorldPoint(new Vector3(c.pixelWidth, c.pixelHeight, c.nearClipPlane + 2.0f));
         gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);
-        gameObject.SetActive(false);
     }
 
     void OnEnable()
@@ -70,6 +76,9 @@ public class PlayerController : MonoBehaviour {
 
     void Update()
     {
+        if (pause.isGamePaused())
+            return;
+
         if(firerate > 0.0f)
             firerate -= Time.deltaTime;
 
@@ -110,14 +119,14 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKey(KeyCode.Keypad0) || Input.GetKey(KeyCode.Z))
         {
             Shoot();
+            powers.FireMissiles();
             powers.AltShoot();
             powers.LaserShoot();
         }
 
-        if (Input.GetKey(KeyCode.KeypadPeriod) || Input.GetKey(KeyCode.X))
+        /*if (Input.GetKey(KeyCode.KeypadPeriod) || Input.GetKey(KeyCode.X))
         {
-            powers.FireMissiles();
-        }
+        }*/
 
         if (Input.GetKey(KeyCode.KeypadEnter) || Input.GetKey(KeyCode.C))
         {

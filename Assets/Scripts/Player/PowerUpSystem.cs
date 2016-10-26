@@ -40,7 +40,7 @@ public class PowerUpSystem : MonoBehaviour {
     {
         isShielded = false;
         speedModifier = 1.0f;
-        if ((altfirePowUp || laserPowUp) && missilePowUp)
+        if (altfirePowUp || laserPowUp)
         {
             altfirePowUp = false;
             laserPowUp = false;

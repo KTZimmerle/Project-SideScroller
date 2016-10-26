@@ -16,7 +16,7 @@ public class StraightMover : MonoBehaviour {
     float seconds;
     bool hasShot;
     public float speed;
-
+    
     // Use this for initialization
     void Awake()
     {

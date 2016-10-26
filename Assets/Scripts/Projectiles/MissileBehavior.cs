@@ -19,6 +19,7 @@ public class MissileBehavior : ProjectileBehavior {
     void OnEnable()
     {
         base.OnEnable();
+        closestTarget = null;
         /*foreach (Collider potenTarget in targets)
         {
             potenTarget = null;

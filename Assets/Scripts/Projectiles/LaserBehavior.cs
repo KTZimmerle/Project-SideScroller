@@ -66,9 +66,6 @@ public class LaserBehavior : MonoBehaviour {
     {
         points = new Vector3[2];
         laser = new Laser(length);
-        Vector3 bottomleft = new Vector3(-9.5f, -4.5f, 0.0f);
-        Vector3 topright = new Vector3(9.5f, 4.5f, 0.0f);
-        gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);
         laserBeam = GetComponent<LineRenderer>();
         laserBeam.SetWidth(width, width);
         GameObject target = GameObject.FindWithTag("GameController");
@@ -90,6 +87,16 @@ public class LaserBehavior : MonoBehaviour {
             mask = 1 << 8 | 1 << 10 | 1 << 12 | 1 << 15;
         else
             mask = 1 << 11;
+    }
+
+    protected void Start()
+    {
+        Camera c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        Vector3 bottomleft = c.ScreenToWorldPoint(new Vector3(0.0f, 0.0f, c.nearClipPlane + 2.0f));
+        Vector3 topright = c.ScreenToWorldPoint(new Vector3(c.pixelWidth, c.pixelHeight, c.nearClipPlane + 2.0f));
+        /*Vector3 bottomleft = new Vector3(-9.5f, -4.5f, 0.0f);
+        Vector3 topright = new Vector3(9.5f, 4.5f, 0.0f);*/
+        gameBounds = new Rect(bottomleft.x, bottomleft.y, topright.x * 2, topright.y * 2);
     }
 
     protected void OnEnable()
@@ -201,7 +208,7 @@ public class LaserBehavior : MonoBehaviour {
         {
             HandleHit(hit.collider);
             if (!isFriendly)
-                GetComponent<DestroybyEnemyFire>().HandlePlayerHit(hit.collider);
+                GetComponent<DestroyPlayer>().HandlePlayerHit(hit.collider);
             else
                 stopGrowth = 0;
         }

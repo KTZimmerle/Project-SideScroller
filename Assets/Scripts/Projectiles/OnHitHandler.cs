@@ -10,7 +10,15 @@ public class OnHitHandler : MonoBehaviour {
     protected WavyMover EP;
     protected FirstBossRoutine BE;
     protected BossBarrierBehavior Barrier;
+    protected ScoreBoard sb;
+    protected SpawnWaves sw;
     GameObject exp;
+
+    void Start()
+    {
+        sb = GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreBoard>();
+        sw = GameObject.FindGameObjectWithTag("GameController").GetComponent<SpawnWaves>();
+    }
 
     public AbstractEnemy OnHitHandle(Collider other, GameController gameController)
     {
@@ -78,6 +86,12 @@ public class OnHitHandler : MonoBehaviour {
             //Destroy(other.gameObject);
             other.gameObject.SetActive(false);
             exp.SetActive(true);
+            if (other.CompareTag("Hazard"))
+            {
+                sb.incrementHit();
+                sb.incrementEnemyHit(other.gameObject);
+                sw.decrementEnemyCount();
+            }
         }
         else
         {
