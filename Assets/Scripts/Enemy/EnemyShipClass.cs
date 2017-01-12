@@ -21,19 +21,5 @@ public class EnemyShip : AbstractEnemy
         clone = MonoBehaviour.Instantiate(proj, pos, rot) as GameObject;
         clone.GetComponent<ProjectileBehavior>().isFriendly = false;
     }
-
-    public override void DropOnDeath(GameObject drop, Vector3 pos, Quaternion rot)
-    {
-        if (drop == null)
-            return;
-        
-        GameObject clone;
-        clone = MonoBehaviour.Instantiate(drop, pos, rot) as GameObject;
-    }
-
-    public override bool isBoss()
-    {
-        return false;
-    }
 }
 

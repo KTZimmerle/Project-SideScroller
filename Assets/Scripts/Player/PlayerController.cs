@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     Rect gameBounds;
     float flickerTime;
     PauseGame pause;
+    AudioClip projectile_SFX;
 
 	void Awake () {
         pause = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().GetComponent<PauseGame>();

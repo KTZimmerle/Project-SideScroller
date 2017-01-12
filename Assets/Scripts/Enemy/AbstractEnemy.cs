@@ -15,19 +15,5 @@ public class AbstractEnemy {
     public virtual int getScoreValue()
     {
         return scoreValue;
-    }
-
-    public virtual void DropOnDeath(GameObject drop, Vector3 pos, Quaternion rot)
-    {
-        if (drop == null)
-            return;
-
-        GameObject clone;
-        clone = MonoBehaviour.Instantiate(drop, pos, rot) as GameObject;
-    }
-
-    public virtual bool isBoss()
-    {
-        return false;
-    }
+    }   
 }

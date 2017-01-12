@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11479946}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hazard
   m_TagString: Hazard
   m_Icon: {fileID: 0}
@@ -118,8 +118,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: -5
-  followPlayer: 0
-  drop: {fileID: 0}
   speedMin: 0.5
   speedMax: 1.5
   hitPoints: 1

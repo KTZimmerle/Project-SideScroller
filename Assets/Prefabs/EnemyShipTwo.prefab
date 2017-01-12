@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11465564}
   - 114: {fileID: 11442410}
   - 54: {fileID: 5407836}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: EnemyShipTwo
   m_TagString: Hazard
   m_Icon: {fileID: 0}
@@ -105,10 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  followPlayer: 0
-  drop: {fileID: 0}
-  angle: 0
-  hitPoints: 40
+  hitPoints: 4
   scoreValue: 5
   projectile: {fileID: 117568, guid: ed5b423227355004382cd4894fad47ac, type: 2}
   target: {fileID: 0}

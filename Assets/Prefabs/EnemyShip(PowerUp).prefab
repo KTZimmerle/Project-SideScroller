@@ -14,7 +14,8 @@ GameObject:
   - 54: {fileID: 5464626}
   - 114: {fileID: 11445204}
   - 114: {fileID: 11426156}
-  m_Layer: 8
+  - 114: {fileID: 11498788}
+  m_Layer: 0
   m_Name: EnemyShip(PowerUp)
   m_TagString: Hazard
   m_Icon: {fileID: 0}
@@ -107,10 +108,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: -2
   followPlayer: 0
-  drop: {fileID: 139642, guid: 9cfa085a113ed4a4f84f6d5ea779e069, type: 2}
-  angle: 0
   hitPoints: 1
-  scoreValue: 1
+  scoreValue: 10
+--- !u!114 &11498788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab7ce95b8c2429743ab3aeeed2bf8323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PowerUpDrop: {fileID: 139642, guid: 9cfa085a113ed4a4f84f6d5ea779e069, type: 2}
 --- !u!135 &13504416
 SphereCollider:
   m_ObjectHideFlags: 1

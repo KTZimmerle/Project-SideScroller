@@ -19,8 +19,10 @@ public class HighScore : MonoBehaviour {
         for (int i = 0; i < 10; i++)
         {
             tw.WriteLine(initials[i] + "." + highScores[i]);
+            Debug.Log(initials[i] + "." + highScores[i]);
         }
         tw.Close();
+        Debug.Break();
     }
 
     void ReadFromFile()
