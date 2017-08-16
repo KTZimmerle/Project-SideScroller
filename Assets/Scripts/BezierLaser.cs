@@ -5,23 +5,23 @@ public class BezierLaser : MonoBehaviour {
 
     public Vector3[] points;
 
-    void InitializePts()
+    public void setPts(float sharpness = 0.0f)
     {
         points = new Vector3[] {
             new Vector3(1f, 0f, 0f),
             new Vector3(2f, 0f, 0f),
-            new Vector3(3f, 0f, 0f)
+            new Vector3(3f, sharpness, 0f)
         };
     }
 
 	// Use this for initialization
 	void Start () {
-        InitializePts();
+        //setPts();
     }
     
-    public void Reset()
+    public void Reset(float sharpness = 0.0f)
     {
-        InitializePts();
+        setPts(sharpness);
     }
 
     // Update is called once per frame

@@ -7,7 +7,7 @@ public class ProjectilePool : MonoBehaviour {
     const int PROJECTILE_LIMIT = 2;
     const int MISSILE_LIMIT = 1;
     const int ALTFIRE_LIMIT = 4;
-    const int LASER_LIMIT = 3;
+    const int LASER_LIMIT = 10;
     List<GameObject> bullets;
     List<GameObject> altfires;
     List<GameObject> missiles;

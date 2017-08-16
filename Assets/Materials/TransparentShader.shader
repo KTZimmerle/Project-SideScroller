@@ -1,4 +1,6 @@
-﻿Shader "ProjectSideScroller/TransparentShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "ProjectSideScroller/TransparentShader"
 {
 	Properties
 	{
@@ -46,7 +48,7 @@
 			FragmentInfo vert (VertexInfo v)
 			{
 				FragmentInfo o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.color = _Color;
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
