@@ -143,13 +143,15 @@ public class GameUI : MonoBehaviour {
 
     public IEnumerator displayHitRatio(float percentage, int hits, float enemies, int bonusPoints)
     {
-        HitRatio.text = "Hit Rate: " + hits + "/" + enemies + "\n";
+        HitRatio.text = "Destroyed: " + hits + "/" + enemies + "\n";
         yield return new WaitForSeconds(1.0f);
         HitRatio.text += percentage.ToString("F2") + "%\n";
         GetComponent<ScoreBoard>().tallyEnemiesDestroyed();
         yield return new WaitForSeconds(1.0f);
         if (hits/enemies == 1.0f)
+        {
             HitRatio.text += "Perfect!\n";
+        }
         HitRatio.text += "Bonus: " + bonusPoints;
         GetComponent<GameController>().ModifyScore(bonusPoints);
         yield return new WaitForSeconds(2.0f);

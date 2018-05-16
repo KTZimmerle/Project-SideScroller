@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class ProjectilePool : MonoBehaviour {
 
-    const int PROJECTILE_LIMIT = 2;
+    int laserTracker = 0;
+    const int PROJECTILE_LIMIT = 5;
     const int MISSILE_LIMIT = 1;
-    const int ALTFIRE_LIMIT = 4;
-    const int LASER_LIMIT = 10;
+    const int ALTFIRE_LIMIT = 8;
+    const int LASER_LIMIT = 60;
     List<GameObject> bullets;
     List<GameObject> altfires;
     List<GameObject> missiles;
@@ -21,12 +22,15 @@ public class ProjectilePool : MonoBehaviour {
     public GameObject bossProj;
     public GameObject bossProjTwo;
     public GameObject bossLaser;
+    public GameObject bossTwoProj;
     const int PROJ_ONE_CAP = 135;
     const int PROJ_TWO_CAP = 40;
     const int BOSS_LASER_CAP = 2;
     List<GameObject> projOne;
+    List<GameObject> projOneBossTwo;
     List<GameObject> projTwo;
     List<GameObject> bossLasers;
+    List<GameObject> bossTwoLasers;
 
 
     void Awake () {
@@ -37,8 +41,9 @@ public class ProjectilePool : MonoBehaviour {
         projOne = new List<GameObject>();
         projTwo = new List<GameObject>();
         bossLasers = new List<GameObject>();
+        projOneBossTwo = new List<GameObject>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 30; i++)
         {
             if (bullets.Count < PROJECTILE_LIMIT)
                 bullets.Add(Instantiate(bullet));
@@ -57,7 +62,8 @@ public class ProjectilePool : MonoBehaviour {
         {
             projOne.Add(Instantiate(bossProj));
             projOne[i].GetComponent<ProjectileBehavior>().isFriendly = false;
-
+            projOneBossTwo.Add(Instantiate(bossTwoProj));
+            projOneBossTwo[i].GetComponent<ProjectileBehavior>().isFriendly = false;
 
             if (projTwo.Count < PROJ_TWO_CAP)
             {
@@ -149,12 +155,19 @@ public class ProjectilePool : MonoBehaviour {
 
     public GameObject RequestLaser()
     {
-        for (int i = 0; i < getLasers(); i++)
+        int index = laserTracker % getLasers();
+        /*for (int i = 0; i < getLasers(); i++)
         {
             if (!lasers[i].activeSelf)
                 return lasers[i];
+        }*/
+        if (!lasers[index].activeSelf)
+        {
+            laserTracker++;
+            return lasers[index];
         }
-        return null;
+        else
+            return null;
     }
     
     public GameObject FireNextBullet(GameObject boss)
@@ -166,6 +179,19 @@ public class ProjectilePool : MonoBehaviour {
         {
             if (!projOne[i].activeSelf)
                 return projOne[i];
+        }
+        return null;
+    }
+
+    public GameObject FireNextBulletTwo(GameObject boss)
+    {
+        if (!boss.CompareTag("Boss"))
+            return null;
+        
+        for (int i = 0; i < PROJ_ONE_CAP; i++)
+        {
+            if (!projOneBossTwo[i].activeSelf)
+                return projOneBossTwo[i];
         }
         return null;
     }

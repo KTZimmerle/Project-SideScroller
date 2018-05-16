@@ -16,12 +16,14 @@ public class RotatorMover : MonoBehaviour {
     float rotSpeed;
     int minSpeed;
     int maxSpeed;
+    float chance;
 
     void Awake()
     {
+        chance = 0.05f;
         player = null;
         proj = Instantiate(projectile);
-        ES = new EnemyShip(hitPoints, scoreValue, explosion);
+        ES = new EnemyShip(hitPoints, scoreValue, true, chance);
         minSpeed = 1;
         maxSpeed = 4;
         rotSpeed = 100.0f;
@@ -75,7 +77,7 @@ public class RotatorMover : MonoBehaviour {
                     if(ps.CompareTag("Muzzle_FX"))
                         ps.Play(false);
                 }
-                ES.Shoot(proj, transform.position, Quaternion.Euler(0.0f, 0.0f, 180.0f) * transform.rotation);
+                ES.Shoot(proj, transform.position, Quaternion.Euler(0.0f, 0.0f, 180.0f) * transform.rotation, true);
                 //ES.Shoot(projectile, transform.position, Quaternion.Euler(0.0f, 0.0f, 180.0f) * transform.rotation);
                 secondsToShoot = 2.5f;
             }

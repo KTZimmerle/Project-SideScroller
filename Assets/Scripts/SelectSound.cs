@@ -63,11 +63,13 @@ public class SelectSound : MonoBehaviour {
         }
         else if (type.Equals("Projectile"))
         {
+            //if(!projectile_sounds[ID].isPlaying)
             projectile_sounds[ID].PlayOneShot(projectile_SFX[ID]);
         }
         else if (type.Equals("Laser"))
         {
-            laser_sounds[ID].PlayOneShot(laser_SFX[ID]);
+            if(!laser_sounds[ID].isPlaying)
+                laser_sounds[ID].PlayOneShot(laser_SFX[ID]);
         }
         else if (type.Equals("Missile"))
         {

@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour {
     HighScore highScores;
     GameObject StarFighter;
     public int score = 0;
-	public int extraLifeReq = 2000;
+	public int extraLifeReq = 10000;
     int reqScore;
 	public bool Invincible = false;
     bool shielded = false;
@@ -42,7 +42,7 @@ public class GameController : MonoBehaviour {
         gameUI.Initialize(playerLives, score, 0);
 
         //Spawn Player for the first time
-        StarFighter = GetComponent<ShipPool>().SpawnStarFighter();
+        StarFighter = GameObject.FindGameObjectWithTag("ShipPool").GetComponent<ShipPool>().SpawnStarFighter();
         StarFighter.transform.position = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
         StarFighter.transform.rotation = PlayerShip.transform.rotation;
         StarFighter.gameObject.SetActive(true);
@@ -99,8 +99,8 @@ public class GameController : MonoBehaviour {
         gameUI.UpdateScore(score);
         if (score > extraLifeReq)
         {
-            reqScore += 500;
-            extraLifeReq += 2000 + reqScore;
+            reqScore += 10000;
+            extraLifeReq += reqScore;
             ModifyLives(1);
         }
     }
@@ -125,7 +125,7 @@ public class GameController : MonoBehaviour {
 		yield return new WaitForSeconds (playerSpawnWait);
 		/*Vector3 spawnPos = new Vector3 (RespawnPoint.transform.position.x, 0.0f, 0.0f);
 		Quaternion spawnRotate = PlayerShip.transform.rotation;*/
-        StarFighter = GetComponent<ShipPool>().SpawnStarFighter();
+        StarFighter = GameObject.FindGameObjectWithTag("ShipPool").GetComponent<ShipPool>().SpawnStarFighter();
         StarFighter.transform.position = new Vector3(RespawnPoint.transform.position.x, 0.0f, 0.0f);
         StarFighter.transform.rotation = PlayerShip.transform.rotation;
         StarFighter.GetComponent<PlayerController>().revived = true;

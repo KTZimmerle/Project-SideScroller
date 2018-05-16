@@ -3,16 +3,26 @@ using System.Collections;
 
 public class DestroyPlayer : MonoBehaviour {
 
-    GameController gameController;
+    SpecialFXPool specialFX;
+    GameController gc;
+    GameObject orbOne;
+    GameObject orbTwo;
+    GameObject orbSpawn;
 
     //Useful if an attack is more complicated than what a collider can handle accurately
     public bool canKill = true;
 
     void Start()
     {
-        GameObject target = GameObject.FindWithTag("GameController");
+        orbOne = null;
+        orbTwo = null;
+        orbSpawn = null;
+        GameObject target = GameObject.FindWithTag("GFXPool");
         if(target != null)
-            gameController = target.GetComponent<GameController>();
+            specialFX = target.GetComponent<SpecialFXPool>();
+        target = GameObject.FindWithTag("GameController");
+        if (target != null)
+            gc = target.GetComponent<GameController>();
     }
 
     void OnTriggerStay(Collider player)
@@ -27,22 +37,23 @@ public class DestroyPlayer : MonoBehaviour {
     // Useful for handling game logic using more than just collider-based detection
     public void HandlePlayerHit(Collider player)
     {
-        if (player.CompareTag("PlayerShip") && !gameController.Invincible &&
-            !gameController.playerDied && !gameController.getShieldStatus())
+        if (player.CompareTag("PlayerShip") && !gc.Invincible &&
+            !gc.playerDied && !gc.getShieldStatus())
         {
-            gameController.setPlayerDeathFlag(true);
+            gc.setPlayerDeathFlag(true);
             player.gameObject.SetActive(false);
-            GameObject exp = gameController.GetComponent<SpecialFXPool>().playPlayerExplosion();
+
+            GameObject exp = specialFX.GetComponent<SpecialFXPool>().playPlayerExplosion();
             exp.transform.position = player.transform.position;
             exp.SetActive(true);
             //Destroy(player.gameObject);
-            if (gameController.playerLives == 0)
+            if (gc.playerLives == 0)
             {
-                gameController.setGameOver();
+                gc.setGameOver();
             }
             else
             {
-                gameController.ModifyLives(-1);
+                gc.ModifyLives(-1);
             }
         }
     }

@@ -8,19 +8,15 @@ public class BezierLaserBehavior : MonoBehaviour
     public bool isHit;
     public float speed;
     public float time;
+    public int damage;
     float delay;
     protected float veloc;
-    public int length = 3;
-    public float width;
-    protected float extend;
-    protected float totalGrowth = 0.0f;
-    protected Vector3[] points;
     protected Vector3 direction;
-    public BezierLaser BL;
-    public float sharpness = 0.5f;
-    Vector3 DirResultant;
+    public GameObject BL;
+    public float sharpness;
+    //Vector3 DirResultant;
     protected GameController gameController;
-    PlayerController player;
+    //PlayerController player;
     protected SpawnWaves bossStatus;
 
     public void Init()
@@ -29,20 +25,24 @@ public class BezierLaserBehavior : MonoBehaviour
         delay = 0.0f;
         time = 0.0f;
         GetComponent<Rigidbody>().velocity = new Vector3(speed, 0.0f, 0.0f);
-        
+        transform.GetChild(0).rotation = Quaternion.AngleAxis(0.0f, transform.forward);
+
+        BL.GetComponent<BezierLaser>().Reset();
     }
 
     // Use this for initialization
     protected void Awake()
     {
-        /*GameObject target = GameObject.FindWithTag("GameController");
+        BL = transform.GetChild(1).gameObject;
+        laser = new Laser(3, damage);
+        GameObject target = GameObject.FindWithTag("GameController");
         if (target != null)
         {
             gameController = target.GetComponent<GameController>();
             bossStatus = target.GetComponent<SpawnWaves>();
         }
 
-        if (GameObject.FindGameObjectWithTag("PlayerShip") != null)
+        /*if (GameObject.FindGameObjectWithTag("PlayerShip") != null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("PlayerShip");
             player = p.GetComponent<PlayerController>();
@@ -58,7 +58,8 @@ public class BezierLaserBehavior : MonoBehaviour
 
     protected void OnEnable()
     {
-        BL.Reset(sharpness);
+        //BL = GameObject.FindGameObjectWithTag("PlayerLaser").GetComponent<BezierLaser>();
+        BL.GetComponent<BezierLaser>().Reset(sharpness);
     }
 
     protected void OnDisable()
@@ -66,56 +67,46 @@ public class BezierLaserBehavior : MonoBehaviour
         Init();
     }
 
-    /*protected IEnumerator LaserGrowth()
-    {
-        while (totalGrowth <= laser.getLength() && ownerAlive)
-        {
-            headX += extend * direction.normalized.x * stopGrowth;
-            headY += extend * direction.normalized.y * stopGrowth;
-            totalGrowth += Mathf.Abs(extend);
-            yield return new WaitForSeconds(0.001f);
-        }
-        isDone = true;
-        veloc = speed;
-    }*/
-
-    /*protected void LaserGrowth()
-    {
-        
-    }
-
-    protected void LaserShrink()
-    {
-        
-    }*/
-
     protected void Update()
     {
 
-        if(time < 1.0f)
+        /*if (time < 1.0f)
         {
             if (delay <= 0.0f)
             {
-                time += Time.deltaTime;
+                time += Time.smoothDeltaTime;
+                time = Mathf.Clamp(time, 0.0f, 1.0f);
                 if (time >= 1.0f)
-                    time = 1.0f;
-            }
+                    time = 1.0f;*/
+
+                /*if (time < 1.0f)
+                    transform.right = ;
+                    //transform.LookAt(transform.localPosition + BL.GetComponent<BezierLaser>().GetDirection(time));*/
+
+            /*}
             else
                 delay -= Time.deltaTime;
-        }
+        }*/
     }
 
     void FixedUpdate()
     {
-        DirResultant.y = Input.GetAxis("PlayerShipV") * Time.deltaTime;
-        BL.GetDirection(time);
-        BL.GetPoint(time);
-        //Debug.Log(BL.GetDirection(time));
-        GetComponent<Rigidbody>().velocity = (BL.GetDirection(time) ) * Time.deltaTime * speed;
+        if (time < 1.0f)
+        {
+            time += Time.smoothDeltaTime;
+            time = Mathf.Clamp(time, 0.0f, 1.0f);
+            BL.GetComponent<BezierLaser>().GetDirection(time);
+            BL.GetComponent<BezierLaser>().GetPoint(time);
+            Vector3 direction = BL.GetComponent<BezierLaser>().GetDirection(time);
+            GetComponent<Rigidbody>().velocity = (direction) * Time.smoothDeltaTime * speed;
+            float angle;
+            angle = Mathf.Atan2(GetComponent<Rigidbody>().velocity.y, GetComponent<Rigidbody>().velocity.x) * Mathf.Rad2Deg;
+            transform.GetChild(0).rotation = Quaternion.AngleAxis(angle, transform.forward);
+        }
         //MoveLaser();
     }
 
-    public void MoveLaser()
+    /*public void MoveLaser()
     {
         if (DirResultant.y >= 0.1f || DirResultant.y <= -0.1f)
         {
@@ -138,9 +129,9 @@ public class BezierLaserBehavior : MonoBehaviour
         {
             sharpness = (sharpness > 0.0f) ? Mathf.Abs(sharpness - Time.deltaTime) : -Mathf.Abs(sharpness - Time.deltaTime);
         }
-    }
+    }*/
 
-    /*protected virtual void HandleHit(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (!isFriendly)
             return;
@@ -170,5 +161,5 @@ public class BezierLaserBehavior : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-    }*/
+    }/**/
 }

@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SpawnWaves : MonoBehaviour {
 
-    const int MAX_HAZARD_SIZE = 50;
+    const int MAX_HAZARD_SIZE = 40;
     const int MAX_POWERSHIP_SIZE = 6;
     const int MAX_SQUAD_SIZE = 8;
     const int MAX_FORMATION_SIZE = 8;
@@ -21,8 +21,10 @@ public class SpawnWaves : MonoBehaviour {
     public GameObject EnemyShipPower;
     public GameObject BossOne;
     public GameObject BossOneHM;
+    public GameObject BossTwo;
     FirstBossRoutine BEOne;
     FirstBossRoutineHard BEOneHM;
+    SecondBossRoutine BETwo;
     int numFormations = 2;
     int numPlatforms = 2;
     int numHunters = 2;
@@ -35,11 +37,17 @@ public class SpawnWaves : MonoBehaviour {
     public float waveBreak;
     public float bossWait;
     float subtractTime;
+    PowerUpSystem player;
+    GameObject powerOne;
+    GameObject powerTwo;
 
     bool BEOneisHM = false;
+    bool BETwoisHM = false;
     GameUI gameUI;
     ShipPool sPool;
     Camera c;
+    /*GameObject powerupOne;
+    GameObject powerupTwo;*/
 
     void Start ()
     {
@@ -50,7 +58,13 @@ public class SpawnWaves : MonoBehaviour {
         gameUI = GetComponent<GameUI>();
         BEOne = BossOne.GetComponent<FirstBossRoutine>();
         BEOneHM = BossOneHM.GetComponent<FirstBossRoutineHard>();
+        BETwo = BossTwo.GetComponent<SecondBossRoutine>();
         bossAlive = false;
+        sPool = GameObject.FindGameObjectWithTag("ShipPool").GetComponent<ShipPool>();
+    }
+
+    private void OnEnable()
+    {
     }
 
     void Spawner()
@@ -64,19 +78,19 @@ public class SpawnWaves : MonoBehaviour {
         totalEnemies = HazardLimit + extraSpawn;
 
 
-        if (waveCount > 2)
+        if (waveCount > 1)
         {
             totalEnemies += numFormations * squadSize;
             StartCoroutine(SpawnFormationOne());
         }
 
-        if (waveCount > 6)
+        if (waveCount > 4)
         {
             totalEnemies += numPlatforms;
             StartCoroutine(SpawnFormationTwo());
         }
-
-        if (waveCount > 10)
+        
+        if (waveCount > 8)
         {
             totalEnemies += numHunters;
             StartCoroutine(SpawnShipHunter());
@@ -87,6 +101,7 @@ public class SpawnWaves : MonoBehaviour {
     {
         bonusPoints = 100;
         yield return new WaitForSeconds(startWait);
+        player = GameObject.FindGameObjectWithTag("PlayerShip").GetComponent<PowerUpSystem>();
         while (!GameOverFlag)
         {
             waveCount += 1;
@@ -97,7 +112,7 @@ public class SpawnWaves : MonoBehaviour {
             int nextSpawn = 1;
             for (int i = 0; i < HazardLimit; i++)
             {
-                GameObject Razer = GetComponent<ShipPool>().SpawnRazer();
+                GameObject Razer = sPool.SpawnRazer();
                 //Razer.transform.position = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
                 Razer.transform.position = c.ScreenToWorldPoint(new Vector3(c.pixelWidth, 
                                            Random.Range(0.0f + c.pixelHeight * 0.1f, c.pixelHeight - c.pixelHeight * 0.1f), 
@@ -116,7 +131,7 @@ public class SpawnWaves : MonoBehaviour {
             yield return new WaitForSeconds(2.0f);
             
             //Spawn a boss
-            if (waveCount % 5 == 0)
+            if (waveCount % 3 == 0)
             {
                 GetComponent<GameController>().starIncomingBossMessage();
                 yield return new WaitForSeconds(6.0f);
@@ -131,6 +146,20 @@ public class SpawnWaves : MonoBehaviour {
             {
                 GetComponent<ScoreBoard>().setEnemyCount(totalEnemies);
                 GetComponent<ScoreBoard>().tallyScore(bonusPoints);
+                powerOne = SpawnPowerUp();
+                if (GetComponent<ScoreBoard>().GetNumDestroyed()/totalEnemies == 1)
+                {
+                    powerOne.transform.position = new Vector3(3.0f, 3.0f);
+                    powerOne.SetActive(true);
+                    powerTwo = sPool.SpawnRandomPowerUp();
+                    powerTwo.transform.position = new Vector3(3.0f, -3.0f);
+                    powerTwo.SetActive(true);
+                }
+                else
+                {
+                    powerOne.transform.position = new Vector3(3.0f, 0.0f);
+                    powerOne.SetActive(true);
+                }
                 yield return new WaitForSeconds(waveBreak + 1.0f);
                 if (0 == waveCount % 5 && extraSpawn < MAX_POWERSHIP_SIZE)
                     extraSpawn += 1;
@@ -152,8 +181,9 @@ public class SpawnWaves : MonoBehaviour {
                 if (waveCount % 3 == 0 && numPlatforms < MAX_PLATFORM_SIZE)//was 2
                     numPlatforms += 1;
 
-            if (waveCount > 22)
-                if (waveCount % 23 == 0 && numHunters < MAX_HUNTER_SIZE)
+            //change back to 22
+            if (waveCount > 12)
+                if (waveCount % 13 == 0 && numHunters < MAX_HUNTER_SIZE)
                     numHunters += 1;
 
             if(waveCount > 5)
@@ -188,13 +218,14 @@ public class SpawnWaves : MonoBehaviour {
         yield return new WaitForSeconds(startWait + 2.0f);
         for (int j = 0; j < numFormations; j++)
         {
-            //spawnPt = new Vector3(spawnRange.x, Random.Range(-spawnRange.y, spawnRange.y), spawnRange.z);
+            //sets the spawn point for swoopers to be off-screen to the right side.
+            //randomly chooses a y axis position
             Vector3 spawnPt = c.ScreenToWorldPoint(new Vector3(c.pixelWidth,
                                            Random.Range(0.0f + c.pixelHeight * 0.1f, c.pixelHeight - c.pixelHeight * 0.1f),
                                            c.nearClipPlane + 4.0f));/**/
             for (int i = 0; i < squadSize; i++)
             {
-                GameObject Swooper = GetComponent<ShipPool>().SpawnSwooper();
+                GameObject Swooper = sPool.SpawnSwooper();
                 Swooper.transform.position = spawnPt;
                 Swooper.transform.rotation = Quaternion.identity;
                 Swooper.SetActive(true);
@@ -211,25 +242,21 @@ public class SpawnWaves : MonoBehaviour {
         yield return new WaitForSeconds(startWait + 2.0f);
         for (int i = 0; i < numPlatforms; i++)
         {
-            //spawnRangeTwo.y *= CoinFlip(1, -1);
+            //spawns the blaster either above or below off-screen and picking a random x axis position primarily on the right side
             yield return new WaitForSeconds(Random.Range(1.0f, 5.0f));
-            GameObject Blaster = GetComponent<ShipPool>().SpawnBlaster();
+            GameObject Blaster = sPool.SpawnBlaster();
             //Blaster.transform.position = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
             Blaster.transform.position = c.ScreenToWorldPoint(new Vector3(Random.Range(c.pixelWidth * 0.4f, c.pixelWidth * 0.9f),
                                          CoinFlip(-c.pixelHeight * 0.1f, c.pixelHeight * 1.1f),
                                          c.nearClipPlane + 4.0f));
             Blaster.transform.rotation = Quaternion.identity;
             Blaster.SetActive(true);
-            //spawnPt = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
-            //Quaternion spawnRotate = Quaternion.identity;
-            //Instantiate(EnemyShipTwo, spawnPt, spawnRotate);
         }
-        //enemiesRemaining -= numPlatforms;
     }
 
     void SpawnPowerShip()
     {
-        GameObject PowerShip = GetComponent<ShipPool>().SpawnPowerShip();
+        GameObject PowerShip = sPool.SpawnPowerShip();
         PowerShip.transform.position = c.ScreenToWorldPoint(new Vector3(c.pixelWidth * 1.1f,
                                         Random.Range(0.0f + c.pixelHeight * 0.25f, c.pixelHeight - c.pixelHeight * 0.25f),
                                         c.nearClipPlane + 4.0f));
@@ -265,28 +292,39 @@ public class SpawnWaves : MonoBehaviour {
         yield return new WaitForSeconds(bossWait);
         GameObject boss;
         //Vector3 spawnPt = new Vector3(13.0f, 0.0f, 0.0f);
+        //boss one point only
         Vector3 spawnPt = c.ScreenToWorldPoint(new Vector3(c.pixelWidth + c.pixelWidth * 0.15f,
                           c.pixelHeight * 0.5f,
                           c.nearClipPlane + 4.0f));
 
         bossAlive = true;
-        if(!BEOneisHM)
+
+        if (waveCount >= 6 && waveCount % 6 == 0)
         {
-            //boss = Instantiate(BossOne, spawnPt, spawnRotate) as GameObject;
-            boss = GetComponent<ShipPool>().SpawnBattleShip();
-            boss.transform.position = spawnPt;
-            boss.transform.rotation = Quaternion.identity;
+            boss = sPool.SpawnAIDrones();
             boss.SetActive(true);
-            yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutine>().notDead);
+            yield return new WaitWhile(() => !boss.GetComponent<SecondBossRoutine>().isDying);
         }
         else
         {
-            boss = GetComponent<ShipPool>().SpawnBattleShipHM();
-            boss.transform.position = spawnPt;
-            boss.transform.rotation = Quaternion.identity;
-            boss.SetActive(true);
-            //boss = Instantiate(BossOneHM, spawnPt, spawnRotate) as GameObject;
-            yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutineHard>().notDead);
+            if (!BEOneisHM)
+            {
+                //boss = Instantiate(BossOne, spawnPt, spawnRotate) as GameObject;
+                boss = sPool.SpawnBattleShip();
+                boss.transform.position = spawnPt;
+                boss.transform.rotation = Quaternion.identity;
+                boss.SetActive(true);
+                yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutine>().notDead);
+            }
+            else
+            {
+                boss = sPool.SpawnBattleShipHM();
+                boss.transform.position = spawnPt;
+                boss.transform.rotation = Quaternion.identity;
+                boss.SetActive(true);
+                //boss = Instantiate(BossOneHM, spawnPt, spawnRotate) as GameObject;
+                yield return new WaitWhile(() => boss.GetComponent<FirstBossRoutineHard>().notDead);
+            }
         }
 
         bossAlive = false;
@@ -297,12 +335,14 @@ public class SpawnWaves : MonoBehaviour {
         yield return new WaitForSeconds(1.0f);
         for (int i = 0; i < numHunters; i++)
         {
-            GameObject Hunter = GetComponent<ShipPool>().SpawnHunter();
-            //Hunter.transform.position = new Vector3(spawnRangeThree.x, Random.Range(-spawnRangeThree.y, spawnRangeThree.y), spawnRangeThree.z);
+            //Spawns the hunter either to the left or right off screen and choosing a random y axis position.
+            GameObject Hunter = sPool.SpawnHunter();
             Hunter.transform.position = c.ScreenToWorldPoint(new Vector3(CoinFlip(0, c.pixelWidth),
                                         Random.Range(0.0f + c.pixelHeight * 0.1f, c.pixelHeight - c.pixelHeight * 0.1f),
                                         c.nearClipPlane + 4.0f));
             Hunter.transform.rotation = Quaternion.identity;
+
+            gameUI.WarningIcon.gameObject.SetActive(true);
             if (Hunter.transform.position.x < 0.0f)
             {
                 gameUI.WarningIcon.GetComponent<RectTransform>().anchorMax = new Vector2(0.0f, 0.5f);
@@ -315,7 +355,7 @@ public class SpawnWaves : MonoBehaviour {
                 gameUI.WarningIcon.GetComponent<RectTransform>().anchorMin = new Vector2(1.0f, 0.5f);
                 gameUI.WarningIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(-128.0f, 0.0f);
             }
-
+            
             for (int j = 0; j < 5; j++)
             {
                 gameUI.WarningIcon.gameObject.SetActive(true);
@@ -349,5 +389,17 @@ public class SpawnWaves : MonoBehaviour {
     public void setBossStatus(bool status)
     {
         bossAlive = status;
+    }
+
+    public GameObject SpawnPowerUp()
+    {
+        if (!player.CheckMissilePowUp())
+            return sPool.SpawnMissilePowerUp();
+        else if (!player.CheckCrossFirePowUp())
+            return sPool.SpawnCrossFirePowerUp();
+        else if (!player.CheckLaserPowUp())
+            return sPool.SpawnLaserPowerUp();
+        else
+            return null;
     }
 }

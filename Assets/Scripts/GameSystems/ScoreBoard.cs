@@ -5,6 +5,8 @@ using System.Collections;
 public class ScoreBoard : MonoBehaviour {
 
     int numberDestroyed;
+    int lastNumberDestroyed;
+    int totalNumberDestroyed;
     float EnemyCount;
     float hitRatio;
     int bonusPoints;
@@ -16,6 +18,8 @@ public class ScoreBoard : MonoBehaviour {
 
     void Awake()
     {
+        totalNumberDestroyed = 0;
+        lastNumberDestroyed = 0;
         numberDestroyed = 0;
         EnemyCount = 0;
         numRazors = 0;
@@ -28,6 +32,7 @@ public class ScoreBoard : MonoBehaviour {
     public void tallyScore(int bonusPts)
     {
         hitRatio = (numberDestroyed / EnemyCount) * 100;
+        lastNumberDestroyed = numberDestroyed;
         int bonusPoints = CalculateBonus(hitRatio/100, bonusPts);
         StartCoroutine(GetComponent<GameUI>().displayHitRatio(hitRatio, numberDestroyed, EnemyCount, bonusPoints));
         numberDestroyed = 0;
@@ -110,5 +115,10 @@ public class ScoreBoard : MonoBehaviour {
         numSwoopers = 0;
         numBlasters = 0;
         numHunters = 0;
+    }
+
+    public int GetNumDestroyed()
+    {
+        return lastNumberDestroyed;
     }
 }

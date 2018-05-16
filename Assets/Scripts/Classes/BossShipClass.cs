@@ -65,7 +65,7 @@ public class BossShip : AbstractEnemy
         reflectHelper.GetComponent<ReflectHelper>().HelpReflectLaser(pos, angle);
     }
 
-    public override void DropOnDeath(Vector3 pos, Quaternion rot)
+    public override void DropOnDeath(Vector3 pos, Quaternion rot, GameObject drop = null)
     {
         /*if (drop == null)
             return;

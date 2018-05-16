@@ -9,11 +9,11 @@ public class SpecialFXPool : MonoBehaviour {
     public GameObject large_Explosion;
     public GameObject missile_Explosion;
     public GameObject player_Explosion;
-    const int SMALL_EXPLOSION_CAP = 20;
+    const int SMALL_EXPLOSION_CAP = 40;
     const int MEDIUM_EXPLOSION_CAP = 25;
     const int LARGE_EXPLOSION_CAP = 10;
-    const int MISSILE_EXPLOSION_CAP = 3;
-    const int PLAYER_EXPLOSION_CAP = 1;
+    const int MISSILE_EXPLOSION_CAP = 6;
+    const int PLAYER_EXPLOSION_CAP = 3;
     List<GameObject> smallXPlosPool;
     List<GameObject> mediumXPlosPool;
     List<GameObject> largeXPlosPool;

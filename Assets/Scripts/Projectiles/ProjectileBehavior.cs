@@ -18,16 +18,19 @@ public class ProjectileBehavior : MonoBehaviour {
     protected float distance;
     protected Vector3 direction;
     public float angle;
+    public bool destroyOrb = false;
+    SpecialFXPool specialFX;
 
     protected virtual void Awake()
     {
+        specialFX = GameObject.FindWithTag("GFXPool").GetComponent<SpecialFXPool>();
         GameObject target = GameObject.FindWithTag("GameController");
         if (target.GetComponent<GameController>() != null)
             gameController = target.GetComponent<GameController>();
 
         if(GetComponent<ProjectileBehavior>() != null ||
            GetComponent<AltfireBehavior>() != null)
-            bullet = new Bullet();
+            bullet = new Bullet(2);
 
         if (followPlayer)
         {
@@ -76,7 +79,16 @@ public class ProjectileBehavior : MonoBehaviour {
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (!isFriendly || isHit)
+        {
+            if (destroyOrb && other.GetComponent<Orbiter>() != null)
+            {
+                GameObject exp = specialFX.GetComponent<SpecialFXPool>().playPlayerExplosion();
+                exp.transform.position = other.transform.position;
+                exp.SetActive(true);
+                other.gameObject.SetActive(false);
+            }
             return;
+        }
         
         if (other.GetComponent<BossArmorBehavior>() != null)
         {

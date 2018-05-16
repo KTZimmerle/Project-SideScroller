@@ -7,32 +7,39 @@ public class PowerUpSystem : MonoBehaviour {
     public bool altfirePowUp;
     public bool laserPowUp;
     public float missileRate;
+    public float missileRateTwo;
+    public float missileRateThree;
     public float altfireRate;
     public int shieldHits = 5;
-    public int MISSILE_LIMIT = 1;
-    public int ALTFIRE_LIMIT = 4;
-    public int LASER_LIMIT = 3;
     public float laserRate;
     float speedModifier;
     public bool isShielded;
+    float sharpness;
+    public string pool;
+    GameObject orbiterOne;
+    GameObject orbiterTwo;
 
-    public GameObject missile;
-    public GameObject altfire;
-    public GameObject laser;
     public GameObject shields;
     GameObject shield;
 
     protected GameController gameController;
     protected AbstractEnemy enemy;
-    
+    ProjectilePool projPoolMain;
+    ProjectilePool projPoolOne;
+    ProjectilePool projPoolTwo;
+
     void Awake()
     {
+        projPoolMain = GameObject.FindGameObjectWithTag("ProjectilePool").GetComponent<ProjectilePool>();
+        projPoolOne = GameObject.FindGameObjectWithTag("OrbiterProjPoolOne").GetComponent<ProjectilePool>();
+        projPoolTwo = GameObject.FindGameObjectWithTag("OrbiterProjPoolTwo").GetComponent<ProjectilePool>();
+        sharpness = 0.0f;
         Vector3 offsetX = transform.position;
         offsetX.x += 0.25f;
         shield = Instantiate(shields, offsetX, transform.rotation) as GameObject;
         shield.transform.SetParent(transform);
         GameObject target = GameObject.FindWithTag("GameController");
-        if (target.GetComponent<GameController>() != null)
+        if (target != null)
             gameController = target.GetComponent<GameController>();
     }
 
@@ -50,84 +57,156 @@ public class PowerUpSystem : MonoBehaviour {
             missilePowUp = false;
         }
         missileRate = 0.5f;
+        missileRateTwo = 0.5f;
+        missileRateThree = 0.5f;
         altfireRate = 0.25f;
         laserRate = 1.0f;
+    }
+
+    void FixedUpdate()
+    {
+        float verticalDir = Input.GetAxis("PlayerShipV") * Time.smoothDeltaTime;
+        float horizontalDir = Input.GetAxis("PlayerShipH") * Time.smoothDeltaTime;
+
+        if (horizontalDir > 0.01f || horizontalDir < -0.01f)
+        {
+            sharpness = 0.0f;
+        }
+        else if (verticalDir > 0.01f)
+        {
+            sharpness = 2.5f;
+        }
+        else if (verticalDir < -0.01f)
+        {
+            sharpness = -2.5f;
+        }
+        
     }
 
     //speed up
     public void changeSpeed()
     {
-        if(GetComponent<PlayerController>().speed + 50.0f <= 500.0f)
-            GetComponent<PlayerController>().speed += 50.0f;
+        if(GetComponent<PlayerController>().speed + .6f <= 6.0f)
+            GetComponent<PlayerController>().speed += 0.6f;
         else
-            GetComponent<PlayerController>().speed = 250.0f;
+            GetComponent<PlayerController>().speed = 3.0f;
 
+    }
+
+    public void LaunchMissile(Vector3 pos, Quaternion rot, GameObject missile)
+    {
+        missile.GetComponent<ProjectileBehavior>().isFriendly = true;
+        missile.transform.position = pos;
+        missile.transform.rotation = rot;
+        missile.gameObject.SetActive(true);
     }
 
     //missiles
     public void FireMissiles()
     {
-        int numMissiles = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().getMissiles();
-        GameObject miss = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().RequestMissile();
-        if (missileRate < 0.0f && missilePowUp && miss != null)
+        GameObject missileOne = projPoolMain.RequestMissile();
+        GameObject missileTwo = null;
+        GameObject missileThree = null;
+
+        if (orbiterOne != null && orbiterOne.activeSelf)
+            missileTwo = projPoolOne.RequestMissile();
+
+        if (orbiterTwo != null && orbiterTwo.activeSelf)
+            missileThree = projPoolTwo.RequestMissile();
+
+        Vector3 offset = transform.position;
+        offset.x += 0.5f;
+        offset.y -= 0.25f;
+        if (missilePowUp)
         {
-            //GameObject clone;
-            Vector3 offset = transform.position;
-            offset.x += 0.5f;
-            offset.y -= 0.25f;
-            miss.transform.position = offset;
-            miss.transform.rotation = transform.rotation;
-            miss.gameObject.SetActive(true);
-            //clone = Instantiate(missile, offset, transform.rotation) as GameObject;
-            miss.GetComponent<ProjectileBehavior>().isFriendly = true;
-            missileRate = 0.5f;
+            if (missileRate < 0.0f && missileOne != null)
+            {
+                LaunchMissile(offset, transform.rotation, missileOne);
+                missileRate = 0.5f;
+            }
+
+            if (missileRateTwo < 0.0f && orbiterOne != null && orbiterOne.activeSelf && missileTwo != null)
+            {
+                LaunchMissile(orbiterOne.transform.position, transform.rotation, missileTwo);
+                missileRateTwo = 0.5f;
+            }
+
+            if (missileRateThree < 0.0f && orbiterTwo != null && orbiterTwo.activeSelf && missileThree != null)
+            {
+                LaunchMissile(orbiterTwo.transform.position, transform.rotation, missileThree);
+                missileRateThree = 0.5f;
+            }
         }
     }
 
     //alternate shot
     public void AltShoot()
     {
-        int numAltFires = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().getAltfires();
+        int numAltFires = projPoolMain.getAltfires();
         if (numAltFires >= 2 && altfireRate < 0.0f && altfirePowUp && !laserPowUp)
         {
-            float[] angles = {30.0f, -30.0f };
+            float[] angles = {90.0f, -90.0f };
             for (int i = 0; i < 2; i++)
             {
-                GameObject altfire1 = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().RequestAltfire();
+                GameObject altfire1 = projPoolMain.RequestAltfire();
+                GameObject altfire2 = null;
+                GameObject altfire3 = null; ;
+                if (orbiterOne != null && orbiterOne.activeSelf)
+                    altfire2 = projPoolOne.RequestAltfire();
+
+                if (orbiterTwo != null && orbiterTwo.activeSelf)
+                    altfire3 = projPoolTwo.RequestAltfire();
+
                 if (altfire1 != null)
                 {
                     Vector3 offsetX = transform.position;
-                    offsetX.x += 0.75f;
+                    offsetX.x += 0.25f;
                     altfire1.transform.position = offsetX;
                     altfire1.transform.rotation = Quaternion.Euler(0.0f, 0.0f, angles[i]) * Quaternion.Euler(0.0f, 0.0f, 0.0f);
                     altfire1.GetComponent<ProjectileBehavior>().isFriendly = true;
                     altfire1.gameObject.SetActive(true);
                 }
+
+                if (altfire2 != null)
+                {
+                    Vector3 offsetX = orbiterOne.transform.position;
+                    offsetX.x += 0.25f;
+                    altfire2.transform.position = offsetX;
+                    altfire2.transform.rotation = Quaternion.Euler(0.0f, 0.0f, angles[i]) * Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                    altfire2.GetComponent<ProjectileBehavior>().isFriendly = true;
+                    altfire2.gameObject.SetActive(true);
+                }
+
+                if (altfire3 != null)
+                {
+                    Vector3 offsetX = orbiterTwo.transform.position;
+                    offsetX.x += 0.25f;
+                    altfire3.transform.position = offsetX;
+                    altfire3.transform.rotation = Quaternion.Euler(0.0f, 0.0f, angles[i]) * Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                    altfire3.GetComponent<ProjectileBehavior>().isFriendly = true;
+                    altfire3.gameObject.SetActive(true);
+                }
             }
-            altfireRate = 0.25f;
+            altfireRate = 0.15f;
         }
     }
 
     //lasers
     public void LaserShoot()
     {
-        int numLasers = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().getLasers();
-        GameObject laser = GameObject.FindGameObjectWithTag("GameController").GetComponent<ProjectilePool>().RequestLaser();
-        if (laserRate < 0.0f && laserPowUp && laser != null)
+        //GameObject laser = GameObject.FindGameObjectWithTag("ProjectilePool").GetComponent<ProjectilePool>().RequestLaser();
+        if (laserRate < 0.0f && laserPowUp)
         {
             foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
             {
                 if (ps.CompareTag("Laser_FX"))
                     ps.Play();
             }
-
-            //GameObject clone;
-            //clone = Instantiate(laser, transform.position, transform.rotation) as GameObject;
-            laser.transform.position = transform.position;
-            laser.transform.rotation = transform.rotation;
-            laser.GetComponent<LaserBehavior>().isFriendly = true;
-            laser.gameObject.SetActive(true);
-            laserRate = 1.0f;
+            
+            Vector3 pos = transform.position;
+            Quaternion rot = transform.rotation;
+            StartCoroutine(FireBurst(10, pos, rot, sharpness));
+            laserRate = 0.55f;
         }
     }
 
@@ -172,5 +251,92 @@ public class PowerUpSystem : MonoBehaviour {
             potenTarget.gameObject.SetActive(false);
         }
         yield return new WaitForSeconds(0.5f);
+    }
+
+    IEnumerator FireBurst(int burstLength, Vector3 pos, Quaternion rot, float sharp)
+    {
+        Vector3 OrbOnePos = Vector3.zero;
+        Vector3 OrbTwoPos = Vector3.zero;
+
+        if (orbiterOne != null & orbiterOne.activeSelf)
+        {
+            OrbOnePos = orbiterOne.transform.position;
+        }
+
+        if (orbiterTwo != null & orbiterTwo.activeSelf)
+        {
+            OrbTwoPos = orbiterTwo.transform.position;
+        }
+        
+        int numLasers = projPoolMain.getLasers();
+        if (numLasers <= 0)
+            yield break;
+
+
+        GameObject[] lasers = new GameObject[burstLength];
+        GameObject[] lasers2 = new GameObject[burstLength];
+        GameObject[] lasers3 = new GameObject[burstLength];
+        int length = lasers.Length;
+        for (int index = 0; index < length; index++)
+        {
+            lasers[index] = projPoolMain.GetComponent<ProjectilePool>().RequestLaser();
+
+            lasers[index].GetComponent<BezierLaserBehavior>().sharpness = sharp;
+            lasers[index].transform.position = pos;
+            lasers[index].transform.rotation = rot;
+            lasers[index].GetComponent<BezierLaserBehavior>().isFriendly = true;
+            lasers[index].SetActive(true);
+
+            if (orbiterOne != null & orbiterOne.activeSelf)
+            {
+                lasers2[index] = projPoolOne.GetComponent<ProjectilePool>().RequestLaser();
+
+                lasers2[index].GetComponent<BezierLaserBehavior>().sharpness = sharp;
+                lasers2[index].transform.position = OrbOnePos;
+                lasers2[index].transform.rotation = rot;
+                lasers2[index].GetComponent<BezierLaserBehavior>().isFriendly = true;
+                //yield return new WaitForSeconds(0.025f);
+                lasers2[index].SetActive(true);
+            }
+
+            if (orbiterTwo != null & orbiterTwo.activeSelf)
+            {
+                lasers3[index] = projPoolTwo.GetComponent<ProjectilePool>().RequestLaser();
+
+                lasers3[index].GetComponent<BezierLaserBehavior>().sharpness = sharp;
+                lasers3[index].transform.position = OrbTwoPos;
+                lasers3[index].transform.rotation = rot;
+                lasers3[index].GetComponent<BezierLaserBehavior>().isFriendly = true;
+                //yield return new WaitForSeconds(0.025f);
+                lasers3[index].SetActive(true);
+            }
+
+            yield return new WaitForSeconds(0.025f);
+        }
+    }
+    
+    public void SetOrbiterOneRef(GameObject orbOne)
+    {
+        orbiterOne = orbOne;
+    }
+
+    public void SetOrbiterTwoRef(GameObject orbTwo)
+    {
+        orbiterTwo = orbTwo;
+    }
+
+    public bool CheckMissilePowUp()
+    {
+        return missilePowUp;
+    }
+
+    public bool CheckCrossFirePowUp()
+    {
+        return altfirePowUp;
+    }
+
+    public bool CheckLaserPowUp()
+    {
+        return laserPowUp;
     }
 }

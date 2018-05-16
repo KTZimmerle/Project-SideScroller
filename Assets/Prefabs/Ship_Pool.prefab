@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1759847808736518}
+  m_IsPrefabParent: 1
+--- !u!1 &1759847808736518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4210685815110772}
+  - component: {fileID: 114948869472870436}
+  m_Layer: 0
+  m_Name: Ship_Pool
+  m_TagString: ShipPool
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4210685815110772
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1759847808736518}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114948869472870436
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1759847808736518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7218d628987e1943a62019d6057654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  razer: {fileID: 100000, guid: 23984e43f083c1c48967b75dc280f977, type: 2}
+  swooper: {fileID: 163362, guid: 1d403aab272fee9459075225b4702d57, type: 2}
+  blaster: {fileID: 120356, guid: 5c75b292ac1772b45af193a3854f7102, type: 2}
+  hunter: {fileID: 119542, guid: 9bbdda54352adff4fb1f17752126cb64, type: 2}
+  powership: {fileID: 105642, guid: 103f6e6fb8c3c1745b2108beb55c2cc8, type: 2}
+  powerup: {fileID: 142138, guid: 8b9ad1f1e53df0e4ba0e33ebf97cbbb7, type: 2}
+  missilepowerup: {fileID: 1248378226158264, guid: 056bdb1525a3d3c43ac9c01dd0e69b68,
+    type: 2}
+  speedpowerup: {fileID: 1547923403515578, guid: d72144125d0cf5e4abebcce1d980e39a,
+    type: 2}
+  crossfirepowerup: {fileID: 1420750375371418, guid: 191eec1ca27855748aa51856e9ad7a7e,
+    type: 2}
+  laserpowerup: {fileID: 1811718313728768, guid: 01b50cc6c95e790458eb93f80fac26db,
+    type: 2}
+  shieldpowerup: {fileID: 1611227702874162, guid: 837689a84ae6be1479eb18e593330204,
+    type: 2}
+  orbiterPickup: {fileID: 1559494002919192, guid: 399d3ad731d22284d8e2f85374a237a5,
+    type: 2}
+  battleship: {fileID: 154262, guid: 797b57c0498b2a34f990bab1c51c0d5f, type: 2}
+  battleshipHM: {fileID: 187922, guid: d18e74d7da6248e4f9d68a808d2ffe66, type: 2}
+  AIDrones: {fileID: 1123217515909152, guid: 2249b1a93eb4d6f44a5def25682a4911, type: 2}
+  starfighterP: {fileID: 180242, guid: 7a3a0565eca785646a6d76ccb5f0db72, type: 2}
+  orbiterOne: {fileID: 1485676181377708, guid: b69cf9af0856a394986bc3d5e5d760a7, type: 2}
+  orbiterTwo: {fileID: 1803127537421680, guid: 59ef2b9b20b664049ac8522956909b03, type: 2}

@@ -70,7 +70,7 @@ public class MissileBehavior : ProjectileBehavior {
         if (!isFriendly || isHit)
             return;
 
-        GameObject exp = gameController.GetComponent<SpecialFXPool>().playMissileExplosion();
+        GameObject exp = GameObject.FindGameObjectWithTag("GFXPool").GetComponent<SpecialFXPool>().playMissileExplosion();
         if (other.GetComponent<BossArmorBehavior>() != null)
         {
             //gameController.GetComponent<PlayerProjectileList>().addWeapon(gameObject);

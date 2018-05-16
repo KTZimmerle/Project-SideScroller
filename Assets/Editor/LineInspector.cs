@@ -9,7 +9,7 @@ using System.Collections;
 
 
 
-[CustomEditor(typeof(BezierLaser))]
+//[CustomEditor(typeof(BezierLaser))]
 public class BezierCurveInspector : Editor
 {
 

@@ -9,9 +9,9 @@ public class CircularMover : MonoBehaviour {
     public GameObject projectile;
     GameObject proj;
     public float delayManuvuer = 2.0f;
-    public GameObject explosion;
     //GameObject exp;
     float stopManuvuer = 1.19f;
+    float chance;
 
     public float turnSpeed;
     float newTurnSpeed;
@@ -23,9 +23,10 @@ public class CircularMover : MonoBehaviour {
 
     void Awake()
     {
+        chance = 0.025f;
         //exp = Instantiate(explosion);
         proj = Instantiate(projectile);
-        ES = new EnemyShip(hitPoints, scoreValue);
+        ES = new EnemyShip(hitPoints, scoreValue, true, chance);
         enemyShip = GetComponent<Rigidbody>();
         newSpeed = -5 * 100;
         

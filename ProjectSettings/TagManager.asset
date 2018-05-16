@@ -27,6 +27,13 @@ TagManager:
   - MissileProjectile
   - UserInput
   - SoundSystem
+  - ProjectilePool
+  - ShipPool
+  - GFXPool
+  - OribterOne
+  - OribterTwo
+  - OrbiterProjPoolOne
+  - OrbiterProjPoolTwo
   layers:
   - Default
   - TransparentFX

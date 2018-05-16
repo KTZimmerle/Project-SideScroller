@@ -5,7 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Title Screen.unity
-  - enabled: 1
+    guid: 2665063cd75252e4caec4b972f5ae12d
+  - enabled: 0
     path: Assets/Scenes/Space Battle.unity
+    guid: 57550df00e2a6db4797967fc7b6f2d60
+  - enabled: 1
+    path: Assets/Scenes/Space Battle Test.unity
+    guid: c5f0dd46f5afc6a4ca48d2ca93d273b6

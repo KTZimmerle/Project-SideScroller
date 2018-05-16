@@ -10,11 +10,17 @@ public class TrackingMover : MonoBehaviour {
     public GameObject explosion;
     Vector3 direction;
     public float speed;
+    float chance;
+    SpecialFXPool specialFX;
 
     void Awake ()
     {
+        GameObject target = GameObject.FindWithTag("GFXPool");
+        if (target != null)
+            specialFX = target.GetComponent<SpecialFXPool>();
+        chance = 0.075f;
         //base.Awake();
-        ES = new EnemyShip(hitPoints, scoreValue, explosion);
+        ES = new EnemyShip(hitPoints, scoreValue, true, chance);
         gameObject.SetActive(false);
     }
 
@@ -66,6 +72,19 @@ public class TrackingMover : MonoBehaviour {
         }
         else
             direction = transform.right;
+    }
+
+    protected void OnTriggerEnter(Collider other)
+    {
+        //destroy orbiter
+        if (other.GetComponent<Orbiter>() == null)
+            return;
+
+
+        GameObject exp = specialFX.GetComponent<SpecialFXPool>().playPlayerExplosion();
+        other.gameObject.SetActive(false);
+        exp.transform.position = other.transform.position;
+        exp.SetActive(true);
     }
 
 }

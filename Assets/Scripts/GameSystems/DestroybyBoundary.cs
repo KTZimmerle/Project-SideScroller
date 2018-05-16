@@ -31,7 +31,7 @@ public class DestroybyBoundary : MonoBehaviour {
         /*if (other.CompareTag("PlayerWeapon"))
             GameObject.FindGameObjectWithTag("GameController").GetComponent<PlayerProjectileList>().addWeapon(other.gameObject);*/
 
-        if (!other.CompareTag("BossLaser"))
+        if (!other.CompareTag("BossLaser") && !other.CompareTag("Boss"))
             other.gameObject.SetActive(false);
 
         if(other.CompareTag("Hazard"))

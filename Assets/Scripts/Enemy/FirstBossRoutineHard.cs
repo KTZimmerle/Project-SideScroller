@@ -7,6 +7,10 @@ public class FirstBossRoutineHard : FirstBossRoutine
     protected override void Awake()
     {
         base.Awake();
+        GetComponent<Renderer>().material.SetColor(Shader.PropertyToID("_Color"), Color.yellow);
+        /*transform.GetChild(0).GetComponent<Renderer>().material.SetColor(Shader.PropertyToID("_Color"), Color.yellow);
+        transform.GetChild(1).GetComponent<Renderer>().material.SetColor(Shader.PropertyToID("_Color"), Color.yellow);
+        transform.GetChild(2).GetComponent<Renderer>().material.SetColor(Shader.PropertyToID("_Color"), Color.yellow);*/
     }
 
     protected void OnEnable()

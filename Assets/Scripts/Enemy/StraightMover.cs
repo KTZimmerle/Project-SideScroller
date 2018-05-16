@@ -11,18 +11,17 @@ public class StraightMover : MonoBehaviour {
     public GameObject projectile;
     GameObject proj;
     public GameObject explosion;
-    //GameObject exp;
     GameObject player;
     float seconds;
     bool hasShot;
     public float speed;
-    
+
     // Use this for initialization
     void Awake()
     {
         //exp = Instantiate(explosion);
         proj = Instantiate(projectile);
-        ES = new EnemyShip(hitPoints, scoreValue);
+        ES = new EnemyShip(hitPoints, scoreValue, false);
         gameObject.SetActive(false);
     }
 

@@ -8,6 +8,8 @@ public class AbstractEnemy {
     protected int scoreValue;
     protected bool isDead;
     protected bool hasDrop;
+    protected float chance;
+    
 
     public virtual void Init(int hp)
     {
@@ -26,7 +28,7 @@ public class AbstractEnemy {
         return scoreValue;
     }
 
-    public virtual void DropOnDeath(Vector3 pos, Quaternion rot)
+    public virtual void DropOnDeath(Vector3 pos, Quaternion rot, GameObject drop = null)
     {
         /*if (drop == null)
             return;

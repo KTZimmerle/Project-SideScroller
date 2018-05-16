@@ -4,21 +4,26 @@ using System.Collections.Generic;
 
 public class ShipPool : MonoBehaviour {
 
+    int hunterTracker = 0;
     public GameObject razer;
     public GameObject swooper;
     public GameObject blaster;
     public GameObject hunter;
     public GameObject powership;
     public GameObject powerup;
+    public GameObject missilepowerup;
+    public GameObject speedpowerup;
+    public GameObject crossfirepowerup;
+    public GameObject laserpowerup;
+    public GameObject shieldpowerup;
+    public GameObject orbiterPickup;
     public GameObject battleship;
     public GameObject battleshipHM;
+    public GameObject AIDrones;
+    //public GameObject AIBossDrones;
     public GameObject starfighterP;
-    /*public GameObject razerpool;
-    public GameObject swooperpool;
-    public GameObject blasterpool;
-    public GameObject hunterpool;
-    public GameObject powershippool;
-    public GameObject poweruppool;*/
+    public GameObject orbiterOne;
+    public GameObject orbiterTwo;
 
     const int MAX_HAZARD_SIZE = 25;
     const int MAX_POWERSHIP_SIZE = 6;
@@ -31,31 +36,70 @@ public class ShipPool : MonoBehaviour {
     List<GameObject> hunters;
     List<GameObject> powerships;
     List<GameObject> powerups;
+    List<GameObject> missilepowerups;
+    List<GameObject> speedpowerups;
+    List<GameObject> crossfirepowerups;
+    List<GameObject> laserpowerups;
+    List<GameObject> shieldpowerups;
+    List<GameObject> orbiters;
+    List<GameObject> orbiterspickups;
+    //List<GameObject> AIDrones;
+    List<float> xPositions;
+    List<float> yPositions;
     GameObject bShip;
     GameObject bShipHM;
+    GameObject AIShips;
+    //GameObject AIShips;
     GameObject starFP;
 
     void Awake ()
     {
+        /*xPositions = new List<float>(new float[]{ -2.5f, 2.5f, 0.0f, -4.5f, 4.5f, -4.0f, 4.0f});
+        yPositions = new List<float>(new float[] { 4.0f, 4.0f, -4.5f, 1.0f, 1.0f, -2.75f, -2.75f });*/
+        //AIDrones = new List<GameObject>();
         razers = new List<GameObject>();
         swoopers = new List<GameObject>();
         blasters = new List<GameObject>();
         hunters = new List<GameObject>();
         powerships = new List<GameObject>();
         powerups = new List<GameObject>();
+        orbiters = new List<GameObject>();
+        orbiterspickups = new List<GameObject>();
+        speedpowerups = new List<GameObject>();
+        missilepowerups = new List<GameObject>();
+        crossfirepowerups = new List<GameObject>();
+        laserpowerups = new List<GameObject>();
+        shieldpowerups = new List<GameObject>();
+
         bShip = Instantiate(battleship);
         bShipHM = Instantiate(battleshipHM);
+        AIShips = Instantiate(AIDrones);
         starFP = Instantiate(starfighterP);
+        orbiters.Add(Instantiate(orbiterOne));
+        orbiters.Add(Instantiate(orbiterTwo));
+        orbiters[0].GetComponent<Orbiter>().SetStartPosition();
+        orbiters[1].GetComponent<Orbiter>().SetStartPosition(0.0f, -1.0f);
+
 
         for (int i = 0; i < MAX_HAZARD_SIZE; i++)
         {
             razers.Add(Instantiate(razer));
+
+            /*if (AIDrones.Count < 7)
+            {
+                AIDrones.Add(Instantiate(AIBossDrones));
+            }*/
             //razers[i].transform.SetParent(razerpool.transform, false);
 
             if(powerships.Count < MAX_POWERSHIP_SIZE)
             {
                 powerships.Add(Instantiate(powership));
-                powerups.Add(Instantiate(powerup));
+                orbiterspickups.Add(Instantiate(orbiterPickup));
+                missilepowerups.Add(Instantiate(missilepowerup));
+                speedpowerups.Add(Instantiate(speedpowerup));
+                crossfirepowerups.Add(Instantiate(crossfirepowerup));
+                laserpowerups.Add(Instantiate(laserpowerup));
+                shieldpowerups.Add(Instantiate(shieldpowerup));
                 //powerships[i].transform.SetParent(powershippool.transform, false);
                 //powerups[i].transform.SetParent(poweruppool.transform, false);
             }
@@ -79,38 +123,17 @@ public class ShipPool : MonoBehaviour {
             }
         }
 	}
-    
-    /*public void addShip(GameObject b)
+
+    private void Start()
     {
-        if (b.GetComponent<StraightMover>() != null)
-            razers.Add(b);
-        else if (b.GetComponent<CircularMover>() != null)
-            swoopers.Add(b);
-        else if (b.GetComponent<RotatorMover>() != null)
-            blasters.Add(b);
-        else if (b.GetComponent<TrackingMover>() != null)
-            hunters.Add(b);
-        else if (b.GetComponent<WavyMover>() != null)
-            powerships.Add(b);
-        else if (b.CompareTag("PickUp"))
-            powerups.Add(b);
+        orbiters[0].GetComponent<Orbiter>().SetOppositeOrb(orbiters[1]);
+        orbiters[1].GetComponent<Orbiter>().SetOppositeOrb(orbiters[0]);
+        starFP.GetComponent<PlayerController>().SetOrbiterOneRef(orbiters[0]);
+        starFP.GetComponent<PlayerController>().SetOrbiterTwoRef(orbiters[1]);
+        starFP.GetComponent<PowerUpSystem>().SetOrbiterOneRef(orbiters[0]);
+        starFP.GetComponent<PowerUpSystem>().SetOrbiterTwoRef(orbiters[1]);
     }
 
-    public void removeShip(GameObject b)
-    {
-        if (b.GetComponent<StraightMover>() != null)
-            razers.Remove(b);
-        else if (b.GetComponent<CircularMover>() != null)
-            swoopers.Remove(b);
-        else if (b.GetComponent<RotatorMover>() != null)
-            blasters.Remove(b);
-        else if (b.GetComponent<TrackingMover>() != null)
-            hunters.Remove(b);
-        else if (b.GetComponent<WavyMover>() != null)
-            powerships.Remove(b);
-        else if (b.CompareTag("PickUp"))
-            powerups.Remove(b);
-    }*/
 
     public int getMaxRazers()
     {
@@ -169,12 +192,15 @@ public class ShipPool : MonoBehaviour {
 
     public GameObject SpawnHunter()
     {
-        for (int i = 0; i < getMaxHunters(); i++)
+        int index = hunterTracker % getMaxHunters();
+
+        if (!hunters[index].activeSelf)
         {
-            if (!hunters[i].activeSelf)
-                return hunters[i];
+            hunterTracker++;
+            return hunters[index];
         }
-        return null;
+        else
+            return null;
     }
 
     public GameObject SpawnPowerShip()
@@ -187,12 +213,81 @@ public class ShipPool : MonoBehaviour {
         return null;
     }
 
-    public GameObject SpawnPowerUp()
+    public GameObject SpawnRandomPowerUp()
+    {
+        int rand = Random.Range(1, 61);
+        if (rand >= 1 && rand < 10)
+            return SpawnSpeedPowerUp();
+        else if (rand >= 10 && rand < 20)
+            return SpawnMissilePowerUp();
+        else if (rand >= 20 && rand < 30)
+            return SpawnCrossFirePowerUp();
+        else if (rand >= 30 && rand < 40)
+            return SpawnLaserPowerUp();
+        else if (rand >= 40 && rand < 50)
+            return SpawnShieldPowerUp();
+        else if (rand >= 50 && rand <= 60)
+            return SpawnOrbiterPowerUp();
+        else
+            return null;
+    }
+
+    public GameObject SpawnOrbiterPowerUp()
     {
         for (int i = 0; i < getMaxPowerShips(); i++)
         {
-            if (!powerups[i].activeSelf)
-                return powerups[i];
+            if (!orbiterspickups[i].activeSelf)
+                return orbiterspickups[i];
+        }
+        return null;
+    }
+
+    public GameObject SpawnSpeedPowerUp()
+    {
+        for (int i = 0; i < getMaxPowerShips(); i++)
+        {
+            if (!speedpowerups[i].activeSelf)
+                return speedpowerups[i];
+        }
+        return null;
+    }
+
+    public GameObject SpawnMissilePowerUp()
+    {
+        for (int i = 0; i < getMaxPowerShips(); i++)
+        {
+            if (!missilepowerups[i].activeSelf)
+                return missilepowerups[i];
+        }
+        return null;
+    }
+
+    public GameObject SpawnCrossFirePowerUp()
+    {
+        for (int i = 0; i < getMaxPowerShips(); i++)
+        {
+            if (!crossfirepowerups[i].activeSelf)
+                return crossfirepowerups[i];
+        }
+        return null;
+    }
+
+    public GameObject SpawnLaserPowerUp()
+    {
+        for (int i = 0; i < getMaxPowerShips(); i++)
+        {
+            if (!laserpowerups[i].activeSelf)
+                return laserpowerups[i];
+        }
+        return null;
+    }
+
+    public GameObject SpawnShieldPowerUp()
+    {
+        for (int i = 0; i < getMaxPowerShips(); i++)
+        {
+            if (!shieldpowerups[i].activeSelf)
+                return shieldpowerups[i];
         }
         return null;
     }
@@ -211,10 +306,27 @@ public class ShipPool : MonoBehaviour {
         return null;
     }
 
+    public GameObject SpawnAIDrones()
+    {
+        if (!AIShips.activeSelf)
+            return AIShips;
+        return null;
+    }
+
     public GameObject SpawnStarFighter()
     {
         if (!starFP.activeSelf)
             return starFP;
         return null;
     }
+
+    public GameObject SpawnOrbiter()
+    {
+        if (!orbiters[0].activeSelf)
+            return orbiters[0];
+        if (!orbiters[1].activeSelf)
+            return orbiters[1];
+        return null;
+    }
+    
 }
