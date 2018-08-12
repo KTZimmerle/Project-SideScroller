@@ -13,11 +13,17 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
     public float startRotation;
     Vector3 StartPosition;
     Vector3 OutofMapPosition;
+    Vector3 BGMapPosition;
     float startUpTime;
     float timeToLerp;
     float timetoSlerp;
     float waitTime;
     float travelTime;
+    float delay;
+    float TPSlerp;
+    float TPDelay;
+    float SecondTPDelay;
+    float TPLerp;
     bool isMoving;
     bool isMovingTwo;
     bool isMovingTwoDone;
@@ -25,6 +31,9 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
     bool isFlyingStraight;
     bool isMakingEntrance;
     bool notDead;
+    bool isHardMode;
+    bool isMovingThree;
+    bool isMovingThreeDone;
     public BossShip BE;
     Vector3 currentSide;
     Quaternion currentDirection;
@@ -40,6 +49,7 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
     {
         explosionPt = GetComponent<ExplosionPt_Retriever>().RetrievePoints();
         BE = new BossShip(hitPoints, scoreValue);
+        isHardMode = false;
         Init();
         /*healthIndicator = GetComponent<Material>();
         healthIndicator.SetColor()*/
@@ -47,12 +57,19 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
 
     public void Init()
     {
+        TPSlerp = 5.0f;
+        TPDelay = 1.0f;
+        SecondTPDelay = 0.5f;
+        TPLerp = 1.5f;
+        delay = 0.0f;
         isMakingEntrance = true;
         notDead = true;
         isMoving = false;
         isMovingTwo = false;
+        isMovingThree = false;
         isOutofMap = false;
         isMovingTwoDone = true;
+        isMovingThreeDone = true;
         isFlyingStraight = false;
         startUpTime = 1.0f;
         timeToLerp = 4.0f;
@@ -131,7 +148,14 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
         currentDirection = transform.rotation;
         oppositeSide = -transform.position;
         oppositeDirection = Quaternion.Euler(0.0f, 0.0f, transform.rotation.z + 180.0f) * transform.rotation;
+        //oppositeDirection = Quaternion.Inverse(currentDirection);
         GetComponent<AutoRotate>().enabled = true;
+        if (isHardMode)
+        {
+            timeToLerp -= 1.0f;
+            timetoSlerp -= 0.5f;
+            startUpTime -= 0.5f;
+        }
         //start spinning
     }
 
@@ -145,7 +169,10 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
 
         if (timeToLerp > 0.0f)
         {
-            transform.position = Vector3.Lerp(currentSide, oppositeSide, (4.0f - timeToLerp) / 4);
+            if(isHardMode)
+                transform.position = Vector3.Lerp(currentSide, oppositeSide, (3.0f - timeToLerp) / 3);
+            else
+                transform.position = Vector3.Lerp(currentSide, oppositeSide, (4.0f - timeToLerp) / 4);
             timeToLerp -= Time.deltaTime;
         }
         else
@@ -158,6 +185,7 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
             }
             else
             {
+                //transform.LookAt(Vector3.zero, transform.forward);
                 transform.rotation = oppositeDirection;
                 isMoving = false;
                 startUpTime = 1.0f;
@@ -175,9 +203,17 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
         currentDirection = transform.rotation;
         oppositeSide = -transform.position;
         oppositeDirection = Quaternion.Euler(0.0f, 0.0f, transform.rotation.z + 180.0f) * transform.rotation;
-        
+        //start spinning
+    }
 
-
+    public void startMovementPatternThree()
+    {
+        isMovingThree = true;
+        isMovingThreeDone = false;
+        currentSide = transform.position;
+        currentDirection = transform.rotation;
+        oppositeSide = -transform.position;
+        oppositeDirection = Quaternion.Euler(0.0f, 0.0f, transform.rotation.z + 180.0f) * transform.rotation;
         //start spinning
     }
 
@@ -187,12 +223,23 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
         MovementPatternTwoPartOne();
 
         //part 2 of phase 2
-        MovementPatternTwoPartTwo();
+        if (isHardMode)
+        {
+            //randomly select a pattern
+            if(isOutofMap)
+                MovementPatternTwoPartTwoHM();
 
-        //part 3 of phase 2
+            if(isMovingThree)
+                MovementPatternThree();
+        }
+        else
+        {
+            MovementPatternTwoPartTwo();
+        }
+        
 
     }
-
+    
     void MovementPatternTwoPartOne()
     {
         if (timetoSlerp > 0.0f)
@@ -218,6 +265,14 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
         }
     }
 
+    void MovementPatternTwoPartTwoHM()
+    {
+        if (delay < 0.0f)
+            MovementPatternTwoPartTwo();
+        else
+            delay -= Time.deltaTime;
+    }
+
     void MovementPatternTwoPartTwo()
     {
         if (waitTime < 0.0f && isFlyingStraight)
@@ -233,7 +288,45 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
             waitTime -= Time.deltaTime;
         }
 
+        ReturnToStart();
+    }
 
+    void MovementPatternThree()
+    {
+        if (TPDelay > 0.0f)
+        {
+            TPDelay -= Time.deltaTime;
+            if (TPDelay <= 0.0f)
+            {
+                if (TPSlerp >= 0.0f)
+                {
+                    //transform.rotation = Vector3.Slerp(currentSide, oppositeSide, (5.0f - timeToLerp) / 4);
+                    transform.rotation = Quaternion.Slerp(currentDirection, oppositeDirection, (5.0f - TPSlerp) / 5);
+                    TPSlerp -= Time.deltaTime;
+                }
+                else
+                {
+                    if (TPLerp >= 0.0f)
+                    {
+                        //change target vectors
+                        transform.position = Vector3.Lerp(currentSide, oppositeSide, (1.5f - timeToLerp) / 1.5f);
+                        TPLerp -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        TPSlerp = 5.0f;
+                        TPDelay = 1.0f;
+                        SecondTPDelay = 0.5f;
+                        TPLerp = 1.5f;
+                        isMovingThree = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public void ReturnToStart()
+    {
         if (travelTime > 0.0f && (waitTime <= 0.0f && !isFlyingStraight))
         {
             travelTime -= Time.deltaTime;
@@ -250,10 +343,15 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
                 transform.position = new Vector3(0.0f, -15.0f, 0.0f);
                 transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
                 isMovingTwoDone = true;
-                RedoEntrance();
+                //RedoEntrance();
                 GetComponent<AutoRotate>().enabled = false;
             }
         }
+    }
+
+    public void DelayMovementPatternTwo(float wait)
+    {
+        waitTime = wait;
     }
 
     public void SetOutofMapPosition(Vector3 OoMPos, bool flipX)
@@ -262,6 +360,11 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
         OutofMapPosition = OoMPos;
         if (flipX)
             OutofMapPosition = new Vector3(-OutofMapPosition.x, OutofMapPosition.y);
+    }
+
+    public void SetBGMapPosition(Vector3 BGMPos)
+    {
+        OutofMapPosition = BGMPos;
     }
 
     public void FireBullet()
@@ -279,12 +382,17 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
     /*protected GameObject FireBolt()
     {
         return projPool.FireNextBolt(this.gameObject);
+    }*/
+
+    public void FireLaserBeam()
+    {
+        transform.GetChild(7).gameObject.SetActive(true);
     }
 
-    protected GameObject FireLaser()
+    public void StopLaserBeam()
     {
-        return projPool.FireNextLaser(this.gameObject);
-    }*/
+        transform.GetChild(7).gameObject.SetActive(false);
+    }
 
     public bool IsDoneMoving()
     {
@@ -320,5 +428,24 @@ public class AIBossDrone : MonoBehaviour, IBossKill {
         notDead = false;
         GetComponent<Renderer>().material.SetColor(Shader.PropertyToID("_Color"), Color.red);
         //GetComponent<BoxCollider>().enabled = false;
+    }
+
+    public void SetHardModeOn()
+    {
+        isHardMode = true;
+    }
+
+    public void SetDelay(float d)
+    {
+        delay = d;
+    }
+
+    public void PlayLasFX()
+    {
+        foreach (ParticleSystem ps in GetComponentsInChildren<ParticleSystem>())
+        {
+            if (ps.CompareTag("Laser_FX"))
+                ps.Play();
+        }
     }
 }

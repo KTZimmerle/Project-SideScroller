@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SecondBossRoutine : MonoBehaviour, IBossKill {
 
-    int firingOrder;
+    protected int firingOrder;
     public int hitPoints;
     public int scoreValue;
     public float veloc;
@@ -41,12 +41,14 @@ public class SecondBossRoutine : MonoBehaviour, IBossKill {
     float entranceTimer;
     float swapMovementTime;
     float rotatetoCenterTime;
-    bool flipX;
-    List<GameObject> bosses;
-    List<Vector3> OutofMapYCoordinates;
+    protected bool reverseRotation;
+    protected bool flipX;
+    protected List<GameObject> bosses;
+    protected List<Vector3> OutofMapYCoordinates;
 
-    void Awake()
+    protected virtual void Awake()
     {
+        reverseRotation = false;
         isDying = false;
         bosses = new List<GameObject>(7);
         for (int i = 0; i < transform.childCount; i++)
@@ -65,12 +67,12 @@ public class SecondBossRoutine : MonoBehaviour, IBossKill {
         gameObject.SetActive(false);
     }
 
-    void OnEnable()
+    protected void OnEnable()
     {
         Init();
     }
 
-    void OnDisable()
+    protected void OnDisable()
     {
         BE.Init(hitPoints);
         isDying = false;
@@ -177,6 +179,7 @@ public class SecondBossRoutine : MonoBehaviour, IBossKill {
 
             for (int i = 0; i < bosses.Count; i++)
             {
+                bosses[i].GetComponent<AIBossDrone>().RedoEntrance();
                 bosses[i].transform.RotateAround(Vector3.zero, Vector3.forward, 360 / 7 * i);
                 bosses[i].transform.LookAt(new Vector3(bosses[i].transform.position.x, bosses[i].transform.position.y, 0.0f));
                 bosses[i].transform.GetComponent<Rigidbody>().velocity = ((Vector3.zero - bosses[i].transform.position) / (Vector3.zero - bosses[i].transform.position).magnitude) * 5.0f;
@@ -185,19 +188,24 @@ public class SecondBossRoutine : MonoBehaviour, IBossKill {
 
             yield return new WaitUntil(() => transform.GetChild(0).GetComponent<AIBossDrone>().isEntranceDone());
             yield return new WaitForSeconds(1.0f);
+
+            /*for (int i = 0; i < bosses.Count; i++)
+            {
+                bosses[i].GetComponent<AIBossDrone>().ReturnToStart();
+            }*/
             //repeat from the top
         }
     }
 
-        // Use this for initialization
-    void Start () {
+    // Use this for initialization
+    protected void Start () {
         GameObject target = GameObject.FindWithTag("GFXPool");
         if (target.GetComponent<SpecialFXPool>() != null)
             gfx = target.GetComponent<SpecialFXPool>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    protected void Update ()
     {
         if (entranceTimer <= 0.0f && isMoving)
         {
@@ -213,6 +221,8 @@ public class SecondBossRoutine : MonoBehaviour, IBossKill {
         if (isMovingRotation && notDead)
         {
             theta = ((30.0f * Time.deltaTime));
+            if (reverseRotation)
+                theta *= -1;
             /*transform.GetChild(0).position = Vector3.zero + (transform.GetChild(0).GetComponent<AIBossDrone>().GetStartPosition()).normalized
                                  * radius;*/
             transform.GetChild(0).RotateAround(Vector3.zero, Vector3.forward, theta);
@@ -299,5 +309,10 @@ public class SecondBossRoutine : MonoBehaviour, IBossKill {
             
         }
         yield return new WaitForSeconds(3.0f);
+    }
+
+    public void ChangeRotationDirection()
+    {
+        reverseRotation = !reverseRotation;
     }
 }

@@ -139,7 +139,7 @@ public class FirstBossRoutineHard : FirstBossRoutine
     void DecidePattern()
     {
         int[] angles = { 120, -120, 135, -135, 150, -150 };
-        int choice = Random.Range(0, 4);
+        int choice = Random.Range(1, 4);
         if (choice == 1)
         {
             LaserPattern = LaserPatternC(angles);

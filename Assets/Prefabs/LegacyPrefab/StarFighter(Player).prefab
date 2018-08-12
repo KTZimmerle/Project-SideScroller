@@ -367,8 +367,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 0.04, y: 0.015, z: 0.025}
-  m_Center: {x: 0.009, y: 0, z: 0}
+  m_Size: {x: 0.03, y: 0.0125, z: 0.025}
+  m_Center: {x: 0.007, y: 0, z: 0}
 --- !u!95 &9511836
 Animator:
   serializedVersion: 3
@@ -446,6 +446,8 @@ MonoBehaviour:
   altfirePowUp: 0
   laserPowUp: 1
   missileRate: 0
+  missileRateTwo: 0
+  missileRateThree: 0
   altfireRate: 0
   shieldHits: 5
   laserRate: 0
@@ -486,8 +488,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.007
-  m_Height: 0.035
+  m_Radius: 0.0035
+  m_Height: 0.0175
   m_Direction: 0
   m_Center: {x: 0.006751636, y: 0, z: 0}
 --- !u!198 &19805666

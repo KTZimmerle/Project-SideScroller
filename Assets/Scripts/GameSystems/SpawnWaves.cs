@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class SpawnWaves : MonoBehaviour {
 
-    const int MAX_HAZARD_SIZE = 40;
+    const int MAX_HAZARD_SIZE = 35;
     const int MAX_POWERSHIP_SIZE = 6;
     const int MAX_SQUAD_SIZE = 8;
-    const int MAX_FORMATION_SIZE = 8;
-    const int MAX_PLATFORM_SIZE = 25;
+    const int MAX_FORMATION_SIZE = 15;
+    const int MAX_PLATFORM_SIZE = 35;
     const int MAX_HUNTER_SIZE = 5;
     int waveCount = 0;
     public bool GameOverFlag;
@@ -171,14 +171,14 @@ public class SpawnWaves : MonoBehaviour {
                 HazardLimit += 2;
 
             if (waveCount > 5) // was 3
-                if (waveCount % 3 == 0 && numFormations < MAX_FORMATION_SIZE)// was 2
+                if (waveCount % 2 == 0 && numFormations < MAX_FORMATION_SIZE)// was 2
                 {
                     subtractTime += 0.2f;
                     numFormations += 1;
                 }
 
             if (waveCount > 7)
-                if (waveCount % 3 == 0 && numPlatforms < MAX_PLATFORM_SIZE)//was 2
+                if (waveCount % 2 == 0 && numPlatforms < MAX_PLATFORM_SIZE)//was 2
                     numPlatforms += 1;
 
             //change back to 22
