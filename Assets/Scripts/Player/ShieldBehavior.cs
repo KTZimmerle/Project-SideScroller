@@ -18,8 +18,9 @@ public class ShieldBehavior : MonoBehaviour {
             gameController = target.GetComponent<GameController>();
         player = transform.parent.GetComponent<Collider>();
         player.isTrigger = false;
-        gameController.setShieldStatus(true);
+        gameController.setShieldStatus(false);
         PowUp = transform.parent.GetComponent<PowerUpSystem>();
+        //gameObject.SetActive(false);
     }
 
     void OnEnable()

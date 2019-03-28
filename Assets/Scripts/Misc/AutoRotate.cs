@@ -19,6 +19,6 @@ public class AutoRotate : MonoBehaviour {
 
     void Update()
     {
-        transform.Rotate(rotSpeedX * 1000 * Time.deltaTime, rotSpeedY * 1000 * Time.deltaTime, rotSpeedZ * 1000 * Time.deltaTime);
+        transform.Rotate(rotSpeedX * 100 * Time.deltaTime, rotSpeedY * 100 * Time.deltaTime, rotSpeedZ * 100 * Time.deltaTime);
     }
 }

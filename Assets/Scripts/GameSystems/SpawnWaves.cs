@@ -6,7 +6,7 @@ public class SpawnWaves : MonoBehaviour {
     const int MAX_HAZARD_SIZE = 35;
     const int MAX_POWERSHIP_SIZE = 6;
     const int MAX_SQUAD_SIZE = 8;
-    const int MAX_FORMATION_SIZE = 15;
+    const int MAX_FORMATION_SIZE = 20;
     const int MAX_PLATFORM_SIZE = 35;
     const int MAX_HUNTER_SIZE = 5;
     int waveCount = 0;
@@ -30,9 +30,12 @@ public class SpawnWaves : MonoBehaviour {
     int numHunters = 2;
     int squadSize = 5;
     int extraSpawn = 1;
+    float shortenTime = 0.0f;
     int bonusPoints;
     int totalEnemies;
     int enemiesRemaining;
+    int bossNumber;
+    const int MAX_BOSSES = 2;
     public float spawnWait;
     public float waveBreak;
     public float bossWait;
@@ -51,6 +54,7 @@ public class SpawnWaves : MonoBehaviour {
 
     void Start ()
     {
+        bossNumber = 0;
         HazardLimit = 10;
         c = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         subtractTime = 0.0f;
@@ -108,6 +112,12 @@ public class SpawnWaves : MonoBehaviour {
             Spawner();
             enemiesRemaining = totalEnemies;
 
+            if (waveCount == 13)
+            {
+                shortenTime = 2.0f;
+                subtractTime -= 0.8f;
+            }
+                
 
             int nextSpawn = 1;
             for (int i = 0; i < HazardLimit; i++)
@@ -133,7 +143,8 @@ public class SpawnWaves : MonoBehaviour {
             //Spawn a boss
             if (waveCount % 3 == 0)
             {
-                GetComponent<GameController>().starIncomingBossMessage();
+                GetComponent<GameController>().starIncomingBossMessage(WhichBoss(bossNumber));
+                bossNumber = (bossNumber + 1) % MAX_BOSSES;
                 yield return new WaitForSeconds(6.0f);
                 setBossStatus(true);
                 StartCoroutine(StartBossRoutine());
@@ -147,7 +158,9 @@ public class SpawnWaves : MonoBehaviour {
                 GetComponent<ScoreBoard>().setEnemyCount(totalEnemies);
                 GetComponent<ScoreBoard>().tallyScore(bonusPoints);
                 powerOne = SpawnPowerUp();
-                if (GetComponent<ScoreBoard>().GetNumDestroyed()/totalEnemies == 1)
+                powerOne.transform.position = new Vector3(3.0f, 0.0f);
+                powerOne.SetActive(true);
+                /*if (GetComponent<ScoreBoard>().GetNumDestroyed()/totalEnemies == 1)
                 {
                     powerOne.transform.position = new Vector3(3.0f, 3.0f);
                     powerOne.SetActive(true);
@@ -157,9 +170,9 @@ public class SpawnWaves : MonoBehaviour {
                 }
                 else
                 {
-                    powerOne.transform.position = new Vector3(3.0f, 0.0f);
+                powerOne.transform.position = new Vector3(3.0f, 0.0f);
                     powerOne.SetActive(true);
-                }
+                //}*/
                 yield return new WaitForSeconds(waveBreak + 1.0f);
                 if (0 == waveCount % 5 && extraSpawn < MAX_POWERSHIP_SIZE)
                     extraSpawn += 1;
@@ -170,20 +183,34 @@ public class SpawnWaves : MonoBehaviour {
             if(HazardLimit < MAX_HAZARD_SIZE)
                 HazardLimit += 2;
 
-            if (waveCount > 5) // was 3
+            if (waveCount > 5 && waveCount < 13)
+            {
                 if (waveCount % 2 == 0 && numFormations < MAX_FORMATION_SIZE)// was 2
                 {
                     subtractTime += 0.2f;
                     numFormations += 1;
                 }
+            }
+            else if (waveCount >= 13)
+            {
+                if (numPlatforms < MAX_FORMATION_SIZE)
+                    numPlatforms += 1;
+            }
+                
 
-            if (waveCount > 7)
+            if (waveCount > 7 && waveCount < 13)
+            {
                 if (waveCount % 2 == 0 && numPlatforms < MAX_PLATFORM_SIZE)//was 2
                     numPlatforms += 1;
+            }
+            else if (waveCount >= 13)
+            {
+                if (numPlatforms < MAX_PLATFORM_SIZE)
+                    numPlatforms += 1;
+            }
 
-            //change back to 22
             if (waveCount > 12)
-                if (waveCount % 13 == 0 && numHunters < MAX_HUNTER_SIZE)
+                if (waveCount % 7 == 0 && numHunters < MAX_HUNTER_SIZE)
                     numHunters += 1;
 
             if(waveCount > 5)
@@ -243,7 +270,7 @@ public class SpawnWaves : MonoBehaviour {
         for (int i = 0; i < numPlatforms; i++)
         {
             //spawns the blaster either above or below off-screen and picking a random x axis position primarily on the right side
-            yield return new WaitForSeconds(Random.Range(1.0f, 5.0f));
+            yield return new WaitForSeconds(Random.Range(1.0f, 5.0f - shortenTime));
             GameObject Blaster = sPool.SpawnBlaster();
             //Blaster.transform.position = new Vector3(Random.Range(-spawnRangeTwo.x, spawnRangeTwo.x + 7), spawnRangeTwo.y, spawnRangeTwo.z);
             Blaster.transform.position = c.ScreenToWorldPoint(new Vector3(Random.Range(c.pixelWidth * 0.4f, c.pixelWidth * 0.9f),
@@ -401,5 +428,14 @@ public class SpawnWaves : MonoBehaviour {
             return sPool.SpawnLaserPowerUp();
         else
             return null;
+    }
+
+    string WhichBoss(int waveNum)
+    {
+        if (waveNum == 0)
+            return "Battleship";
+        else if (waveNum == 1)
+            return "AI Masters";
+        return "";
     }
 }

@@ -9,5 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Title Screen.unity
     guid: 2665063cd75252e4caec4b972f5ae12d
   - enabled: 1
+    path: Assets/Scenes/Instructions Screen.unity
+    guid: 6a51c3dca98c60444a315755ff7ade4f
+  - enabled: 1
     path: Assets/Scenes/Space Battle.unity
     guid: c5f0dd46f5afc6a4ca48d2ca93d273b6

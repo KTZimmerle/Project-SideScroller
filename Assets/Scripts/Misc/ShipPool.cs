@@ -27,8 +27,8 @@ public class ShipPool : MonoBehaviour {
 
     const int MAX_HAZARD_SIZE = 25;
     const int MAX_POWERSHIP_SIZE = 6;
-    const int MAX_SQUAD_SIZE = 16;
-    const int MAX_PLATFORM_SIZE = 25;
+    const int MAX_SQUAD_SIZE = 24;
+    const int MAX_PLATFORM_SIZE = 35;
     const int MAX_HUNTER_SIZE = 5;
     List<GameObject> razers;
     List<GameObject> swoopers;

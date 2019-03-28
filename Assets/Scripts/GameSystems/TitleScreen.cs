@@ -23,7 +23,7 @@ public class TitleScreen : MonoBehaviour {
             SceneManager.LoadScene(1);
         }
 
-        switchTimer -= Time.deltaTime;
+        /*switchTimer -= Time.deltaTime;
         if (switchTimer < 0.0f)
         {
             switchTimer = 5.0f;
@@ -42,6 +42,6 @@ public class TitleScreen : MonoBehaviour {
                 GetComponent<TitleUI>().DisplayTitle();
                 GetComponent<TitleUI>().HideEnemyValues();
             }
-        }
+        }*/
 	}
 }

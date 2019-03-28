@@ -164,8 +164,8 @@ public class GameController : MonoBehaviour {
         StartCoroutine(gameUI.nextWaveMessage());
     }
 
-    public void starIncomingBossMessage()
+    public void starIncomingBossMessage(string bossMsg)
     {
-        StartCoroutine(gameUI.bossIncomingMessage());
+        StartCoroutine(gameUI.bossIncomingMessage(bossMsg));
     }
 }

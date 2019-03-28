@@ -252,7 +252,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 692882702
+  randomSeed: -1728659488
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -4697,10 +4697,6 @@ Prefab:
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 440755588}
-    - target: {fileID: 1000013074368096, guid: 1ff84d1a0a13ea04badac406b271b8f7, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ff84d1a0a13ea04badac406b271b8f7, type: 2}
   m_IsPrefabParent: 0
@@ -5539,55 +5535,6 @@ Prefab:
       propertyPath: InitialsField
       value: 
       objectReference: {fileID: 2003456400}
-    - target: {fileID: 82000013856099734, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.057
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000012082833474, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000013532602562, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.251
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000013500105856, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.105
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000011611694382, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.105
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000012123869902, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: BypassReverbZones
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000012123869902, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.514
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000012939620982, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.501
-      objectReference: {fileID: 0}
-    - target: {fileID: 82000010451568002, guid: 26faf50ca7401244385238a180f28034,
-        type: 2}
-      propertyPath: m_Volume
-      value: 0.097
-      objectReference: {fileID: 0}
-    - target: {fileID: 11440684, guid: 26faf50ca7401244385238a180f28034, type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26faf50ca7401244385238a180f28034, type: 2}
   m_IsPrefabParent: 0
